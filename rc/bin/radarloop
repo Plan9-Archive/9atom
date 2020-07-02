@@ -1,0 +1,4 @@
+#!/bin/rc
+if(! ~ $#* 0)
+	exec imgloop -c radar -9 $*
+exec imgloop

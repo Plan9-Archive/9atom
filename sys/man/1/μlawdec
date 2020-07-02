@@ -1,0 +1,20 @@
+.TH ΜLAWDEC 1
+.SH NAME
+μlawdec \- play μ-law encoded .au files
+.SH SYNOPSIS
+.B μlawdec
+[
+.B -d
+]
+.I file ...
+.SH DESCRIPTION
+Μlawdec decodes mono μ-law encoded .au files and plays
+them with
+.IR audio (3).
+The bitrate is set through
+.B /dev/volume
+if necessary.
+.SH "SEE ALSO"
+.IR mp3dec (1),
+.IR audio (3),
+.IR playlistfs (7).

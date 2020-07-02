@@ -1,0 +1,105 @@
+#!/bin/rc -e
+
+rfork ne
+
+path=/bin
+contrib=/n/sources/contrib
+
+fn fatal {
+	echo $*
+	exit $"*
+}
+
+fn usage {
+	echo 'usage: contrib/list [-c | -v] [user | user/name]' >[1=2]
+	exit  usage	
+}
+
+fn quiet {
+	if (test -r $1/inf)
+		sed 1q $1/inf
+	if not
+		echo
+}
+
+fn noisy {
+	echo
+	echo '	Description: '
+	if (test -r $1/inf)
+		fmt -i 16 $1/inf
+
+	s=`{awk '$NF!=0{sz += $NF; n++} END{printf("%.2f %d\n", sz/(1024*1024), n)}'  $1/db }
+	echo '	Contents:' $s(1)^Mb in $s(2) files
+
+	last=`{tail -1 $1/log}
+	echo '	Modified:' `{date -u $last(1)}
+
+	dep=`{cat $1/dep >[2]/dev/null}
+	echo '	Depends: ' $dep
+}
+
+fn pdiff {
+	s=`{ls -l $1 >[2]/dev/null |awk '{print $6}'}
+	n=`{ls -l $2 >[2]/dev/null |awk '{print $6}'}
+	if (~ $n 0 || ~ $#n 0 || test $s -lt $n)
+		cat $1
+	if not {
+		m=`{echo $n-1024 | hoc}
+		if(~ $m -*)
+			m=0
+		cmp -s $1 $2 $m $m
+		x=$status
+		switch($x){
+		case *': EOF'
+			tail +^$n^c $1
+		case *': differ'
+			cat $1
+		}
+	}
+}
+
+fn changes {
+	echo
+	if (test -r $1/chg) {
+		n=`{basename $1}
+		if (test -r /dist/replica/client/$n.chg)
+			pdiff $1/chg /dist/replica/client/$n.chg |sed 's/^/    /'
+		if not
+			cat $1/chg |sed 's/^/    /'
+	}
+}
+
+out=quiet
+while (! ~ $#* 0 && ~ $1 -*) {
+	switch ($1) {
+	case -v
+		out=noisy
+	case -c
+		out=changes
+	case -*
+		usage
+	}
+	shift
+}
+
+if (~ $#* 0)
+	*='*/*'
+
+if (! ~ $1 */*) 
+	*=$1'/*'
+
+9fs sources || fatal mount server failed
+
+usr=`{echo $1 | awk -F'/' '{print $1}'}
+name=`{echo $1 | awk -F'/' '{print $2}'}
+repl=`{eval echo $contrib/$usr/replica/$name}
+
+for (i in $repl) {
+	u=`{echo $i | awk -F'/' '{print $5}'}
+	n=`{basename $i}
+	echo -n $u/$n': '
+	if (test -d $i)
+		$out $i
+	if not
+		echo no such replica
+} | cat

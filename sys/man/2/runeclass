@@ -1,0 +1,38 @@
+.TH RUNECLASS 2
+.SH NAME
+runeclass, runecompose \- Unicode character equivalence
+.SH SYNOPSIS
+.B #include <u.h>
+.br
+.B #include <libc.h>
+.PP
+.B
+Rune *runeclass(Rune r)
+.PP
+.B
+int runecompose(Rune base, Rune combiner)
+.SH DESCRIPTION
+These routines use codepoint properties from the Unicode standard to
+combine and determine sets of characters with the same base character.
+The set of codepoints with the same base codepoint are a generalization
+of the equivilence between various cases such as title, lower an upper:
+.I runeclass
+returns this set.
+Likewise,
+.I runecompose
+takes a base codepoint and a combining codepoint (e.g. u+0308,
+combining diaresis) and returns the combined form, if it exists.
+For example
+.IP
+.EX
+	echo e\u0308 | rune/uconv | rune/compose
+.EE
+.SH "SEE ALSO
+.IR grep (1) ,
+.IR rune (1) ,
+.br
+The Unicode Consortium.
+.IR "The Unicode Standard" ,
+Version 6.0.0, (Mountain View, CA: The Unicode Consortium, 2011. ISBN 978-1-936213-01-6)
+.br
+http://www.unicode.org/versions/Unicode6.0.0/

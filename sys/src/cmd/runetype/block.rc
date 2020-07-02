@@ -1,0 +1,30 @@
+#!/bin/rc
+. common.rc
+
+awk -F☺ '
+' ^ $hex ^ '
+
+BEGIN {
+	print "typedef	struct	Ublock	Ublock;"
+	print "struct	Ublock {"
+	print "	Rune	r[2];"
+	print "	char	*name;"
+	print "};"
+	print
+	print "static Ublock ucblock[] = {"
+}
+
+NF>2 {
+	a = hex($1)
+	b = hex($2)
+	dq=utf(34)
+	printf "	0x%x,	0x%x,	%s%s%s,\n", a, b, dq, $3, dq
+}
+
+END {
+	print "};";
+	print "";
+} ' <{cat block | sed '/^#/d
+	s/\.\./☺/g
+	s/; */☺/g'
+} | Sprint

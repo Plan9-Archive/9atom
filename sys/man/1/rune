@@ -1,0 +1,132 @@
+.TH RUNE 1
+.SH NAME
+block, case, compose, fold, type, uconv, unfold \- rune transformations
+.SH SYNOPSIS
+.B rune/block
+.I rune ...
+.br
+.B rune/case [
+.B ltu
+] [
+.B -f
+.I file
+]
+.br
+.B rune/compose
+[
+.I file ...
+]
+.br
+.B rune/fold
+[
+.B -i
+]
+[
+.I file ...
+]
+.br
+.B rune/type [-x] 
+[
+.I file ...
+]
+.br
+.B rune/uconv
+[
+.B -f
+]
+[
+.B -n
+.I defsize
+]
+[
+.I file ...
+]
+.br
+.B rune/unfold
+[
+.I re ...
+]
+.br
+.SH DESCRIPTION
+These programs provide transformations on runes.
+.I Block
+converts from rune to the containing Unicode block name.
+If there exists a case conversion from the given rune,
+.I case
+converts to the specified case. The
+.B ltu
+flags convert to lower, title and upper case, respectively.
+The default is lower case.
+If there exists an equivalent precombined codepoint,
+.I compose
+combines base codepoints with any following combining
+codepoints.
+.I Fold
+converts codepoints to their base codepoint, esentially
+stripping combining characters while
+.I unfold
+transforms a regular expression to one that matches any
+string which would match the original expression if folded first.
+Both accept
+.B -i
+which makes the conversion case insensitive.
+.I Type
+prints the codepoint then the type classes of each given rune,
+which may be any of
+.IR alpha ,
+.IR title ,
+.IR space ,
+.IR lower ,
+.IR upper ,
+and
+.IR digit .
+Upper- and lowercase append the type with a string consisting
+of a colon, the corresponding lower- or upper case rune and the
+codepoint in parenthesis.  Digit values are followed by a colon
+and the corresponding digit value. For example
+.IP
+.EX
+	03b1 alpha lower:Α(0391) 
+.EE
+.PP
+.I Uconv
+converts
+.CW "\\u0000"
+(4 hex digits) and
+.CW "\\U000000"
+(6 hex digits) to corresponding runes.  With the
+.B -f
+flag, it is assumed that the escapes are terminated by non-numbers
+so the number of digits is not checked while
+.I -n
+sets the default width.  For example, one could simulate
+the output of
+.IR unicode
+(see
+.IR ascii (1))
+with
+.IP
+.EX
+awk 'BEGIN{for(i=945; i<955; i++)printf "\\\\u%.4x", i}' |
+	rune/uconv
+grep `{rune/unfold naïve} /lib/words
+.EE
+.PP
+.SH FILES
+.TP
+.B /lib/unicode
+.TP
+.B /sys/src/libc/port/*.h
+.B
+.SH SOURCE
+.TP
+.B /sys/src/cmd/runetype
+.SH "SEE ALSO"
+.IR rune (2)
+.SH BUGS
+Still a bit raw.
+.I Type
+has wierd output.
+It's not clear that
+.I uconv
+does the most useful conversions.

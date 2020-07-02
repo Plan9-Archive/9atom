@@ -1,0 +1,7 @@
+</$objtype/mkfile
+
+TARG=9clock
+OFILES=\
+	9clock.$O\
+
+</sys/src/cmd/mkone

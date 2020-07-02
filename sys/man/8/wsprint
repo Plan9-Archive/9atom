@@ -1,0 +1,51 @@
+.TH WSPRINT 8
+.SH NAME
+wsprint \- format kernel wait statistics
+.SH SYNOPSIS
+.B wsprint
+[
+.B -t
+]
+.I kernel
+< /dev/wsdata
+.SH DESCRIPTION
+.I Wsprint
+sorts the wait statistics provided by
+.IR ws (3)
+by cumulative wait and then maximum wait
+and adds symbol information from
+.IR kernel .
+The columns are
+type ,
+pc ,
+count ,
+maximum wait,
+cumulative wait,
+and
+symbol information.
+A title line printing the headings may
+be added with the
+.B -t
+flag.
+.BR 
+.SH EXAMPLE
+A DHCP and auth server uses few locks.  The only lock captured
+was cleaning up after the first 
+.IR echo (1)
+exited.
+.IP
+.EX
+tyty# echo start>/dev/wsctl
+tyty# echo stop>/dev/wsctl
+tyty# wsprint -t /n/9fat/9cpu < wsdata
+ltype	pc			count		max wait	tot wait
+		sym
+lock	fffffffff01b49aa	1	            1096	1096
+		// /sys/src/nix/port/page.c:309 putpage()
+lock	fffffffff01186cd	1	          324048	324048
+		// /sys/src/nix/port/qmalloc.c:511 free()
+.EE
+.SH SOURCE
+.B /sys/src/cmd/wsprint.c
+.SH "SEE ALSO"
+.IR ws (3)

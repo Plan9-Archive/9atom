@@ -1,0 +1,11 @@
+</$objtype/mkfile
+BIN=/$objtype/bin/games
+
+TARG=xword acrosslite
+HFILES=xword.h
+
+</sys/src/cmd/mkmany
+
+$O.xword: write.$O read.$O
+$O.acrosslite: write.$O
+$O.xcat: write.$O read.$O

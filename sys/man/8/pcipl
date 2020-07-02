@@ -1,0 +1,210 @@
+.TH PCIPL 8
+.SH NAME
+iplfat, ipliso, iplpxe \- PC bootloader for FAT, ISO and PXE network booting
+.SH SYNOPSIS
+Started by PC BIOS or chainloaded by partition bootsector
+.SH DESCRIPTION
+.I Ipl
+is a PC bootloader capable of loading 32- or 64-bit Plan 9 kernels.
+It loads configuration from
+.IR plan9.ini (8),
+and gathers additional system information (discussed below).
+It loads the kernel into memory, and jumps to it in 32-bit
+protected mode.  During operation, output is sent both
+to the VGA and serial consoles.
+.PP
+The interpreted configuration is placed at 
+.BR CONFADDR , 
+.B 0x1200 
+along with any discovered hardware information.
+The E820 memory map is presented as
+.BR *e820 ,
+and consists of 3-tuples of memory type, base address
+and end address.  All delimiters are spaces.
+The configuration variable
+.B drive0
+holds information about the first BIOS drive
+using
+.IR tag = value
+format.  The required tags are
+.BR tbdf ,
+.BR chan ,
+and
+.BR sectors .
+USB drives also have the tag
+.BR usb=y .
+For PXE-capable systems,
+.B ether0
+holds information about the first PXE device.
+The required tags are
+.BR ea ,
+the ethernet address, and
+.BR tbdf .
+The kernels use this information to select
+the first ethernet port.  (see
+.IR devether (3))
+.PP
+The loader will automatically 
+attempt to boot the kernel specified by
+.BR bootfile .
+If there is no such parameter, a key
+is pressed or the kernel file was not
+found then the loader enters the interactive
+boot console.
+.PP
+The syntax of the boot console is the same as in
+.IR plan9.ini ,
+except for multiple configurations (boot menus).
+.BR
+The word
+.B clear
+[
+.I prefix
+]
+can be used to remove parameters from the current configuration.
+If a
+.IR prefix
+is specified, the first matching parameter is removed. If the
+.IR prefix
+is omitted, the whole configuration will be reset.
+If the word
+.B wait
+appears in the configuration then
+.IR ipl
+will return to the console prompt after processing the file.
+.PP
+The word
+.B boot
+will resume booting the kernel,
+while
+.B panic
+will warm boot the machine.
+.PP
+The menu symtax differs from standard
+.I plan9.ini
+files, but the semantics are the same.
+The menu section contains two types of items:
+.BI option n\fR,\fP
+and
+.BR default.
+The option syntax is
+.BI option n = blockname\fR,\fP
+.I Blockname
+is the name of the block to be included.
+There is no descriptive text.
+The syntax for default is
+.BI default = blockname\fR.\fP
+With a default,
+.I ipl
+will wait for 10 seconds for a response, otherwise
+selecting the default.  Without a default,
+.I ipl
+will wait indefinitely.
+.PP
+There are many ways to boot a PC; there is one
+.IR ipl
+program for each boot method.
+.SS "FAT Booting"
+When booting from a harddisk or USB pen drive, a
+FAT16/32 partition,
+.BR 9fat ,
+is used to store the kernel and 
+.IR plan9.ini .
+Due to size limitations, instead of loading
+the kernel directly, the bootsector,
+.BR pbs ,
+of the FAT partition loads
+a 2nd stage bootloader,
+.IR iplfat ,
+from the root directory of the filesystem.
+.SS "CD-ROM Booting"
+Booting from CD-ROM requires only the 
+.I ipliso
+bootloader to be included in the ISO-9660 image under
+.BR 386/ipliso ,
+set as a non-emulation bootblock (see
+.IR mk9660 (8)).
+Boot parameters are read from
+.B cfg/plan9.ini.
+.SS "Network Booting"
+With a PXE capable BIOS and network card one can download
+.I iplpxe
+and boot the kernel from a TFTP server (see
+.IR dhcpd (8)
+and
+.IR ndb (6)
+for details). Once started,
+.I iplpxe
+will read the file
+.BI /cfg/pxe/ ether
+from the tftp server to use as its
+.IR plan9.ini .
+.I Ether
+is the MAC address of the PXEing
+interface in lower case hex.
+.SH EXAMPLES
+On a typical FAT-booted server,
+.I iplfat
+might set the following based on hardware configuration
+.IP
+.EX
+*e820=1 0x0 0x9b000 2 0x9b000 0xa0000 [...]
+	2 0xff000000 0x100000000 
+drive0=sectors=0x1e78780 tbdf=0x2000 usb=y chan=0x5 
+.EE
+.PP
+On a typical PXE-booted server,
+.I iplpxe
+might also set
+.IP
+.EX
+ea=002590c1a56e tbdf=0x0c030000
+.EE
+.PP
+Note that
+.B drive0
+is set by both
+.I iplpxe
+and
+.IR iplfat.
+.PP
+This configuration file will boot from either a primary
+or secondary file server.  To select the secondary file server,
+one must override the default within 10 seconds.
+.IP
+.EX
+[menu]
+option0=wrens
+option1=swift
+
+[wrens]
+fs=10.220.1.17
+bootfile=9cpu
+
+[swift]
+fs=10.220.1.22
+bootfile=9paecpu
+
+[common]
+console=0 b115200
+ether0=type=i82598
+auth=10.220.1.1
+nobootprompt=il -g 10.220.10.1 ether /net/ether0 10.220.1.1 /112
+.EE
+.SH FILES
+.B /386/iplmbr
+.br
+.B /386/iplpbs
+.br
+.B /386/iplfat
+.br
+.B /386/ipliso
+.br
+.B /386/iplpxe
+.SH SOURCE
+.BR /sys/src/boot/pcipl
+.SH "SEE ALSO"
+.IR devether (3),
+.IR plan9.ini (8).
+.SH BUGS
+Booting from disk requires a FAT filesystem.

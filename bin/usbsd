@@ -1,0 +1,60 @@
+#!/bin/rc
+# turn usb disks into sd devices via sdloop(3)
+rfork e
+disk = ()
+disks=()
+name=()
+
+fn picksd{
+	p=`{awk '{print $1}' < /dev/sdctl}
+	r=()
+	for(i in u v w x y z)
+		if(~ $#r 0 && ! ~ sd$i $p)
+			r = $i
+	echo $r
+}
+
+test -e /dev/usb || bind -a '#u' /dev || {
+	echo no '#u/usb' >[1=2]
+	exit nousb
+}
+test -e /dev/usbdctl || mount -a /srv/usb /dev || {
+	echo cannot mount /srv/usb >[1=2]
+	exit nousbd
+}
+
+switch($#*){
+case 0
+	;
+case 1
+	disks = $1
+case 2
+	disks = $1
+	name = $2
+case *
+	echo usage: usbsd ' [disk [sdchr]]' >[1=2]
+	exit usage
+}
+
+if(~ $#disks 0){
+	if(! test -e /dev/sdU*/data){
+		echo no usb disks >[1=2]
+		exit nodisk
+	}
+	disks = `{echo /dev/sdU*/data}
+}
+
+for(d in $disks){
+	if(~ $d /dev/sdU*.[0-9]*/data && test -e $d){
+		if(~ $#name 0)
+			name=`{picksd u}
+		if(~ $#name 0){
+			echo no available devices >[2=1];
+			exit nodev
+		}
+		echo config switch on spec $name type loop/$d >/dev/sdctl
+	}
+	if not
+		echo $d does not exist >[2=1]
+}
+exit ''

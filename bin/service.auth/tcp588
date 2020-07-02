@@ -1,0 +1,8 @@
+#!/bin/rc
+#smtp serv net incalldir user
+
+user=`{cat /dev/user}
+if(test -f /srv/ratify)
+	mount /srv/ratify /mail/ratify
+# missing -D
+exec upas/smtpd -c /sys/lib/tls/smtpd.pem  -p -aqeEn $3

@@ -1,0 +1,165 @@
+#!/bin/rc 
+
+rfork e
+. /rc/bin/apatch/defs
+
+args='patch-name'
+flagfmt=''
+if(! eval `'' {aux/getflags $*} || ! ~ $#* 1){
+	aux/usage
+	exit usage
+}
+mountfs -a
+mountdist -w	# writable
+
+d=$PD/$1
+if(! $patch/okay $d){
+	echo 'bad patch: '$status >[1=2]
+	exit badpatch
+}
+
+if(test -e /n/dist/lib/patch.skip && grep -s '^'^$1^'$' /n/dist/lib/patch.skip){
+	echo patch $1 is a skip. done. >[1=2]
+	exit ''
+}
+
+echo  /dist/patch/$1
+
+if(! test -d /n/dist/dist/patch/$1){
+	must mkdir -p /n/dist/dist/patch/$1
+	must dircp $d /n/dist/dist/patch/$1
+}
+d=/n/dist/dist/patch/$1
+must cd $d
+
+echo -n merge... >[1=2]
+fn xxx {
+	rm -rf $2.new
+	if(! test -e /n/dist$1 && test -e $2.orig){
+		echo $1 'locally removed (ignoring)'>[1=2]
+	}
+	if(test -e /n/dist$1 && ! test -e $2.orig){
+		echo fail: $1 locally created. remove and retry>[1=2]
+		applyfailed=locally
+	}
+	if(test -f /n/dist$1 && test -d $2.orig){
+		echo $1 is now a file.>[1=2]
+		applyfailed=file
+	}
+	if(test -d /n/dist$1 && test -f $2.orig){
+		echo $1 is now a directory>[1=2]
+		applyfailed=directory
+	}
+	if(test -f /n/dist$1 && test -f $2.orig){
+		errs=/tmp/apply.$pid
+		ape/diff3 -m /n/dist$1 $2.orig $2 >$2.new >[2]$errs
+		if(grep -s 'Binary' $errs){
+			rm -f $2.new
+			if(! cmp /n/dist$1 $2.orig>[2]/dev/null){
+				echo conflicts in binary file $1';' see `{pwd} >[1=2]
+				applyfailed=binary
+			}
+		}
+		if not{
+			if(grep -s '^<<<<' $2.new){
+				echo conflicts. see `{pwd}^/$2.new >[1=2]
+				echo diff -n `{pwd}^/$2 $1
+				echo diff -n `{pwd}^/$2.orig $1
+				applyfailed=text
+			}
+		}
+		rm -f $errs
+	}
+	if(test -d /n/dist$1 && test -d $2.orig){
+		diff -ncr /n/dist$1 $2.orig >$2.diffs
+		if(grep -s '^diff '  $2.diffs){
+			echo conflicts merging $1';' see `{pwd}^/$2.diffs >[1=2]
+			applyfailed=merge
+		}
+		if not {
+			mkdir -p $2.new
+			dircp $2.orig $2.new
+			dircp $2 $2.new
+		}
+	}
+}
+
+applyfailed=()
+
+{
+	if(test -e /lib/patch.skipfile)
+		grep -v -f /lib/patch.skipfile files
+	if not
+		cat files
+} | sed 's/^/xxx /' | rc
+
+if(! ~ $#applyfailed 0){
+	echo exiting without changes >[1=2]
+	exit failed
+}
+
+echo -n backup... >[1=2]
+
+fn xxx {
+	rm -rf $2.backup
+	test -e /n/dist$1 && cpfile /n/dist$1 $2.backup
+}
+
+if(test -e /lib/patch.skipfile){
+	grep -v -f /lib/patch.skipfile files | sed 's/^/xxx /' | rc
+}
+if not {
+	cat files | sed 's/^/xxx /' | rc
+}
+if(~ 0 never){
+	echo exiting without changes cannot backup: `{cat failed}>[1=2]
+	exit failed
+}
+
+echo  copy... >[1=2]
+fn xxx {
+	fdir=`{basename -d /n/dist$1}
+	if(! test -d $fdir){
+		echo mkdir $fdir >[1=2]
+		mkdir -p $fdir
+	}
+	echo cpfile $2 /n/dist$1 >[1=2]
+	if(test -e $2.new)
+		cpfile $2.new /n/dist$1
+	if not
+		cpfile $2 /n/dist$1
+	#BUG: update /n/dist/$1 permissions by looking at those of $2.orig
+}
+if(test -e /lib/patch.skipfile){
+	grep -v -f /lib/patch.skipfile files | sed 's/^/xxx /' | rc
+}
+if not {
+	cat files | sed 's/^/xxx /' | rc
+}
+
+fn xxx {
+	# echo cp $2.backup $1
+	if(test -e $2.backup)
+		cpfile $2.backup /n/dist$1
+	if not
+		rm -rf /n/dist$1
+}
+if(~ 0 never){
+	echo copying failed, restoring backups >[1=2]
+	if(test -e /lib/patch.skipfile){
+		grep -v -f /lib/patch.skipfile files | sed 's/^/xxx /' | rc
+	}
+	if not {
+		cat files | sed 's/^/xxx /' | rc
+	}
+	exit failed
+}
+
+mkdir $PD/applied/$1 && dircp $PD/$1 $PD/applied/$1 && rm -r $PD/$1
+
+if(test -s removed){
+	echo '#' remove these files if you want. I will not remove them for you >[1=2]
+	echo '# ($patch/undo will not restore them)'>[1=2]
+	sed 's|^|rm -r /n/dist|' < removed
+}
+echo done>[1=2]

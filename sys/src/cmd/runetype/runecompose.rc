@@ -1,0 +1,55 @@
+#!/bin/rc
+rfork e
+. common.rc
+awk '-F;' '
+' ^ $hex ^ '
+
+BEGIN {
+}
+
+length($6)>0 && $6 !~ /^</ {
+	split($6, a, " ");
+	if(length(a) != 2)
+		next
+#	combiner[hex(a[2])]++;
+
+	if(hex($1) < 65535 && hex(a[1]) < 65536 && hex(a[2]) < 65536){
+		idx = hex(a[1])*65536 + hex(a[2])
+		tab[idx] = hex($1);
+	}else{
+		idx = a[1] "" a[2]
+		tab64[idx] = $1
+	}
+}
+
+END {
+	print "static";
+	print "uint\t__combine2[] =";
+	print "{";
+
+	for(i in tab){
+		printf "\t" "0x%08x," "\t" "0x%04x," "\t /* \\u%04x + %04x -> \\u%04x */\n", 
+			i, tab[i], i/65536, i%65536, tab[i] | "sort"
+	}
+	close "sort"
+	print "};"
+	print ""
+
+	if(ENVIRON["rdigits"] == 6){
+		print "static";
+		print "uvlong\t__combine264[] =";
+		print "{";
+
+		for(i in tab64){
+			printf "\t" "0x%sull," "\t" "0x%s," "\t /* \\u%s + %s -> \\u%s */\n", 
+				i, tab64[i], substr(i, 1, 5), substr(i, 6, 5), tab64[i] | "sort"
+		}
+		close "sort"
+		print "};"
+		print ""
+	}
+
+#	for(i in combiner)
+#		printf "//	\\u%04x %04x %d\n", i, i, combiner[i]
+#	print ""
+} ' <{Unicode} | tr 'A-Z' 'a-z' | Sprint

@@ -1,0 +1,63 @@
+#!/bin/rc
+
+loader=9load
+pbs=/386/pbslba
+mbr=/386/mbr
+
+fn fail{
+	if(! ~ $#* 0)
+		echo mkfsboot: $*>[2=1]
+	exit fail
+}
+
+flagfmt='l loader,p pbs,m mbr'
+args='drive'
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 1){
+	aux/usage
+	exit usage
+}
+if(! test -d $1 || ! test -f $1/data){
+	fail disk $1 not found
+}
+
+if(! ~ $#flagl 0)
+	loader=$flagl
+if(! ~ $#flagp 0)
+	pbs=$flagp
+if(! ~ $#flagm 0)
+	mbr=$flagm
+if(! test -f fsconfig)
+	fail fsconfig missing
+if(! test -d 9fat || ! test -f 9fat/$loader)
+	fail invalid 9fat directory
+d=$1
+
+# format properly without password
+disk/mknvrsafe -c `{sed -n 's:^config (.*):\1:p' < fsconfig} | dd -quiet 1 -conv sync -of 9fat/fs.nvr
+if(! ~ $status '|')
+	exit mknvrsafe
+
+dd -if /dev/zero -of $d/data -count 1024 -bs 8192 -quiet 1 || fail
+disk/mbr -m $mbr $d/data || fail
+disk/fdisk -abw $d/data || fail
+{
+	echo a 9fat 0 0x5000
+	echo a nvram 0x5000 0x5001
+	echo a fsconfig 0x5040 0x5060
+	test -x extraparts && extraparts
+	echo w
+	echo q
+} | disk/prep $d/plan9 || fail
+extra=`{ls -p 9fat/* | grep -v '^(' ^ $loader ^ '|plan9.ini|fs.nvr)$'}
+if(! test -f 9fat/$loader)
+	cp /386/$loader 9fat/$loader || fail
+if(~ $#extra 0 || ! test -f 9fat/plan9.ini || ! test -f 9fat/fs.nvr)
+	fail missing required 9fat files
+disk/format -b $pbs -d -r 2 $d/9fat \
+	9fat/^($loader plan9.ini fs.nvr $extra) || fail
+# prep lies to us.  we need to get the real offset of
+# 9fat to put the config block on a 8k boundary
+offset=`{awk '$1=="part" && $2=="plan9" {print 8 - $3%8}' < $d/ctl}
+
+# add Tconfig tag
+grep -v '^config' fsconfig | disk/mkfsconf | dd -of $d/fsconfig -oseek $offset -quiet 1

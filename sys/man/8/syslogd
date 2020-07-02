@@ -1,0 +1,41 @@
+.TH SYSLOGD 8
+.SH NAME
+syslogd \- receive syslog information
+.SH SYNOPSIS
+.B syslogd
+[
+.B -x
+.I netmntpt
+]
+.SH DESCRIPTION
+The
+.I syslogd
+process gateways RFC-3164 udp syslog messages
+from the given network stack to
+.I syslog
+(see
+.IR perror (2))
+using the logname
+.BI syslog. facility\fR.
+The default network stack is 
+.L /net
+but may be overridden with the
+.B -x
+flag.
+.SH SOURCE
+.B /sys/src/cmd/syslogd.c
+.SH "SEE ALSO"
+.IR perror (2).
+.SH BUGS
+.I Syslogd
+is not recommended for monitoring
+Plan 9 systems; use
+.IR syslog,
+.L /lib/rfc/rfc3164.
+.PP
+A hardcoded list of facilties is used and
+the facility name 
+.L sr
+(Coraid SR units use this facility)
+is used instead of
+.L local0\fR.

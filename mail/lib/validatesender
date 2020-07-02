@@ -1,0 +1,109 @@
+#!/bin/rc
+rfork en
+
+# note the patterns in the exception lists are eval'd
+# later, so wildcards may be quoted.
+#
+# force non-explicit matches to fail.  gmail specifies allowed hosts, but
+# then says ?all, defeating all that work.  just fail jerks impersonating google.
+spfescalate=(gmail.com)
+
+# ignore spf mismatches from these domains
+spfign=(*.bell-labs.com mac.com)
+
+# these domains get a spamhaus pass
+shign=(*terzarima.net *zenzebra.mv.com)
+
+# these people are special; give them a pass
+# dom!addr style.
+specialed=(yahoo.com!swardd)
+
+# these domains are special; give them a pass
+noping=('*.homeagain.com' mail.legalzoom.com '*.legalzoom.com')
+
+# these particular senders are blacklisted
+# motivated by the fact that yahoo calender
+# is compromised.
+dropuser=(reply.yahoo.com!calendar-invite comerrec.net!* ecoinfor.com!mail-bounces sheilabret!att.net)
+
+fn usage{
+	echo 'usage: validatesender [-n /net] dom user [ip [hellodom]]' >[1=2]
+	exit usage
+}
+
+fn checkspf{
+	str=($h spf $*)
+	spfflag=-v
+	if(~ $1 $spfescalate)
+		spfflag=$spfflag^e
+	if(~ $#netroot 1)
+		spfflag=($spfflag -n $netroot)
+	upas/spf $spfflag $* >[2=1] | sed 's:^:'^$"str^' -> :g' >>$log
+	spfstatus=$status
+	spfstatus=`{echo $spfstatus | sed 's:\|.*::
+		s/^spf [0-9]+://'}
+	if(! ~ $#spfstatus 0 && ! ~ $"spfstatus *none){
+		if(~ $spfstatus deferred:*)
+			exit $"spfstatus
+		if(! ~ $dom $2)
+			exit 'rejected: spf '^$"spfstatus
+	}
+}
+
+h=`{date -n} ^ ' ' ^ $sysname ^ ' ' ^ $pid
+h=$"h
+log=/sys/log/smtpd.mx	#/fd/2
+if(! test -w $log)
+	log = /dev/null
+echo $h validatesender $* >>$log
+
+netroot=/net.alt
+if(~ $1 -n){
+	shift
+	netroot=$1
+	shift
+}
+if(! ~ $#* [234])
+	usage
+
+dom=$1; addr=$2; ip=$3; helo=$4
+
+if(eval ~ '$dom!$addr' $dropuser)
+	exit 'member of dropuser list'
+
+if(~ $dom^!^$addr $specialed networksolutions.com!*)
+	exit ''
+
+if(! ~ $#ip 0 && test -x /mail/lib/spamhaus){
+	spamhaus=`{/mail/lib/spamhaus $ip}
+	if(! ~ $spamhaus '' && eval ! ~ '$dom' $shign){
+		echo $h spamhaus '->' $spamhaus>>$log
+		exit 'rejected: spamhaus: '^$"spamhaus
+	}
+	if(! ~ $spamhaus '')
+		echo $h spamhaus '->' $spamhaus '(ignored)'>>$log
+}
+
+if(eval ~ $helo $noping){
+	echo $h validatesender noping ok >> $log
+	exit ''
+}
+
+if(x=`{upas/smtp -p $netroot/tcp!$dom /dev/null $addr >[2=1] | 
+		tee >{sed 's/^/'$h' /' >> $log} |
+		tail -1}){
+	if(~ $#ip 0 || ! test -x /bin/upas/spf)
+		exit ''
+	if(eval ~ '$dom' $spfign)
+		exit ''
+	echo $h spf $dom $ip $addr $helo>>$log
+	checkspf $dom $ip $addr $helo
+	exit ''
+}
+
+smtpstatus=$status
+if(~ $#x 0)
+	x=$smtpstatus
+if(~ $smtpstatus *'Permanent Failure'*)
+	exit 'rejected: smtp ping: '^$"x
+exit 'deferred: smtp ping: '^$"x

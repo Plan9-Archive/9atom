@@ -1,0 +1,7 @@
+</$objtype/mkfile
+
+TARG=health
+OFILES=main.$O
+BIN=/$objtype/bin/disk
+
+</sys/src/cmd/mkone

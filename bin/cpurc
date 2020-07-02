@@ -1,0 +1,98 @@
+#!/bin/rc
+echo -n cpu > /env/service
+date > /env/boottime
+
+fileserver=aska
+cpu=ladd
+facedom=quanstro.net
+
+# mount points
+mntgen -s slashn && chmod 666 /srv/slashn
+
+# name translation, cs sets /dev/sysname and eladdr
+ndb/cs
+sysname=`{cat /dev/sysname}
+
+# start network.  beware boot hack for fossil
+if(! test -e /net/ipifc/0/ctl || ~ 127.0.0.1 `{cat /net/ipifc/0/local})
+	ip/ipconfig >/dev/null >[2=1]
+
+# parallelism for mk
+NPROC = `{wc -l </dev/sysstat}
+
+prompt=($sysname^'# ' '	')
+
+# pick a timeserver closer to you when you can or we'll get clogged
+# aux/timesync -ra1000000
+if(! ~ $sysname timeserver){
+	aux/timesync -nl -d /sys/log/timesync.d time1.uga.edu
+	if(test -e '#r/rtc') @ {
+		while(sleep 600)
+			awk '{print $1}' /dev/time >'#r/rtc'
+	} &
+}
+
+flashpart
+
+switch($sysname){
+case ladd
+	ndb/dns -s
+
+	ip/dhcpd
+	ip/tftpd
+
+	auth/keyfs -wp -m /mnt/keys /adm/keys >/dev/null >[2=1]
+	auth/secstored >/dev/null >[2=1]
+	auth/cron >>/sys/log/cron >[2=1] &
+
+	# ssh key.
+	auth/secstore -n -G factotum > /mnt/factotum/ctl
+
+	bind -b '#l1' /net.alt
+	bind -b '#I1' /net.alt
+	ip/ipconfig -x /net.alt -g 192.168.10.254 ether /net.alt/ether1 add 192.168.10.1  /120
+	ndb/cs -x /net.alt -f /lib/ndb/external
+	ndb/dns -Rrsx /net.alt -f /lib/ndb/external
+	upas/ratfs -c /mail/lib/smtpd.conf
+	aux/listen -q -t /rc/bin/service.auth -d /rc/bin/service.ext /net.alt/tcp
+	#aux/listen1 -t /net.alt/tcp!*!25 /bin/upas/smtpd -f -g -h ladd.coraid.com&
+	ip/httpd/httpd -a /net.alt/tcp!*!80
+
+	syslogd&
+
+case harness
+	ndb/dns -r
+	ip/httpd/httpd -a /net/tcp!*!80
+
+case *
+	ndb/dns -r
+}
+
+# services available to networks
+aux/listen -q -t /rc/bin/service.auth -d /rc/bin/service il
+aux/listen -q -t /rc/bin/service.auth -d /rc/bin/service tcp
+
+if(test -f '#©/cecctl') @{
+	rfork e
+	echo name $sysname
+	for(i in `{seq 1 9}){
+		j='#l'^$i/ether$i
+		if(test -e $j)
+			echo cecon $j
+	}
+}>'#©/cecctl'>[2]/dev/null
+
+if(test -f /net/el/ctl && test -f /net/ether0/addr){
+#	{
+#		echo add 5100`{cat /net/ether0/addr}
+#		echo bind ether /net/ether0
+#	}>/net/el/ctl
+	if(~ $sysname chula)
+		aux/listen -t /usr/quanstro/tmp/service el
+}
+if(test -f /lib/ndb/consoledb.$sysname){
+	bind -a '#t' /dev
+	aux/consolefs -c /lib/ndb/consoledb.$sysname
+	startclog
+}
+~ 0 0

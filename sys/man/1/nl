@@ -1,0 +1,14 @@
+.TH NL 1
+.SH NAME
+nl \- number lines
+.SH SYNOPSIS
+.B nl
+[
+.I file ...
+]
+.SH DESCRIPTION
+Prefix each line of the input with a line number.
+.SH SOURCE
+.B /usr/quanstro/bin/rc/nl
+.SH BUGS
+This manual page is longer than the program.

@@ -1,0 +1,12 @@
+#!/bin/rc
+rfork e
+re='s/[ 	]*Runemax[ 	]*=[ 	]*([^,]+).*/\1/p'
+runemax=`{sed -n $re < /sys/include/libc.h}
+if(test $runemax -gt 0xffff){
+	echo 'rune='$rune20bit
+	echo 'rdigits=6'
+}
+if not{
+	echo 'rune='$rune16bit
+	echo 'rdigits=4'
+}

@@ -1,0 +1,29 @@
+.TH PROF 2
+.SH NAME
+prof, _profdump \- profile functions
+.SH SYNOPSIS
+.B
+void	prof(void (*fn)(void*), void *arg, int entries, int what)
+.PP
+.B
+void	_profdump(void)
+.SH DESCRIPTION
+.I Prof
+profiles a single function and writes the profiling data to a file
+on return as specified in
+.IR prof (1).
+The function
+.I _profdump
+may be called to dump profile information before function exit,
+or when profiling whole program invocations, at any point before
+exit.
+.SH SOURCE
+.SH "SEE ALSO"
+.IR prof (1).
+.SH BUGS
+When mixing calls to
+.IR prof 
+and
+.I _profdump
+and
+whole-program profiling, it is easy to overwrite the fixed output file.

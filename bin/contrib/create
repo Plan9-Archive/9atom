@@ -1,0 +1,110 @@
+#!/bin/rc
+
+rfork ne
+path=/bin
+
+fn fatal {
+	echo $*
+	exit $"*
+}
+
+fn usage {
+	echo 'usage: contrib/create [-d depend] [-f] [-r root] [-u user] [-x file] name proto' >[1=2]
+	exit  usage	
+}
+
+root=/
+usr=$user
+force=false
+exclude=()
+depend=()
+while (~ $1 -*) {
+	switch ($1) {
+	case -d
+		depend=($depend $2)
+		shift
+	case -f
+		force=true
+	case -r
+		root=$2
+		shift
+	case -u
+		usr=$2
+		shift
+	case -x
+		exclude=($exclude `{cleanname -d `{pwd} $2})
+		shift
+	case -*
+		usage
+	}
+	shift
+}
+
+if (! ~ $#* 2)
+	usage
+
+repl=$home/lib/replica
+# setup dirs
+if(! test -d $repl) mkdir -p $repl
+for(i in cfg db log) {
+	if(! test -d $repl/$i)
+		mkdir -p $repl/$i
+}
+
+
+name=$1
+proto=`{cleanname -d `{pwd} $2}
+if (! test -f $proto)
+	fatal cannot find proto: $proto
+
+cfg=$repl/cfg/$name
+if (test -x $cfg && ~ $force false)
+	fatal name conflict: replica $name already exists.
+
+contrib=/n/sources/contrib/$usr
+x='$'
+cat > $cfg <<!
+#!/bin/rc
+s=$contrib/replica
+serverroot=/n/sources/contrib/$usr/root
+serverlog=$x^s/$name/log
+serverdb=$x^s/$name/db
+serverdep=$x^s/$name/dep
+serverchg=$x^s/$name/chg
+serverinf=$x^s/$name/inf
+fn servermount { 9fs sources; 9fs -m sources }
+c=$repl
+clientroot=$root
+clientdb=$x^c/db/$name
+clientlog=$x^c/log/$name
+clientexclude=($exclude)
+clientdepend=($depend)
+clientproto=$proto
+!
+chmod +x $cfg
+> $repl/db/$name
+> $repl/log/$name
+
+. $cfg
+
+servermount || fatal cant mount server
+mkdir -p $contrib/root
+mkdir -p $contrib/replica
+mkdir -p $contrib/replica/$name
+> $serverdb
+> $serverlog
+> $serverdep
+> $serverchg
+for (i in $clientdepend)
+	echo $i >> $serverdep
+
+if (test -w /dev/consctl) {
+	>/dev/consctl {
+		echo holdon
+		cat >$serverinf
+	}
+}
+if not
+	cat >$serverinf
+
+exec contrib/push $name

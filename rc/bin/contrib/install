@@ -1,0 +1,93 @@
+#!/bin/rc -e
+
+rfork ne
+path=/bin
+
+fn fatal {
+	echo $*
+	exit $"*
+}
+
+fn usage {
+	echo 'usage: contrib/install [-f] [-r root] user/name' >[1=2]
+	exit  usage	
+}
+
+root='/'
+force=false
+while (~ $1 -*) {
+	switch ($1) {
+	case -f
+		force=true
+	case -r
+		root=`{cleanname -d `{pwd} $2}
+		shift
+	case -*
+		usage
+	}
+	shift
+}
+
+if (! ~ $#* 1)
+	usage
+
+usr=`{echo $1 | awk -F'/' '{print $1}'}
+name=`{echo $1 | awk -F'/' '{print $2}'}
+
+repl=/n/sources/contrib/$usr/replica/$name
+cfg=/dist/replica/$name
+
+if (test -x $cfg && ~ $force false)
+	fatal $name is already installed
+
+if (! test -d /dist/replica -w) 
+	fatal cannot write in /dist/replica
+
+9fs sources || fatal mount server failed
+
+if (! test -d $repl)
+	fatal no such replica $repl
+
+dep=`{cat $repl/dep >[2]/dev/null}
+miss=()
+for (i in $dep) {
+	r=`{echo $i | awk -F'/' '{print $2}'}
+	if (! test -x /dist/replica/$i)
+		miss=($miss $i)
+}
+
+if (! ~ $#miss 0) {
+	if (~ $force false)
+		fatal missing dependencies: $miss
+	if not
+		echo warning: missing dependencies: $miss
+}
+
+proto=`{grep $name\.proto $repl/db | awk '{print $1}'}
+
+x='$'
+cat > $cfg <<!
+#!/bin/rc
+s=/n/sources/contrib/$usr/replica
+serverroot=/n/sources/contrib/$usr/root
+serverlchg=$x^s/$name/chg
+serverlog=$x^s/$name/log
+serverproto=$x^serverroot/$proto
+fn servermount { 9fs sources }
+fn serverupdate { status='' }
+fn clientmount { status='' }
+c=/dist/replica
+clientroot=$root
+clientdb=$x^c/client/$name.db
+clientexclude=(dist/replica/client)
+clientlog=$x^c/client/$name.log
+clientchg=$x^c/client/$name/chg
+clientproto=$x^clientroot/$proto
+!
+chmod +x $cfg
+
+>/dist/replica/client/$name.db
+>/dist/replica/client/$name.log
+>/dist/replica/client/$name.chg
+
+exec replica/pull -v $cfg

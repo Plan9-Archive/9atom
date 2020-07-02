@@ -1,0 +1,40 @@
+.TH LATCMP 1
+.SH NAME
+latcmp \- compare latitudes
+.SH SYNOPSIS
+.B latcmp
+[
+.B -m
+] [
+.B -l
+.I lat lng
+] ... [
+.I file ...
+]
+.SH DESCRIPTION
+.I Latcmp
+computes the distance in meters between two points on the earth using
+Thaddeus Vincenty's formula using the WGS-84 parameters.  Divergent
+cases are approximated with the Haversine formula.  The default starting
+point is taken from
+.BR /lib/sky/here 
+and can be overridden with the
+.B -l
+option.  A second
+.B -l
+option specifies the comparison point.
+Files passed on the command line are expected to have one comparison
+point per line.  Leading and trailing text is ignored.  A point consists
+of two floating-point numbers, representing the latitude and longitude in
+degrees, separated by whitespace.  The sign is negative for latitude South
+of the equator, and longitude West of the Prime Meridian.
+.P
+For each point after the first, the geodesic distance in meters to the first is computed.
+The output is the input line (or the point, if specified on the command line)
+a tab and the distance between that point and the first.  The
+.B -m
+flag only prints the point closest to the first.  The
+.B -q
+flag prints only the geodesic distance.
+.SH SOURCE
+.B /sys/src/cmd/latcmp.c

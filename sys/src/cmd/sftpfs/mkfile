@@ -1,0 +1,17 @@
+</$objtype/mkfile
+
+TARG=\
+	sftpfs\
+
+OFILES=\
+	fxp.$O\
+	util.$O\
+	map.$O\
+	sftpfs.$O\
+
+HFILES=\
+	fxp.h\
+
+BIN=/$objtype/bin
+
+</sys/src/cmd/mkone

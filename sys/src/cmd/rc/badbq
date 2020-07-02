@@ -1,0 +1,4 @@
+#!/bin/rc
+nl='
+'
+ifs=α$nl echo `{echo abαβ}

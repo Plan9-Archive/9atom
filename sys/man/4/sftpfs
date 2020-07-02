@@ -1,0 +1,89 @@
+.TH SFTPFS 4
+.SH NAME
+sftpfs \- SSH File Transfer Protocol (SFTP) file system
+.SH SYNOPSIS
+.B sftpfs
+[
+.B -12DU
+] [
+.B -m
+.I mntpt
+] [
+.B -p
+.I srvpath
+] [
+.B -s
+.I svc
+]
+[
+.B -u
+.I passwd
+.I group
+]
+.RI [ user\fB@ ] host
+.SH DESCRIPTION
+.I Sftpfs
+connects to the SFTP subsystem of the SSH server at
+.IR host ,
+and presents the root file tree of
+.IR host
+at
+.IR mntpt .
+The default mount point is
+.BI /n/ host \fR.
+.PP
+If the
+.B -s
+option is given, the file system is posted as
+.BI /srv/ svc \fR.
+It will try to login as
+.IR user ,
+if given.  Otherwise, login is attempted using the user name from
+.BR /dev/user .
+Authentication is entirely the reponsibility of the SSH client.
+.PP
+The
+.B -1 -2
+flags specify the SSH version used for the connection.
+.I Serverpath
+(default
+.BR /usr/lib/sftp-server )
+specifies the remote path of the SFTP server used in version 1.  A path without
+slash character is looked up in the executable search path.  Some
+common places for SFTP server to live are:
+.IP
+.EX
+/usr/lib/sftp-server
+/usr/libexec/openssh/sftp-server
+/usr/lib/misc/sftp-server
+/usr/libexec/sftp-server
+/usr/lib/ssh/sftp-server
+.EE
+.PP
+.I Passwd
+and
+.I group
+specifies path to the Unix password and group files, to be used for
+UID/GID to name translation.  The paths are interpreted after the file
+system is mounted, so paths starting with
+.I mntpt
+are acceptable. The
+.B -U
+option uses
+.IB mntpt /etc/passwd
+and
+.IB mntpt /etc/group
+as the Unix password and group file. It overrides the
+.B -u
+flag.
+.LP
+The
+.B -D
+flag causes a transcript of the 9P conversation to be written to
+standard error.
+.SH SOURCE
+.B /sys/src/cmd/sftpfs
+.SH "SEE ALSO"
+.IR ssh1 (1),
+.IR ssh2 (1),
+.IR srv (4).

@@ -1,0 +1,181 @@
+.TH XML 2
+.SH NAME
+xmlattr,
+xmlcalloc,
+xmlelem,
+xmlfind,
+xmlfree,
+xmllook,
+xmlmalloc,
+xmlnew,
+xmlparse,
+xmlprint,
+xmlstrdup,
+xmlvalue
+\- XML parser
+.SH SYNOPSIS
+.de PB
+.PP
+.ft L
+.nf
+..
+.PB
+#include <u.h>
+#include <libc.h>
+#include <xml.h>
+.PB
+enum {
+	Fcrushwhite = 1,
+	Fstripnamespace = 2,
+};
+.PB
+struct Xml{
+	Elem *root;		/* root of tree */
+	char *doctype;		/* DOCTYPE structured comment, or nil */
+	...
+};
+.PB
+struct Elem {
+	Elem *next;		/* next element at this hierarchy level */
+	Elem *child;		/* first child of this node */
+	Elem *parent;		/* parent of this node */
+	Attr *attrs;		/* linked list of atributes */
+	char *name;		/* element name */
+	char *pcdata;		/* pcdata following this element */
+	int line;			/* Line number (for errors) */
+};
+.PB
+struct Attr {
+	Attr *next;		/* next atribute */
+	Elem *parent;		/* parent element */
+	char *name;		/* atributes name */
+	char *value;		/* atributes value */
+};
+.PB
+.PD 0
+.ta +\w'\fL      'u +\w'\fL    'u +6n +4n
+Attr*	xmlattr(Xml *xp, Attr **root, Elem *parent,
+		char *name, char *value)
+.PB
+Elem*	xmlelem(Xml *xp, Elem **root, Elem *parent, char *name)
+.PB
+Elem*	xmlfind(Xml *xp, Elem *ep, char *path)
+.PB
+Elem*	xmllook(Elem *ep, char *path, char *attr, char *value)
+.PB
+Xml*	xmlnew(int blksize)
+.PB
+Xml*	xmlparse(int fd, int blksize, int flags)
+.PB
+char*	xmlvalue(Elem *ep, char *name)
+.PB
+void*	xmlmalloc(Xml *xp, usize size)
+.PB
+void*	xmlcalloc(Xml *xp, usize nelem, usize elemsz)
+.BP
+void*	xmlstrdup(Xml *xp, char *s)
+.PB
+void	xmlfree(Xml *xp)
+.PB
+void	xmlprint(Xml *xp, int fd)
+.SH DESCRIPTION
+.PP
+.I Libxml
+is a library for manipulating an XML document, in-memory 
+(known as the DOM model). Each element may have a
+number of children, each of which has a number of attributes, each attribute
+has a single value. All elements contain a pointer to their parent
+element, the root element having a nil parent pointer.
+.I Pcdata
+(free form text) found between elements is attached to element which follows it.
+The line numbers where each element was found is stored to allow unambigious
+error messages during later analysis.
+.PP
+Strings are stored in two data structures: a binary tree for common names such as
+element and attribute names. Uncommon names such as values and
+pcdata are stored in a simple, unmanaged heap. These steps vastly reduce the memory
+footprint of the parsed file and the time needed to free the XML data.
+.PP
+.I Xmlparse
+reads the given file and builds an in-memory tree.
+.I Blocksize
+controls the granularity of allocation of the string heap described above,
+8192 is typically used.
+The
+.I flags
+field allows some control over the parser, it is a bitwise
+.B or
+of the following values: 
+.TP 10
+.B Fcrushwhite
+All strings whitespace in PCdata is replaced by a single space and leading and trailing whitespace is
+removed.
+.TP
+.B Fstripsnamespace
+Remove leading namespace strings form all element and attribute names; this effectively ignores namespaces
+which can lead to parsing ambiguities, though in practice it has not been a problem—yet.
+.PP
+Xml trees may also be built up by calling
+.I xmlnew
+to create the XML tree, followed by
+.I xmlelem
+and
+.I xmlattr
+to create individual elements and attributes  respectively.
+.I Xmlelem
+takes the address of the root of an element list to which the new
+element should be appended, the address of the parent node the new
+element should reference, and the name
+of the node to create; It returns the address of the created element.
+.PP
+.I Xmlattr
+attaches an attribute to an existing element. It takes a list pointer
+and parent pointer like 
+.IR xmlelem ,
+but requires both an atribute name and value,
+and returns the address of the new attribute.
+.PP
+.I Xmllook
+descends through the tree rooted at
+.I ep
+using the path specified in
+.IR path .
+It then returns if
+.I elem
+is nil, or continues to search for a matching element.
+if
+.I attr
+and 
+.I value
+are not nil, the search will continue for
+for an element which contains this attribute and value pair.
+.PP
+.I Xmlvalue
+searches the given element's attribute list and returns the
+value of the attribute found or nil if that attribute is not found. 
+.PP
+.I Xmlprint
+writes the XML hierarchy rooted at \fIep\fR as text to the given
+file descriptor.
+.PP
+.IR Xmlmalloc ,
+.IR xmlcalloc ,
+and
+.IR xmlstrdup
+allocate memory within the
+.B Xml
+tree.
+.I Xmlfree
+frees all memory used by the given
+.B Xml
+tree.
+.SH SOURCE
+/sys/src/libxml
+.SH "SEE ALSO"
+.IR xb (1).
+.SH BUGS
+Namespaces should be handled properly.
+.PP
+A SAX model parser will probably be needed sometime (e.g. for Ebooks).
+.PP
+UTF-16 headers should be respected but UTF-16 files seems rare.

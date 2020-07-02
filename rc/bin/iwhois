@@ -1,0 +1,134 @@
+#!/bin/rc
+rfork e
+
+ipquery=(ndb/ipquery -f /lib/ndb/whois)
+query=(ndb/query -f /lib/ndb/whois)
+
+fn split{
+	ifs=. x=`{echo -n $*} echo $x
+}
+
+fn permute{
+	while(! ~ $#* 0){
+		echo $*|sed 's/ /./g'
+		shift
+	}
+}
+
+fn firstm{
+	m = ()
+
+	switch($1){
+	case *@*
+		m=`{echo $1|sed s/.*@//}
+	case [0-9]*.[0-9]*.[0-9]*.[0-9]* *:*
+		m=`{$ipquery ip $1 dom|sed 's/^dom=//
+			s/ .*//g'}
+		if(~ $m unallocated*){
+			echo $m ip block $1>[1=2]
+			m=()
+		}
+	case *
+		for(i in `{permute `{split $1}})
+			if(~ $#m 0)
+				m=`{$query tld $i dom}
+	}
+	if(~ $#m 0){
+		echo unknown whois server for $1>[1=2]
+		exit unknown
+	}
+	echo $m
+}
+
+fn mtoperson{
+	p=`{$query dom $1 person | sed 's/\$person/'$person'/'}
+	if(~ $#p 0)
+		p=$person
+	echo $p
+}
+
+fn mtoboiler{
+	# echo $query -m dom $1 boiler
+	ifs='' {f=`{$query -m dom $1 boiler}}
+	# whatis f
+	if(! ~ $#f 0)
+		eval fn boiler '{' sed ''''^$f^'''' '}'
+	if not{
+		ifs='' {f=`{$query -m dom $1 boilerp}}
+		# whatis f
+		if(! ~ $#f 0)
+			eval fn boiler '{' $f '}'
+	}
+	if(~ $#f 0)
+		fn boiler { cat }
+}
+
+fn mtocharset{
+	f=`{$query dom $1 tcs}
+	fn tcsfn { cat }
+	if(! ~ $#f 0)
+		eval fn tcsfn '{' tcs -f $f '}'
+}
+
+fn deboiler{
+	if(! ~ $flagn 1)
+		mtoboiler $1
+	mtocharset $1
+	shift
+	if(! ~ $flagn 1)
+		tcsfn <$1 | boiler | sed 's:[ 	]+$::g' | uniq
+	if not
+		tcsfn <$1
+}
+
+file=/tmp/iwhois$pid	# file=/tmp/iwhois
+fn sigexit {
+	rm -f $file $file^.old
+}
+
+flagfmt='n,v'
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 1){
+	echo 'usage: iwhois [-nv] domain'>[1=2]
+	exit usage
+}
+
+m0=0
+machine=`{firstm $1}
+if(! ~ $status '')
+	exit unknown
+person=`{echo $1|sed s/@.*//}
+
+while(~ 1 1){
+	if(~ $flagv 1)
+		echo echo `{mtoperson $machine} '|' telnet -nr tcp!$machine!whois
+	mtoperson $machine | telnet -nr tcp!$machine!whois > $file >[2=]
+	x=`{ sed -n '
+		s/.*Whois Server: (.*)/\1/p
+		s;.*ReferralServer: whois://([a-z_0-9.]+)(:[0-9]+)?;\1;p
+		/^No match/p
+		' $file }
+	switch($x){
+	case 'No match'*
+		echo $x
+		exit nomatch
+	case '' $m0
+		# if the current lookup fails, check parent's output
+		if(! test -s $file){
+			if(! test -s $file^.old)
+				exit unknown
+			echo referral failed: $m0 reports:
+			if(~ $#m0 0)
+				exit referral
+			deboiler $m0 $file^.old
+		}
+		if not
+			deboiler $machine $file
+		exit ''
+	case *' '*
+		echo $0: buggery: $x >[1=2]
+		exit botch
+	}
+	m0=$machine
+	machine=$x
+	mv $file $file^.old
+}

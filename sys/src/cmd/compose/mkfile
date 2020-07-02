@@ -1,0 +1,21 @@
+</$objtype/mkfile
+
+TARG=compose
+
+HFILES=compose.h
+OFILES=\
+	compose.$O\
+	main.$O\
+	page.$O\
+	strtoop.$O\
+
+UPDATE=\
+	mkfile\
+	${OFILES:%.$O=%.c}\
+	$HFILES\
+	/sys/man/1/compose\
+	/386/bin/compose\
+
+</sys/src/cmd/mkone
+
+BIN=/$objtype/bin

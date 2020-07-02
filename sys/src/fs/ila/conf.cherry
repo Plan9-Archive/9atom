@@ -1,0 +1,10 @@
+config p(h0)95.5
+service cherry
+filsys main cp(e99.0)0.10p(e99.0)10.90
+filsys dump o
+ipsntp 128.192.1.9
+ip0 205.185.197.117
+ipgw0 206.186.197.254
+ipmask0 255.255.255.0
+ipflag0 cec aoe
+end

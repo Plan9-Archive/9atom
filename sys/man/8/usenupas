@@ -1,0 +1,35 @@
+.TH USENUPAS 8
+.SH NAME
+usenupas \- test new upas
+.SH SYNOPSIS
+.B usenupas
+.SH DESCRIPTION
+.I Usenupas
+allows one to test the new upas
+before it becomes the default,
+given an appropriate installation
+of
+.IR Nupas .
+To enable parallel installation of
+the new and old versions, modify
+.B /sys/src/cmd/upas/mkupas
+to install in
+.B /$\f2objtype\f5/bin/nupas
+.PP
+Typically 
+.I usenupas
+should be sourced from
+.B /usr/\f2user\f5/lib/profile
+after one's mailbox has been converted
+to
+.IR mdir (6)
+format.
+.SH "SEE ALSO"
+.IR mdir (6),
+.IR pop3 (8),
+.IR splitmbox (8)
+.SH BUGS
+This is for testing only and is depricated.
+.PP
+It's imperative that one close all IMAP
+clients using the old upas system.

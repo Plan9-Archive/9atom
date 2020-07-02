@@ -1,0 +1,99 @@
+.TH PCI 8
+.SH NAME
+pci, pcirw \- PCI space tools
+.SH SYNOPSIS
+.B pci
+[
+.B -cmv
+]
+[
+.IR vid / did
+|
+.I bdf
+...
+]
+.br
+.B pcirw
+.B -r
+.I bdf
+.I offset
+.I width
+.br
+.B pcirw
+.B -w
+.I bdf
+.I offset
+.I width
+.I value
+.SH DESCRIPTION
+With no options,
+.I pci
+prints one line per device found on the local PCI bus
+described by
+.BR #$/pci .
+The fields are
+.IB bus . device . function ,
+class,
+class code,
+.IB vendor / device
+ids,
+IRQ (interrupt),
+followed by the BAR (base address) registers in pairs of
+.IB index : address
+and
+.IR size .
+The
+.B -v
+option adds a second line per device, containing an English description
+obtained from
+.BR /lib/pci .
+A second
+.B -v
+includes a second line of description based on the
+sub-DID and sub-VID.
+.PP
+The description for arbirary devices may be found by giving their
+PCI vendor and device ids on the command line. Specifying
+a
+.IR bdf s
+on the command line, will print only the selected devices.
+.PP
+The
+.B -c
+option prints a one-line summary of PCI capabilities instead.
+Each capability has the format
+.IB name / capcode \fR.\fP
+Combined with
+.B -v
+the capabilities' contents are decoded in human-readable format.
+.PP
+The
+.B -m
+option prints one line per device detailing the MSI (message-signaled
+interrupt) configuration.  The fields are
+.IB bus . device . function ,
+flags, target address, target "data" and offset of the capability structure.
+Combined with
+.B -v
+the flags are decoded in human-readable format.
+.PP
+.I Pcirw
+reads 
+.RB ( -r )
+or writes 
+.RB ( -w )
+an integer of the specified
+.I width
+and the specified
+.I offset
+to or from PCI configuration space of a single specified device.
+.SH FILES
+.B /lib/pci
+.SH SOURCE
+.B /rc/bin/pci
+.SH SEE ALSO
+.IR pnp (3)
+.SH BUGS
+Due to constrants in the PCI standard, the BAR sizes are not
+discoverable without corrupting them, so these must be provided
+by the kernel pci device.

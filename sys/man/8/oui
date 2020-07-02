@@ -1,0 +1,46 @@
+.TH OUI 8
+.SH NAME
+etheroui, wwnoui \- OUI Parsing
+.SH SYNOPSIS
+.B etheroui
+[
+.I mac ...
+]
+.br
+.B wwnoui
+[
+.I wwn ...
+]
+.SH DESCRIPTION
+These commands convert common strings containing
+an embedded IEEE Organizationally Unique Identifier (OUI)
+to the manufacturing organization's name.
+.I Etheroui
+accepts MAC addresses while
+.I wwnoui
+accepts World Wide Names (WWNs).
+.SH EXAMPLES
+Often it is helpful in determining the source of unknown
+packets on a network to know the manufacturer.
+Given these error messages in
+.BR /sys/log/ipboot ,
+.I etheroui
+can be used to narrow down the list of suspect equipment.
+.IP
+.EX
+; tail -100 /sys/log/ipboot | grep 'no binding'
+ladd Jul  1 22:34:58 !Discover(hwa01_003048da5830
+	via 192.168.0.136): no binding ::
+; etheroui 003048da5830
+003048 supermicro computer, inc.
+.EE
+.PP
+.SH FILES
+.TP
+.B /lib/oui
+organization database
+.SH "SEE ALSO"
+.IR atazz (8),
+.IR dhcpd (8),
+.IR scuzz (8),
+.IR snoopy (8)

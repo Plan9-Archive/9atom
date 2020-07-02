@@ -1,0 +1,608 @@
+0000A1  !!          ¡	inverted exclamation mark
+0000A2  c$          ¢	cent sign
+0000A3  l$          £	pound sign
+0000A4  g$          ¤	currency sign
+0000A5  y$          ¥	yen sign
+0000A6  ||          ¦	broken vertical bar
+0000A7  SS          §	section sign
+0000A8  ""          ¨	spacing diaeresis
+0000A9  Oc cO       ©	copyright sign
+0000AA  sa          ª	feminine ordinal indicator
+0000AB  <<          «	left pointing guillemet
+0000AC  no          ¬	not sign
+0000AD  --          ­	soft hyphen
+0000AE  Or rO       ®	registered trade mark sign
+0000AF  __          ¯	spacing macron
+0000B0  de          °	degree sign
+0000B1  +-          ±	plus-or-minus sign
+0000B2  s2          ²	superscript digit two
+0000B3  s3          ³	superscript digit three
+0000B4  ''          ´	spacing acute
+0000B5  mi          µ	micro sign
+0000B6  pg          ¶	paragraph sign
+0000B7  ..          ·	middle dot
+0000B8  ,,          ¸	spacing cedilla
+0000B9  s1          ¹	superscript digit one
+0000BA  so          º	masculine ordinal indicator
+0000BB  >>          »	right pointing guillemet
+0000BC  14          ¼	fraction one quarter
+0000BD  12          ½	fraction one half
+0000BE  34          ¾	fraction three quarters
+0000BF  ??          ¿	inverted question mark
+0000C0  `A          À	latin capital letter a grave
+0000C1  'A          Á	latin capital letter a acute
+0000C2  ^A          Â	latin capital letter a circumflex
+0000C3  ~A          Ã	latin capital letter a tilde
+0000C4  "A          Ä	latin capital letter a diaeresis
+0000C5  oA          Å	latin capital letter a ring
+0000C6  AE          Æ	latin capital letter a e
+0000C7  ,C          Ç	latin capital letter c cedilla
+0000C8  `E          È	latin capital letter e grave
+0000C9  'E          É	latin capital letter e acute
+0000CA  ^E          Ê	latin capital letter e circumflex
+0000CB  "E          Ë	latin capital letter e diaeresis
+0000CC  `I          Ì	latin capital letter i grave
+0000CD  'I          Í	latin capital letter i acute
+0000CE  ^I          Î	latin capital letter i circumflex
+0000CF  "I          Ï	latin capital letter i diaeresis
+0000D0  -D D-       Ð	latin capital letter eth
+0000D1  ~N          Ñ	latin capital letter n tilde
+0000D2  `O          Ò	latin capital letter o grave
+0000D3  'O          Ó	latin capital letter o acute
+0000D4  ^O          Ô	latin capital letter o circumflex
+0000D5  ~O          Õ	latin capital letter o tilde
+0000D6  "O          Ö	latin capital letter o diaeresis
+0000D7  mu          ×	multiplication sign
+0000D8  /O          Ø	latin capital letter o slash
+0000D9  `U          Ù	latin capital letter u grave
+0000DA  'U          Ú	latin capital letter u acute
+0000DB  ^U          Û	latin capital letter u circumflex
+0000DC  "U          Ü	latin capital letter u diaeresis
+0000DD  'Y          Ý	latin capital letter y acute
+0000DE  |P          Þ	latin capital letter thorn
+0000DF  ss          ß	latin small letter sharp s
+0000E0  `a          à	latin small letter a grave
+0000E1  'a          á	latin small letter a acute
+0000E2  ^a          â	latin small letter a circumflex
+0000E3  ~a          ã	latin small letter a tilde
+0000E4  "a          ä	latin small letter a diaeresis
+0000E5  oa          å	latin small letter a ring
+0000E6  ae          æ	latin small letter a e
+0000E7  ,c          ç	latin small letter c cedilla
+0000E8  `e          è	latin small letter e grave
+0000E9  'e          é	latin small letter e acute
+0000EA  ^e          ê	latin small letter e circumflex
+0000EB  "e          ë	latin small letter e diaeresis
+0000EC  `i          ì	latin small letter i grave
+0000ED  'i          í	latin small letter i acute
+0000EE  ^i          î	latin small letter i circumflex
+0000EF  "i          ï	latin small letter i diaeresis
+0000F0  -d d-       ð	latin small letter eth
+0000F1  ~n          ñ	latin small letter n tilde
+0000F2  `o          ò	latin small letter o grave
+0000F3  'o          ó	latin small letter o acute
+0000F4  ^o          ô	latin small letter o circumflex
+0000F5  ~o          õ	latin small letter o tilde
+0000F6  "o          ö	latin small letter o diaeresis
+0000F7  -: :-       ÷	division sign
+0000F8  /o          ø	latin small letter o slash
+0000F9  `u          ù	latin small letter u grave
+0000FA  'u          ú	latin small letter u acute
+0000FB  ^u          û	latin small letter u circumflex
+0000FC  "u          ü	latin small letter u diaeresis
+0000FD  'y          ý	latin small letter y acute
+0000FE  |p          þ	latin small letter thorn
+0000FF  "y          ÿ	latin small letter y diaeresis
+000100  _A          Ā	latin capital letter a macron
+000101  _a          ā	latin small letter a macron
+000102  uA          Ă	latin capital letter a breve
+000104  ,A          Ą	latin capital letter a ogonek
+000105  ,a          ą	latin small letter a ogonek
+000106  'C          Ć	latin capital letter c acute
+000107  'c          ć	latin small letter c acute
+000108  ^C          Ĉ	latin capital letter c circumflex
+000109  ^c          ĉ	latin small letter c circumflex
+00010A  .C          Ċ	latin capital letter c dot
+00010B  .c          ċ	latin small letter c dot
+00010C  vC          Č	latin capital letter c hacek
+00010D  vc          č	latin small letter c hacek
+00010E  vD          Ď	latin capital letter d hacek
+00010F  vd          ď	latin small letter d hacek
+000112  _E          Ē	latin capital letter e macron
+000113  _e          ē	latin small letter e macron
+000114  uE          Ĕ	latin capital letter e breve
+000115  ue          ĕ	latin small letter e breve
+000116  .E          Ė	latin capital letter e dot
+000117  .e          ė	latin small letter e dot
+000118  ,E          Ę	latin capital letter e ogonek
+000119  ,e          ę	latin small letter e ogonek
+00011A  vE          Ě	latin capital letter e hacek
+00011B  ve          ě	latin small letter e hacek
+00011C  ^G          Ĝ	latin capital letter g circumflex
+00011D  ^g          ĝ	latin small letter g circumflex
+00011E  uG          Ğ	latin capital letter g breve
+00011F  ug          ğ	latin small letter g breve
+000120  .G          Ġ	latin capital letter g dot
+000121  .g          ġ	latin small letter g dot
+000122  ,G          Ģ	latin capital letter g cedilla
+000123  'g ,g       ģ	latin small letter g cedilla
+000124  ^H          Ĥ	latin capital letter h circumflex
+000125  ^h          ĥ	latin small letter h circumflex
+000126  -H H-       Ħ	latin capital letter h bar
+000128  ~I          Ĩ	latin capital letter i tilde
+000129  ~i          ĩ	latin small letter i tilde
+00012A  _I          Ī	latin capital letter i macron
+00012B  _i          ī	latin small letter i macron
+00012C  uI          Ĭ	latin capital letter i breve
+00012D  ui          ĭ	latin small letter i breve
+00012E  ,I          Į	latin capital letter i ogonek
+00012F  ,i          į	latin small letter i ogonek
+000130  .I          İ	latin capital letter i dot
+000131   i          ı	latin small letter dotless i
+000132  IJ          Ĳ	latin capital letter i j
+000133  ij          ĳ	latin small letter i j
+000134  ^J          Ĵ	latin capital letter j circumflex
+000135  ^j          ĵ	latin small letter j circumflex
+000136  ,K          Ķ	latin capital letter k cedilla
+000137  ,k          ķ	latin small letter k cedilla
+000139  'L          Ĺ	latin capital letter l acute
+00013A  'l          ĺ	latin small letter l acute
+00013B  ,L          Ļ	latin capital letter l cedilla
+00013C  ,l          ļ	latin small letter l cedilla
+00013D  vL          Ľ	latin capital letter l hacek
+00013E  vl          ľ	latin small letter l hacek
+00013F  .L          Ŀ	latin capital letter l with middle dot
+000140  .l          ŀ	latin small letter l with middle dot
+000141  -L L-       Ł	latin capital letter l slash
+000142  -l l-       ł	latin small letter l slash
+000143  'N          Ń	latin capital letter n acute
+000144  'n          ń	latin small letter n acute
+000145  ,N          Ņ	latin capital letter n cedilla
+000146  ,n          ņ	latin small letter n cedilla
+000147  vN          Ň	latin capital letter n hacek
+000148  vn          ň	latin small letter n hacek
+00014C  _O          Ō	latin capital letter o macron
+00014D  _o          ō	latin small letter o macron
+00014E  uO          Ŏ	latin capital letter o breve
+00014F  uo          ŏ	latin small letter o breve
+000152  OE          Œ	latin capital letter o e
+000153  oe          œ	latin small letter o e
+000154  'R          Ŕ	latin capital letter r acute
+000155  'r          ŕ	latin small letter r acute
+000156  ,R          Ŗ	latin capital letter r cedilla
+000157  ,r          ŗ	latin small letter r cedilla
+000158  vR          Ř	latin capital letter r hacek
+000159  vr          ř	latin small letter r hacek
+00015A  'S          Ś	latin capital letter s acute
+00015B  's          ś	latin small letter s acute
+00015C  ^S          Ŝ	latin capital letter s circumflex
+00015D  ^s          ŝ	latin small letter s circumflex
+00015E  ,S          Ş	latin capital letter s cedilla
+00015F  ,s          ş	latin small letter s cedilla
+000160  vS          Š	latin capital letter s hacek
+000161  vs          š	latin small letter s hacek
+000162  ,T          Ţ	latin capital letter t cedilla
+000163  ,t          ţ	latin small letter t cedilla
+000164  vT          Ť	latin capital letter t hacek
+000165  vt          ť	latin small letter t hacek
+000166  -T T-       Ŧ	latin capital letter t bar
+000167  -t t-       ŧ	latin small letter t bar
+000168  ~U          Ũ	latin capital letter u tilde
+000169  ~u          ũ	latin small letter u tilde
+00016A  _U          Ū	latin capital letter u macron
+00016B  _u          ū	latin small letter u macron
+00016C  uU          Ŭ	latin capital letter u breve
+00016D  uu          ŭ	latin small letter u breve
+00016E  oU          Ů	latin capital letter u ring
+00016F  ou          ů	latin small letter u ring
+000172  ,U          Ų	latin capital letter u ogonek
+000173  ,u          ų	latin small letter u ogonek
+000174  ^W          Ŵ	latin capital letter w circumflex
+000175  ^w          ŵ	latin small letter w circumflex
+000176  ^Y          Ŷ	latin capital letter y circumflex
+000177  ^y          ŷ	latin small letter y circumflex
+000178  "Y          Ÿ	latin capital letter y diaeresis
+000179  'Z          Ź	latin capital letter z acute
+00017A  'z          ź	latin small letter z acute
+00017B  .Z          Ż	latin capital letter z dot
+00017C  .z          ż	latin small letter z dot
+00017D  vZ          Ž	latin capital letter z hacek
+00017E  vz          ž	latin small letter z hacek
+000180  -b          ƀ	latin small letter b bar
+000192  $f          ƒ	latin small letter script f
+000195  hv          ƕ	latin small letter h v
+000197  -I I-       Ɨ	latin capital letter barred i
+00019B  -*l         ƛ	latin small letter barred lambda
+0001A2  OI          Ƣ	latin capital letter o i
+0001A3  oi          ƣ	latin small letter o i
+0001A6  YR          Ʀ	latin letter y r
+0001B2  $V          Ʋ	latin capital letter script v
+0001B5  -Z Z-       Ƶ	latin capital letter z bar
+0001B6  -z z-       ƶ	latin small letter z bar
+0001BB  -2 2-       ƻ	latin letter two bar
+0001C4  DvZ         Ǆ	latin capital letter d z hacek
+0001C5  Dvz         ǅ	latin letter capital d small z hacek
+0001C6  dvz         ǆ	latin small letter d z hacek
+0001C7  LJ          Ǉ	latin capital letter l j
+0001C8  Lj          ǈ	latin letter capital l small j
+0001C9  lj          ǉ	latin small letter l j
+0001CA  NJ          Ǌ	latin capital letter n j
+0001CB  Nj          ǋ	latin letter capital n small j
+0001CC  nj          ǌ	latin small letter n j
+0001CD  vA          Ǎ	latin capital letter a hacek
+0001CE  va          ǎ	latin small letter a hacek
+0001CF  vI          Ǐ	latin capital letter i hacek
+0001D0  vi          ǐ	latin small letter i hacek
+0001D1  vO          Ǒ	latin capital letter o hacek
+0001D2  vo          ǒ	latin small letter o hacek
+0001D3  vU          Ǔ	latin capital letter u hacek
+0001D4  vu          ǔ	latin small letter u hacek
+0001D5  _"U         Ǖ	latin capital letter u diaeresis macron
+0001D6  _"u         ǖ	latin small letter u diaeresis macron
+0001D7  '"U         Ǘ	latin capital letter u diaeresis acute
+0001D8  '"u         ǘ	latin small letter u diaeresis acute
+0001D9  v"U         Ǚ	latin capital letter u diaeresis hacek
+0001DA  v"u         ǚ	latin small letter u diaeresis hacek
+0001DB  `"U         Ǜ	latin capital letter u diaeresis grave
+0001DC  `"u         ǜ	latin small letter u diaeresis grave
+0001DE  _"A         Ǟ	latin capital letter a diaeresis macron
+0001DF  _"a         ǟ	latin small letter a diaeresis macron
+0001E0  _.A         Ǡ	latin capital letter a dot macron
+0001E1  _.a         ǡ	latin small letter a dot macron
+0001E4  -G G-       Ǥ	latin capital letter g bar
+0001E5  -g g-       ǥ	latin small letter g bar
+0001E6  vG          Ǧ	latin capital letter g hacek
+0001E7  vg          ǧ	latin small letter g hacek
+0001E8  vK          Ǩ	latin capital letter k hacek
+0001E9  vk          ǩ	latin small letter k hacek
+0001EA  ,O          Ǫ	latin capital letter o ogonek
+0001EB  ,o          ǫ	latin small letter o ogonek
+0001EC  _,O         Ǭ	latin capital letter o ogonek macron
+0001ED  _,o         ǭ	latin small letter o ogonek macron
+0001F0  vj          ǰ	latin small letter j hacek
+000251  $a          ɑ	latin small letter script a
+000268  -i i-       ɨ	latin small letter barred i
+000289  -u u-       ʉ	latin small letter u bar
+00028B  $v          ʋ	latin small letter script v
+0002A3  dz          ʣ	latin small letter d z
+000391  *A          Α	greek capital letter alpha
+000392  *B          Β	greek capital letter beta
+000393  *G          Γ	greek capital letter gamma
+000394  *D          Δ	greek capital letter delta
+000395  *E          Ε	greek capital letter epsilon
+000396  *Z          Ζ	greek capital letter zeta
+000397  *Y          Η	greek capital letter eta
+000398  *H          Θ	greek capital letter theta
+000399  *I          Ι	greek capital letter iota
+00039A  *K          Κ	greek capital letter kappa
+00039B  *L          Λ	greek capital letter lambda
+00039C  *M          Μ	greek capital letter mu
+00039D  *N          Ν	greek capital letter nu
+00039E  *C          Ξ	greek capital letter xi
+00039F  *O          Ο	greek capital letter omicron
+0003A0  *P          Π	greek capital letter pi
+0003A1  *R          Ρ	greek capital letter rho
+0003A3  *S          Σ	greek capital letter sigma
+0003A4  *T          Τ	greek capital letter tau
+0003A5  *U          Υ	greek capital letter upsilon
+0003A6  *F          Φ	greek capital letter phi
+0003A7  *X          Χ	greek capital letter chi
+0003A8  *Q          Ψ	greek capital letter psi
+0003A9  *W          Ω	greek capital letter omega
+0003AA  "*I         Ϊ	greek capital letter iota diaeresis
+0003AB  "*U         Ϋ	greek capital letter upsilon diaeresis
+0003B1  *a          α	greek small letter alpha
+0003B2  *b          β	greek small letter beta
+0003B3  *g          γ	greek small letter gamma
+0003B4  *d          δ	greek small letter delta
+0003B5  *e          ε	greek small letter epsilon
+0003B6  *z          ζ	greek small letter zeta
+0003B7  *y          η	greek small letter eta
+0003B8  *h          θ	greek small letter theta
+0003B9  *i          ι	greek small letter iota
+0003BA  *k          κ	greek small letter kappa
+0003BB  *l          λ	greek small letter lambda
+0003BC  *m          μ	greek small letter mu
+0003BD  *n          ν	greek small letter nu
+0003BE  *c          ξ	greek small letter xi
+0003BF  *o          ο	greek small letter omicron
+0003C0  *p          π	greek small letter pi
+0003C1  *r          ρ	greek small letter rho
+0003C2  ts          ς	greek small letter final sigma
+0003C3  *s          σ	greek small letter sigma
+0003C4  *t          τ	greek small letter tau
+0003C5  *u          υ	greek small letter upsilon
+0003C6  *f          φ	greek small letter phi
+0003C7  *x          χ	greek small letter chi
+0003C8  *q          ψ	greek small letter psi
+0003C9  *w          ω	greek small letter omega
+0003CA  "*i         ϊ	greek small letter iota diaeresis
+0003CB  "*u         ϋ	greek small letter upsilon diaeresis
+0003D1  $*h         ϑ	greek small letter script theta
+0003D5  $*f         ϕ	greek small letter script phi
+0003F0  $*k         ϰ	greek small letter script kappa
+000401  @YO @Yo     Ё	cyrillic capital letter io
+000410  @A          А	cyrillic capital letter a
+000411  @B          Б	cyrillic capital letter be
+000412  @V          В	cyrillic capital letter ve
+000413  @G          Г	cyrillic capital letter ge
+000414  @D          Д	cyrillic capital letter de
+000415  @@E @YE @Ye Е	cyrillic capital letter ie
+000416  @ZH @Zh     Ж	cyrillic capital letter zhe
+000417  @@Z         З	cyrillic capital letter ze
+000418  @I          И	cyrillic capital letter ii
+000419  @J          Й	cyrillic capital letter short ii
+00041A  @@K         К	cyrillic capital letter ka
+00041B  @L          Л	cyrillic capital letter el
+00041C  @M          М	cyrillic capital letter em
+00041D  @N          Н	cyrillic capital letter en
+00041E  @O          О	cyrillic capital letter o
+00041F  @P          П	cyrillic capital letter pe
+000420  @R          Р	cyrillic capital letter er
+000421  @@S         С	cyrillic capital letter es
+000422  @@T         Т	cyrillic capital letter te
+000423  @U          У	cyrillic capital letter u
+000424  @F          Ф	cyrillic capital letter ef
+000425  @KH @Kh @X  Х	cyrillic capital letter kha
+000426  @TS @Ts     Ц	cyrillic capital letter tse
+000427  @CH @Ch     Ч	cyrillic capital letter che
+000428  @SH @Sh     Ш	cyrillic capital letter sha
+000429  @SC @Sc     Щ	cyrillic capital letter shcha
+00042B  @@Y         Ы	cyrillic capital letter yeri
+00042D  @EH @Eh     Э	cyrillic capital letter reversed e
+00042E  @YU @Yu     Ю	cyrillic capital letter iu
+00042F  @YA @Ya     Я	cyrillic capital letter ia
+000430  @a          а	cyrillic small letter a
+000431  @b          б	cyrillic small letter be
+000432  @v          в	cyrillic small letter ve
+000433  @g          г	cyrillic small letter ge
+000434  @d          д	cyrillic small letter de
+000435  @@e @ye     е	cyrillic small letter ie
+000436  @zh         ж	cyrillic small letter zhe
+000437  @@z         з	cyrillic small letter ze
+000438  @i          и	cyrillic small letter ii
+000439  @j          й	cyrillic small letter short ii
+00043A  @@k         к	cyrillic small letter ka
+00043B  @l          л	cyrillic small letter el
+00043C  @m          м	cyrillic small letter em
+00043D  @n          н	cyrillic small letter en
+00043E  @o          о	cyrillic small letter o
+00043F  @p          п	cyrillic small letter pe
+000440  @r          р	cyrillic small letter er
+000441  @@s         с	cyrillic small letter es
+000442  @@t         т	cyrillic small letter te
+000443  @u          у	cyrillic small letter u
+000444  @f          ф	cyrillic small letter ef
+000445  @kh @x      х	cyrillic small letter kha
+000446  @ts         ц	cyrillic small letter tse
+000447  @ch         ч	cyrillic small letter che
+000448  @sh         ш	cyrillic small letter sha
+000449  @sc         щ	cyrillic small letter shcha
+00044A  @''         ъ	cyrillic small letter hard sign
+00044B  @@y         ы	cyrillic small letter yeri
+00044C  @@'         ь	cyrillic small letter soft sign
+00044D  @eh         э	cyrillic small letter reversed e
+00044E  @yu         ю	cyrillic small letter iu
+00044F  @ya         я	cyrillic small letter ia
+000451  @yo         ё	cyrillic small letter io
+002018  l'          ‘	single turned comma quotation mark
+002019  r'          ’	single comma quotation mark
+00201C  l"          “	double turned comma quotation mark
+00201D  r"          ”	double comma quotation mark
+002020  dg          †	dagger
+002021  dd          ‡	double dagger
+002022  bu          •	bullet
+002024  1.          ․ one dot leader
+002025  2.          ‥ two dot leader
+002026  3.          … horizontal ellipsis
+00203D  !? ?!       ‽	interrobang
+002070  s0          ⁰	superscript digit zero
+002074  s4          ⁴	superscript digit four
+002075  s5          ⁵	superscript digit five
+002076  s6          ⁶	superscript digit six
+002077  s7          ⁷	superscript digit seven
+002078  s8          ⁸	superscript digit eight
+002079  s9          ⁹	superscript digit nine
+00207A  s+          ⁺	superscript plus sign
+00207B  s-          ⁻	superscript hyphen-minus
+00207C  s=          ⁼	superscript equals sign
+00207D  s(          ⁽	superscript opening parenthesis
+00207E  s)          ⁾	superscript closing parenthesis
+00207F  sn          ⁿ	superscript latin small letter n
+002013  en          –	en dash
+002014  em          —	em dash
+002080  b0          ₀	subscript digit zero
+002081  b1          ₁	subscript digit one
+002082  b2          ₂	subscript digit two
+002083  b3          ₃	subscript digit three
+002084  b4          ₄	subscript digit four
+002085  b5          ₅	subscript digit five
+002086  b6          ₆	subscript digit six
+002087  b7          ₇	subscript digit seven
+002088  b8          ₈	subscript digit eight
+002089  b9          ₉	subscript digit nine
+001d62  bi          ᵢ	subscript small letter i
+002c7c  bj          ⱼ	subscript small letter j
+00208A  b+          ₊	subscript plus sign
+00208B  b-          ₋	subscript hyphen-minus
+00208C  b=          ₌	subscript equals sign
+00208D  b(          ₍	subscript opening parenthesis
+00208E  b)          ₎	subscript closing parenthesis
+0020AC  e$          €	euro symbol
+002102  CC          ℂ	double-struck capital c
+00210A  $g          ℊ	script small g
+00210B  $H          ℋ	script capital h
+00210D  HH          ℍ	double-struck capital h
+00210F  -h h-       ℏ	planck constant over 2 pi
+002110  $I          ℐ	script capital i
+002112  $L          ℒ	script capital l
+002113  $l          ℓ	script small l
+002115  NN          ℕ	double-struck capital n
+002117  Op pO       ℗	sound recording copyright
+002118  $p          ℘	script p
+002119  PP          ℙ	double-struck capital p
+00211A  QQ          ℚ	double-struck capital q
+00211B  $R          ℛ	script capital r
+00211D  RR          ℝ	double-struck capital r
+002122  tm          ™	trademark
+002124  ZZ          ℤ	double-struck capital z
+00212C  $B          ℬ	script capital b
+00212F  $e          ℯ	script small e
+002130  $E          ℰ	script capital e
+002131  $F          ℱ	script capital f
+002133  $M          ℳ	script capital m
+002134  $o          ℴ	script small o
+002153  13          ⅓	fraction one third
+002154  23          ⅔	fraction two thirds
+002155  15          ⅕	fraction one fifth
+002156  25          ⅖	fraction two fifths
+002157  35          ⅗	fraction three fifths
+002158  45          ⅘	fraction four fifths
+002159  16          ⅙	fraction one sixth
+00215A  56          ⅚	fraction five sixths
+00215B  18          ⅛	fraction one eighth
+00215C  38          ⅜	fraction three eighths
+00215D  58          ⅝	fraction five eighths
+00215E  78          ⅞	fraction seven eighths
+002190  <-          ←	left arrow
+002191  ua          ↑	up arrow
+002192  ->          →	right arrow
+002193  da          ↓	down arrow
+002194  ab          ↔	left right arrow
+0021D0  V=          ⇐	left double arrow
+0021D2  =V          ⇒	right double arrow
+002200  fa          ∀	for all
+002202  pd          ∂	partial differential
+002203  te          ∃	there exists
+002205  es          ∅	empty set
+002206  De          ∆	increment
+002207  gr          ∇	nabla
+002208  mo          ∈	element of
+002209  !m          ∉	not an element of
+00220D  st          ∍	small contains as member
+00220F  pr          ∏	n-ary product
+002211  su          ∑	n-ary summation
+002213  -+          ∓	minus-or-plus sign
+002217  **          ∗	asterisk operator
+00221A  sr          √	square root
+00221D  pt          ∝	proportional to
+00221E  if          ∞	infinity
+002220  an          ∠	angle
+002227  l&          ∧	logical and
+002228  l|          ∨	logical or
+002229  ca          ∩	intersection
+00222A  cu          ∪	union
+00222B  is          ∫	integral
+002234  tf          ∴	therefore
+002242  -~          ≂	minus tilde
+002243  ~-          ≃	asymptotically equal to
+002244  !~-         ≄	not asymptotically equal to
+002245  cg ~=       ≅	approximately equal to
+002246  ~!=         ≆	approximately but not actually equal to
+002247  !~=         ≇	neither approximately nor actually equal to
+002248  ~~          ≈	almost equal to
+002249  !~~         ≉	not almost equal to
+002254  :=          ≔	colon equal
+002255  =:          ≕	equal colon
+002260  !=          ≠	not equal to
+002261  ==          ≡	identical to
+002264  <=          ≤	less than or equal to
+002265  >=          ≥	greater than or equal to
+002268  <!=         ≨	less than but not equal to
+002269  >!=         ≩	greater than but not equal to
+00226E  !<          ≮	not less than
+00226F  !>          ≯	not greater than
+002272  <~          ≲	less than or equivalent to
+002273  >~          ≳	greater than or equivalent to
+002276  <>          ≶	less than or greater than
+002277  ><          ≷	greater than or less than
+002282  sb          ⊂	subset of
+002283  sp          ⊃	superset of
+002284  !b          ⊄	not a subset of
+002285  !p          ⊅	not a superset of
+002286  ib          ⊆	subset of or equal to
+002287  ip          ⊇	superset of or equal to
+002295  +O O+       ⊕	circled plus
+002296  -O O-       ⊖	circled minus
+002297  Ox xO       ⊗	circled times
+002298  O/          ⊘	circled division slash
+002299  .O O.       ⊙	circled dot operator
+00229A  Oo oO       ⊚	circled ring operator
+00229B  O*          ⊛	circled asterisk operator
+00229C  =O O=       ⊜	circled equals
+0022A2  tu          ⊢	right tack
+0022A8  Tu          ⊨	true
+0022C0  L&          ⋀	n-ary logical and
+0022C1  L|          ⋁	n-ary logical or
+0022C2  CA          ⋂	n-ary intersection
+0022C3  CU          ⋃	n-ary union
+0022C4  lz          ⋄	diamond operator
+0022DC  =<          ⋜	equal to or less than
+0022DD  =>          ⋝	equal to or greater than
+0022E6  <!~         ⋦	less than but not equivalent to
+0022E7  >!~         ⋧	greater than but not equivalent to
+0022EF  el          ⋯	midline horizontal ellipsis
+002423              ␣	open box, visible space
+002639  :(          ☹ sad face
+00263A  :)          ☺ smiley face
+002654  wk          ♔	white chess king
+002655  wq          ♕	white chess queen
+002656  wr          ♖	white chess rook
+002657  wb          ♗	white chess bishop
+002658  wn          ♘	white chess knight
+002659  wp          ♙	white chess pawn
+00265A  bk          ♚	black chess king
+00265B  bq          ♛	black chess queen
+00265C  br          ♜	black chess rook
+00265D  bb          ♝	black chess bishop
+00265E  bn          ♞	black chess knight
+00265F  bp          ♟	black chess pawn
+002669  M4          ♩	music quarter note
+00266a  M8          ♪	music eighth note
+00266d  Mb          ♭	music flat
+00266e  M#          ♮	music natural
+00266f  Ms          ♯	music sharp
+00F015  ZA          	raw alt (plan 9 specific)
+00F016  ZS          	raw shift (plan 9 specific)
+00F017  ZC          	raw ctl (plan 9 specific)
+01D49C  $A          𝒜	mathematical script capital a
+01D49E  $C          𝒞	mathematical script capital c
+01D49F  $D          𝒟	mathematical script capital d
+01D4A2  $G          𝒢	mathematical script capital g
+01D4A5  $J          𝒥	mathematical script capital j
+01D4A6  $K          𝒦	mathematical script capital k
+01D4A9  $N          𝒩	mathematical script capital n
+01D4AA  $O          𝒪	mathematical script capital o
+01D4AB  $P          𝒫	mathematical script capital p
+01D4AC  $Q          𝒬	mathematical script capital q
+01D4AE  $S          𝒮	mathematical script capital s
+01D4AF  $T          𝒯	mathematical script capital t
+01D4B0  $U          𝒰	mathematical script capital u
+#01D4B1  $V          𝒱	mathematical script capital v
+01D4B2  $W          𝒲	mathematical script capital w
+01D4B3  $X          𝒳	mathematical script capital x
+01D4B4  $Y          𝒴	mathematical script capital y
+01D4B5  $Z          𝒵	mathematical script capital z
+#01D4B6  $a          𝒶	mathematical script small a
+01D4B7  $b          𝒷	mathematical script small b
+01D4B8  $c          𝒸	mathematical script small c
+01D4B9  $d          𝒹	mathematical script small d
+#01D4BB  $f          𝒻	mathematical script small f
+01D4BD  $h          𝒽	mathematical script small h
+01D4BE  $i          𝒾	mathematical script small i
+01D4BF  $j          𝒿	mathematical script small j
+01D4C0  $k          𝓀	mathematical script small k
+#01D4C1  $l          𝓁	mathematical script small l
+01D4C2  $m          𝓂	mathematical script small m
+01D4C3  $n          𝓃	mathematical script small n
+#01D4C5  $p          𝓅	mathematical script small p
+01D4C6  $q          𝓆	mathematical script small q
+01D4C7  $r          𝓇	mathematical script small r
+01D4C8  $s          𝓈	mathematical script small s
+01D4C9  $t          𝓉	mathematical script small t
+01D4CA  $u          𝓊	mathematical script small u
+#01D4CB  $v          𝓋	mathematical script small v
+01D4CC  $w          𝓌	mathematical script small w
+01D4CD  $x          𝓍	mathematical script small x
+01D4CE  $y          𝓎	mathematical script small y
+01D4CF  $z          𝓏	mathematical script small z

@@ -1,0 +1,14 @@
+config p(h0)90.5
+service plano
+filsys other a0
+filsys main cp(e545.0)0.3276800e545.1
+filsys dump o
+ip0 205.185.197.104
+ipgw0 205.185.197.254
+ipmask0 255.255.255.0
+ipflag0 cec
+ip1 205.185.197.104
+ipgw1 205.185.197.254
+ipmask1 255.255.255.0
+ipflag1 cec aoe aoejumbo
+end

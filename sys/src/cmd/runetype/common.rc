@@ -1,0 +1,48 @@
+#!/bin/rc
+
+if(~ $#rune 0 || ~ $#rdigits 0){
+	echo 'need runesize/rdigits defined (see mkfile)' >[1=2]
+	exit runesize
+}
+if(~ $#uconv 0)
+	uconv=/bin/rune/uconv
+if(~ $rdigits 6)
+	uconv=($uconv -f)
+
+unicodedata = unicodedata
+for(i)
+	unicodedata = $i
+
+fn Sprint {
+	$uconv
+}
+
+fn Unicode {
+	grep $rune < $unicodedata | tr -d '\015'
+}
+
+# if you have an old-and-broken awk
+#
+# hex='
+# function hex0(s,        base, r, n, i, k, c)
+# {
+# 	base = 16;
+# 	if(s ~ /^0[xX]/)
+# 		s = substr(str, 3);
+# 	if(s !~ /^[0-9a-fA-F]*/)
+# 		return 0;
+# 	n = length(s)
+#   	r = 0
+# 	for (i = 1; i <= n; i++) {
+# 		c = tolower(substr(s, i, 1))
+# 		k = index("0123456789abcdef", c) - 1;
+# 		r = r * base + k
+# 	}
+#      	return r
+# }
+# '
+hex='
+function hex (h) {
+	return strtonum("0x" h);
+}
+'

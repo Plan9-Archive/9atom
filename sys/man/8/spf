@@ -1,0 +1,117 @@
+.TH SPF 8
+.SH NAME
+spf \- evaluate spf records
+.SH SYNOPSIS
+.B upas/spf
+[
+.B -demprv
+]
+[
+.B -n
+.I netroot
+]
+.I domain
+[
+.I ehlo
+.I  ip
+]
+
+.SH DESCRIPTION
+.I Spf
+parses SPF records for
+.I domain
+and validates them against any additional arguments.  If there are no
+additional arguments, the internal representation of the SPF records
+is printed.  Typically,
+.I spf
+is invoked by
+.IR smtpd
+(see
+.IR smtp (8))
+through the
+.B /mail/lib/validatesender
+script.  There are four possible results of an spf invocation:
+success, no match, no record found and timeout.  Unsuccessful results
+are indicated by exit codes beginning with
+.BR fail ,
+.BR none ,
+and
+.BR deferred ,
+respectively.
+.PP
+The policy implented is that negatively biased results are the equivalent
+to negative match.  Thus
+.B ~all
+is treated the same as
+.BR -all .
+The
+.B -e
+flag makes this policy even more draconian, escalating neutral results
+to failure.  This is useful for sites like
+.B gmail.com
+which enumerate all allowed hosts but end with an inclusive
+neutral result.  This flag is not recomended as a default for all sites.
+.PP
+Flags are as follows:
+.TF netroot
+.PD
+.TP
+.B -d
+print DNS queries as performed
+.TP
+.B -e
+escalate; treat
+.B ?all
+as
+.BR -all .
+The result
+.B ~all
+is always treated the same as
+.BR -all .
+.TP
+.B -m
+ignore macros
+.TP
+.BI -n " netroot"
+use the IP stack rooted at
+.BI netroot .
+.TP
+.B -p
+print the internal representation of the SPF records.
+This is the default if only one argument is given.
+.TP
+.B -r
+trace
+.B include
+and
+.B redirect
+elements.
+.TP
+.B -v
+print records resulting in postitive
+or negative match or bias.
+.SH "SEE ALSO"
+.IR smtp (8) ,
+.br
+.PD 0
+.TF /lib/rfc/rfc4408
+.TP
+.B /lib/rfc/rfc4408
+Sender Policy Framework
+.TP
+.B /lib/rfc/rfc/4406
+SenderID
+.SH SOURCE
+.B /sys/src/cmd/upas/spf
+.SH BUGS
+Exp records are ignored.
+.PP
+Inproperly placed
+.B redirect
+queries are not evaluated last.
+.PP
+.I Spf
+uses higher dns query limits than allowed by
+the RFC as the authors of the RFC use SPF
+records that require twice the allowed number of
+queries.

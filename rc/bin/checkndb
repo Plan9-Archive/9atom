@@ -1,0 +1,63 @@
+#!/bin/rc
+# very coraid-specific
+rfork e
+
+fn warn{
+	echo /lib/ndb/$o(3): $* >[1=2]
+}
+
+fn uidtab{
+	uidtab = ()
+	uidtab0 = `{awk -F: '{print $2 " " $1}' < /adm/users}
+	oktab = `{sed -n 's/^([^	]+)	ok$/\1/p' </adm/keystat}
+	while(! ~ $#uidtab0 0){
+		x = $uidtab0(1-2)
+		uidtab0 = $uidtab0(3-)
+		if(~ $x(1) sys || ~ $x(1) $oktab)
+			uidtab = ($uidtab $x)
+	}
+}
+
+fn okayuser {
+	w=0
+	if(! ~ $o(1) $uidtab){
+		w = 1
+		warn unknown or expired user: $o(1)
+	}
+	if(! ~ $o(2) sys coraid)
+		warn bad group: $o(2)
+
+	if(! ~ $w 1 && ~ $o(3) 10.220.[0-9]*){
+		x = $uidtab;
+		uid = ()
+		while(! ~ $#x 0){
+			y=$x(1-2)
+			x=$x(3-)
+			if(~ $y(1) $o(1)){
+				uid=$y(2)
+				break
+			}
+		}
+		if(! ~ $o(3) 10.220.$uid)
+		if(! ~ $o(3) 10.220.1 10.220.9 10.220.42)
+			warn uid mismatch want $uid
+	}
+}
+
+uidtab
+cd /lib/ndb
+stat = `{ls -l | 
+	grep -v ' (nfs|dnsdump|.*\.group|.*password)$' |
+	awk '{print $4 " " $5 " " $NF}'
+	}
+chk=()
+while(! ~ $#stat 0){
+	o=$stat(1-3)
+	stat=$stat(4-)
+	okayuser
+	if(~ $o(3) 10.220.*)
+		chk = ($chk $o(3))
+}
+
+if(! ~ $#chk 0)
+	ndb/vrfy -m 10.220.0.0/112 $chk

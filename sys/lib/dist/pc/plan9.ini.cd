@@ -1,0 +1,32 @@
+[menu]
+menuitem=install, Install Plan 9 from this CD
+menuitem=cdboot, Boot Plan 9 from this CD
+menuitem=debug, Boot Plan 9 from this CD and debug 9load
+
+[common]
+*nomp=1
+*nodumpstack=1
+partition=new
+mouseport=ask
+monitor=ask
+vgasize=ask
+dmamode=ask
+adisk=/dev/sdD0/cdboot
+cdboot=yes
+
+[install]
+nobootprompt=local!/boot/bzroot
+bootfile=sdD0!cdboot!9pcflop.gz
+*nobiosload=1
+#*noahciload=1
+
+[cdboot]
+bootargs=local!#S/sdD0/data
+bootfile=sdD0!cdboot!9pccd.gz
+*nobiosload=1
+#*noahciload=1
+
+[debug]
+bootargs=local!#S/sdD0/data
+bootfile=sdD0!cdboot!9pccd.gz
+*debugload=1

@@ -1,0 +1,19 @@
+config p(h0)95.1
+service aska
+filsys other pe2.0"other"
+filsys main cpe2.0"kcache"e2.1
+filsys dump o
+ipsntp 128.192.1.9
+ip0 192.168.99.98
+ipgw0 192.168.0.4
+ipmask0 255.255.255.0
+ipflag0 cec aoe aoejumbo
+ip1 192.168.99.99
+ipmask1 255.255.255.0
+ipflag1 cec aoe aoejumbo
+ip2 192.168.0.131
+ipmask2 255.255.255.0
+ipflag2 cec
+ip3 192.168.0.132
+ipmask3 255.255.255.0
+ipflag3 cec

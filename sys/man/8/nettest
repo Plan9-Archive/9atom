@@ -1,0 +1,135 @@
+.TH NETTEST 8
+.SH NAME
+nettest \- test network performance
+.SH SYNOPSIS
+.B nettest
+.B -l
+[
+.B -t
+[
+.B -e
+.I encalg
+.B -h
+.I hashalg
+]]
+[
+.B -s
+.I sleepms
+][
+.B -n
+.I nblocks
+]
+.br
+.B nettest
+[
+.B -t
+[
+.B -e
+.I encalg
+.B -h
+.I hashalg
+]]
+[
+.B -a
+.I addr
+][
+.B -s
+.I sleepms
+]
+.br
+.B nettest
+[
+.B -t
+[
+.B -e
+.I encalg
+.B -h
+.I hashalg
+]]
+.B -r
+.I raddr
+.B -n
+.I nblocks
+.SH DESCRIPTION
+.I Nettest
+tests goodput of reliable, in-order transports
+at full speed, and with receiver throttling.  Both sender
+and receiver do i/o in 8 KB chunks.
+Goodput in MB/s and if throttled, the theoretical
+maximum goodput in MB/s are reported.
+.PP
+As a client the options are
+.TF "-s sleepms"
+.PD 0
+.TP
+.B "-r \fIraddr\fP"
+remote address
+.I addr
+.TP
+.B "-n \fInblocks\fP"
+send
+.I nblocks
+8-KiB blocks
+.PP
+Server options are
+.TF "-s sleepms"
+.PD 0
+.TP
+.B "-a \fIaddr\fP"
+listen on network address
+.I addr
+.TP
+.B "-s \fIsleepms\fP"
+sleep
+.I sleepms
+between 8KiB reads
+.PP
+In loopback mode the options are
+.TF "-s sleepms"
+.PD 0
+.TP
+.B -l
+specify loopback mode
+.TP
+.B "-s \fIsleepms\fP"
+sleep
+.I sleepms
+between 8KiB reads
+.TP
+.B "-n \fInblocks\fP"
+send
+.I nblocks
+8-KiB blocks
+.PP
+In all modes, TLS may be pushed onto the network file descriptor.
+The options are
+.TP
+.B -t
+Enable TLS.
+.TP
+.B "-h \fIhashalg\fP"
+Set the hash algorithm.  The default is clear.
+.TP
+.B "-e \fIencalg\fP"
+Set the encryption algorithm.  The default is clear.
+.SH EXAMPLE
+To test a reader limited to 8MB/s
+.IP
+.EX
+nettest -l -n 5000 -s 1
+.EE
+.PP
+To do the same test using two independent IP stacks
+.IP
+.EX
+nettest -s 1 -a /net.a/tcp!* &
+nettest -n 5000 -r /net.b/tcp!mymachine-neta
+.EE
+.PP
+To test with TLS using AES and SHA1 over loopback networking
+.IP
+.EX
+nettest -te aes_128_cbc -h sha1 -ln5000
+.EE
+.SH "SEE ALSO"
+.IR ping (8)

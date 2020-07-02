@@ -1,0 +1,46 @@
+.TH NDBTOZONE 8
+.SH NAME
+tozone \- convert ndb database to a zone file
+.SH SYNOPSIS
+.B ndb/tozone
+[
+.B -dg
+] [
+.B -f
+.I dbfile
+] [
+.I zone...
+]
+.SH DESCRIPTION
+Convert a network database file to a zone file
+for bind interoperability.  Standard name compression
+is applied and glue for subordinate zones is automaticly
+generated.  (Glue may be supressed with
+.BR -g ).
+Each soa in the input file (default
+.BR /lib/ndb/local )
+is converted into a zone.  Reverse zones (including
+classless RFC2317-style zones) are automaticly generated
+given an soa record.  The databases may be specified
+with the
+.B -f
+flag.  Arguments limit the zones generated to 
+the specified zones.
+.SH FILES
+.TF /lib/ndb/localxxx
+.TP
+.B /lib/ndb/local
+default datbase
+.SH SOURCE
+.B /sys/src/cmd/ndb/tozone.c
+.SH "SEE ALSO"
+.IR ndb (2),
+.IR ndb (6),
+.IR ndb (8),
+/lib/rfc/rfc2672
+.SH BUGS
+Ndb's structure makes it difficult to be precise about which
+records belong to which zones.  In contrast to a `/' in a path,
+a `.' in a dns name is not always a zone boundary.
+Zones are greedy; a single soa with a dom of `.' would include
+all names.

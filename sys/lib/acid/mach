@@ -1,0 +1,173 @@
+// mp kernel support (386 only)
+//
+// usage: acid -k -l kernel -l mach
+//
+
+MACHSIZE = BY2PG;
+
+defn machno() {
+	print(m->machno, "\n");
+}
+
+defn mach(mach) {
+	complex Mach mach;
+
+	print(mach\X, " ", mach.machno, " proc ");
+	if mach.proc == 0 then
+		print(0\X, "\n");
+	else
+		proc(mach.proc);
+}
+
+defn machs() {
+	local i;
+
+	i = 0;
+	loop 1, conf.nmach do {
+		mach(machp[i]);
+		i = i+1;
+	}
+}
+
+defn machaddr(mach, addr) {
+	if addr < *m || addr >= *m+MACHSIZE then
+		return addr;
+	addr = addr & (MACHSIZE-1);
+	return mach+addr;
+}
+
+defn machureg(mach) {
+	complex Mach mach;
+
+	// dbgreg 0 is valid; current register state
+	return (Ureg)machaddr(mach, mach.dbgreg);
+}
+
+defn machpc(mach) {
+	complex Mach mach;
+	local ureg;
+
+	ureg = machureg(mach);
+	return ureg.pc;
+}
+
+defn machsp(mach) {
+	complex Mach mach;
+	local ureg;
+
+	if mach.dbgsp == 0 then {
+		ureg = machureg(mach);
+		return ureg.sp;
+	} else
+		return mach.dbgsp;
+}
+
+defn machgpr(mach) {
+	complex Mach mach;
+	local ureg;
+
+	ureg = machureg(mach);
+	print("AX\t", ureg.ax\X, " BX\t", ureg.bx\X, " CX\t", ureg.cx\X, " DX\t", ureg.dx\X, "\n");
+	print("DI\t", ureg.di\X, " SI\t", ureg.si\X, " BP\t", ureg.bp\X, "\n");
+}
+
+defn machspr(mach) {
+	complex Mach mach;
+	local ureg, sp;
+
+	ureg = machureg(mach);
+	sp = machsp(mach);
+	print("PC\t", ureg.pc\X, " ", fmt(ureg.pc, 'a'), "  ");
+	pfl(ureg.pc);
+	print("SP\t", sp\X, " ECODE ", ureg.ecode\X, " EFLAG ", ureg.flags\X, "\n");
+	print("CS\t", ureg.cs\X, " DS\t ", ureg.ds\X, " SS\t", ureg.ss\X, "\n");
+	print("GS\t", ureg.gs\X, " FS\t ", ureg.fs\X, " ES\t", ureg.es\X, "\n");
+
+	print("TRAP\t", ureg.trap\X, " ", reason(ureg.trap), "\n");
+}
+
+defn machregs(mach) {
+	machspr(mach);
+	machgpr(mach);
+}
+
+defn machstk(mach) {
+	_stk(machpc(mach), machaddr(mach, machsp(mach)), 0, 0);
+}
+
+defn machlstk(mach) {
+	_stk(machpc(mach), machaddr(mach, machsp(mach)), 0, 1);
+}
+
+defn machstacks() {
+	local i;
+
+	i = 0;
+	loop 1, conf.nmach do {
+		print("=========================================================\n");
+		mach(machp[i]);
+		machstk(machp[i]);
+		i = i+1;
+	}
+}
+
+// a function of last resort...
+defn machunwind(mach) {
+	complex Mach mach;
+	local sp, se;
+
+	sp = machsp(mach);
+	if mach.proc != 0 then
+		se = sp | (KSTACK-1);
+	else
+		se = sp | (MACHSIZE-1);
+	dump(machaddr(mach, sp), (se-sp)/4 + 1, "a");
+}
+
+// kernel procstk assumes gotolabel; breaks on mp
+defn procstk(p) {
+	complex Proc p;
+
+	if p.mach != 0 then
+		_stk(machpc(p.mach), machaddr(p.mach, machsp(p.mach)), 0, 0);
+	else if p.state != 0 then
+		_stk(gotolabel, *(p.sched), 0, 0);
+}
+
+defn proclstk(p) {
+	complex Proc p;
+
+	if p.mach != 0 then
+		_stk(machpc(p.mach), machaddr(p.mach, machsp(p.mach)), 0, 1);
+	else if p.state != 0 then
+		_stk(gotolabel, *(p.sched), 0, 1);
+}
+
+// builtin reason ignores status; breaks on mp
+defn reason(status) {
+	     if status ==  0 then return "divide error";
+	else if status ==  1 then return "debug exception";
+	else if status ==  2 then return "nonmaskable interrupt";
+	else if status ==  3 then return "breakpoint";
+	else if status ==  4 then return "overflow";
+	else if status ==  5 then return "bounds check";
+	else if status ==  6 then return "invalid opcode";
+	else if status ==  7 then return "coprocessor not available";
+	else if status ==  8 then return "double fault";
+	else if status ==  9 then return "coprocessor segment overrun";
+	else if status == 10 then return "invalid TSS";
+	else if status == 11 then return "segment not present";
+	else if status == 12 then return "stack exception";
+	else if status == 13 then return "general protection violation";
+	else if status == 14 then return "page fault";
+	else if status == 16 then return "coprocessor error";
+	else if status == 17 then return "alignment check";
+	else if status == 18 then return "machine check";
+	else if status == 19 then return "SIMD exception";
+	else if status == 64 then return "system call";
+
+	// emulate i386except brokenness:
+	return "exception "+itoa(status);
+}
+
+print("/sys/lib/acid/mach");

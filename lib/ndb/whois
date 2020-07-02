@@ -1,0 +1,479 @@
+#
+# query modification mappings.  bogus ip allows us to use ipquery to
+# return multiple results.
+#
+dom=whois.denic.de 	ip=1.2.3.4
+	person="-T dn $person"
+dom=whois.jprs.jp dom=whois.nic.ad.jp ip=1.2.3.4
+	person="$person/e"
+dom=whois.internic.net dom=whois.nic.coop ip=1.2.3.4
+	person="domain $person"
+
+#
+# huristics & guesswork:
+#
+# boiler is a sed script for stripping junk from output from
+# this machine; boilerp is an rc function to that same effect.
+# multiple lines are concatinated with \n to form a single script.
+# tcs specifies the character set this machine returns.
+#
+dom=whois.dk-hostmaster.dk dom=whois.nic-se.se
+	boiler="s/^#/d"
+dom=whois.arin.net
+	boiler="/^# /d"
+dom=whois.nic.at dom=whois.dns.be dom=whois.isoc.org.il
+	dom=whois.norid.no dom=whois.nic.br
+	boiler="/^%/d"
+dom=whois.srs.net.nz dom=whois.museum dom=whois.nic.ad.jp
+	boiler="/% /d"
+	boiler=s/^%//g"
+dom=whois.nic.fr
+	boiler=/^%%/d
+dom=whois.cira.ca
+	tcs=8859-1 boiler=":[	 ]*/d"
+dom=whois.aunic.net
+	boiler=":[	 ]*$/d"
+dom=whois.nic.us whois.nic.uk
+	boiler="/W.... database was last updated/,$d"
+dom=whois.denic.de
+	boiler="/^%/d"
+dom=whois.jprs.jp
+	boilerp=cat
+dom=whois.inregistry.net
+	boiler="1,/^$/d"
+dom=whois.nic.it
+	boiler="/^\*/d"
+dom=whois.nic.mx
+	boiler="/La informacion/,$d"
+dom=whois.nic.ve
+	tcs=8859-1 boiler="1,/whois@nic.ve/d
+	boiler="/NIC/,$d"
+dom=whois.networksolutions.com
+	boiler="/^NOTICE/,/^<a href/d
+	boiler="/^   -----/,/^   -----/d"
+dom=whois.godaddy.com
+	boiler="1,/Registrant/d
+	boiler="/\*\*/,$d"
+dom=whois.educause.net
+	boiler="1,/^-------------/d"
+dom=whois*.tr
+	tcs=8859-9 boilerp=cat
+dom=whois.tucows.com
+	boiler="/WHOIS/,$d"
+dom=whois.net.ua
+	tcs=koi8-u boilerp=cat
+dom=whois.lacnic.net whois.nic.br
+	tcs=8859-1 boiler="/^% /d"
+dom=whois.enom.com
+	boilerp="sed -n '/Domain /,/^Expiration /p' "
+dom=whois.nic.or.kr
+	tcs=gb2312 boiler="1,/^# ENGLISH/d"
+dom=whois.publicinterestregistry.net dom=whois.registrypro.pro dom=whois.dotmobiregistry.net dom=whois.afilias.info
+	boilerp="sed -n '/^ *[A-Za-z0-9 ]+:[ 	]*[^ ]/p' "
+dom=whois.domainit.com
+	boilerp="sed -n '^Accesses/p"
+dom=whois.internic.net jobswhois.verisign-grs.com whois.nic.cc
+	boilerp="sed -n '/^   /p"
+	boilerp="/^>>>/p' "
+dom=whois.nic.biz whois.nic.travel
+	boilerp="sed -n '1,/^>>>/p' "
+dom=whois.register.com
+	boiler="1,/^By submitting this/d"
+	boiler="/^Visit AboutUs/,$d"
+dom=whois.wildwestdomains.com
+	boilerp="sed -n ''/^[^A-Za-z]/p' "
+dom=whois.encirca.com
+	boilerp="sed -n '/[a-z0-9]:  |^$/p' "
+
+#
+# tld mappings
+#
+tld=ac		dom=whois.nic.ac
+tld=ae		dom=whois.uaenic.ae
+tld=af		dom=whois.nic.af
+tld=ag		dom=whois.nic.ag
+tld=ai		dom=whois.ai
+tld=am		dom=whois.nic.am
+tld=as		dom=whois.nic.as
+tld=at		dom=whois.nic.at
+tld=au		dom=whois.ausregistry.net.au
+tld=be		dom=whois.dns.be
+tld=bg		dom=whois.register.bg
+tld=bj		dom=whois.nic.bj
+tld=br		dom=whois.nic.br
+tld=bz		dom=whois.belizenic.bz
+tld=co.ca	dom=whois.co.ca
+tld=ca		dom=whois.cira.ca
+tld=cc		dom=whois.nic.cc
+tld=cd		dom=whois.nic.cd
+tld=ch		dom=whois.nic.ch
+tld=ci		dom=www.nic.ci
+tld=ck		dom=whois.nic.ck
+tld=cl		dom=whois.nic.cl
+tld=edu.cn	dom=whois.edu.cn
+tld=cn		dom=whois.cnnic.net.cn
+tld=uk.co	dom=whois.uk.co
+tld=cx		dom=whois.nic.cx
+tld=cz		dom=whois.nic.cz
+tld=de		dom=whois.denic.de
+tld=dj		dom=whois.domain.dj
+tld=dk		dom=whois.dk-hostmaster.dk
+tld=dm		dom=whois.nic.dm
+tld=ee		dom=whois.eenet.ee
+tld=eu		dom=whois.eu
+tld=fi		dom=whois.ficora.fi
+tld=fj		dom=whois.usp.ac.fj
+tld=fo		dom=whois.ripe.net
+tld=fr		dom=whois.nic.fr
+tld=gd		dom=whois.adamsnames.tc
+tld=gf		dom=whois.nplus.gf
+tld=gg		dom=whois.channelisles.net
+tld=gm		dom=whois.ripe.net
+tld=gp		dom=whois.nic.gp
+tld=gs		dom=whois.nic.gs
+tld=hk		dom=whois.hkdnr.net.hk
+tld=hm		dom=whois.registry.hm
+tld=hu		dom=whois.nic.hu
+tld=id		dom=whois.idnic.net.id
+tld=ie		dom=whois.domainregistry.ie
+tld=il		dom=whois.isoc.org.il
+tld=in		dom=whois.registry.in
+tld=io		dom=whois.nic.io
+tld=ir		dom=whois.nic.ir
+tld=is		dom=whois.isnet.is
+tld=it		dom=whois.nic.it
+tld=je		dom=whois.channelisles.net
+tld=jp		dom=whois.jprs.jp
+tld=ke		dom=whois.kenic.or.ke
+tld=kg		dom=whois.domain.kg
+tld=kp		dom=whois.kcce.kp
+tld=kr		dom=whois.nic.or.kr
+tld=kz		dom=whois.nic.kz
+tld=la		dom=whois.nic.la
+tld=li		dom=whois.nic.li
+tld=lk		dom=whois.nic.lk
+tld=lt		dom=whois.domreg.lt
+tld=lu		dom=whois.dns.lu
+tld=lv		dom=whois.nic.lv
+tld=mc		dom=whois.ripe.net
+tld=mm		dom=whois.nic.mm
+tld=mn		dom=whois.nic.mn
+tld=mq		dom=whois.nic.mq
+tld=ms		dom=whois.adamsnames.tc
+tld=mx		dom=whois.nic.mx
+tld=my		dom=whois.mynic.net.my
+tld=na		dom=whois.na-nic.com.na
+tld=nc		dom=whois.cctld.nc
+tld=nf		dom=whois.nic.nf
+tld=nl		dom=whois.domain-registry.nl
+tld=no		dom=whois.norid.no
+tld=nu		dom=whois.nic.nu
+tld=nz		dom=whois.srs.net.nz
+tld=pe		dom=whois.nic.pe
+tld=co.pl	dom=whois.co.pl
+tld=pl		dom=whois.dns.pl
+tld=pm		dom=whois.nic.fr
+tld=pt		dom=whois.dns.pt
+tld=pw		dom=whois.nic.pw
+tld=re		dom=whois.nic.fr
+tld=ro		dom=whois.rotld.ro
+tld=edu.ru	dom=whois.informika.ru
+tld=ru		dom=whois.ripn.net
+tld=sa		dom=saudinic.net.sa
+tld=sb		dom=whois.nic.net.sb
+tld=se		dom=whois.nic-se.se
+tld=sg		dom=whois.nic.net.sg
+tld=sh		dom=whois.nic.sh
+tld=si		dom=whois.arnes.si
+tld=sk		dom=whois.sk-nic.sk
+tld=sm		dom=whois.ripe.net
+tld=sr		dom=whois.register.sr
+tld=st		dom=whois.nic.st
+tld=su		dom=whois.ripn.net
+tld=tc		dom=whois.adamsnames.tc
+tld=tf		dom=whois.nic.tf
+tld=th		dom=whois.thnic.net
+tld=tj		dom=whois.nic.tj
+tld=tk		dom=whois.dot.tk
+tld=tl		dom=whois.nic.tl
+tld=tm		dom=whois.nic.tm
+tld=to		dom=whois.tonic.to
+tld=tp		dom=whois.nic.tp
+tld=tr		dom=whois.metu.edu.tr
+tld=tv		dom=whois.nic.tv
+tld=tw		dom=whois.twnic.net
+tld=ua		dom=whois.net.ua
+tld=ug		dom=www.registry.co.ug
+tld=co.uk tld=net.uk tld=org.uk
+		dom=whois.nic.uk
+tld=ac.uk tld=gov.uk
+		dom=whois.ja.net
+tld=fed.us	dom=whois.nic.gov
+tld=us		dom=whois.nic.us
+tld=uy		dom=www.rau.edu.uy
+tld=uz		dom=whois.cctld.uz
+tld=va		dom=whois.ripe.net
+tld=ve		dom=whois.nic.ve
+tld=vc		dom=whois.opensrs.net
+tld=vg		dom=whois.adamsnames.tc
+tld=wf		dom=whois.nic.wf
+tld=ws		dom=whois.samoanic.ws
+tld=yt		dom=whois.nic.yt
+tld=ac.za	dom=whois.ac.za
+tld=gov.za	dom=whois.gov.za
+tld='[0-9]*.[0-9]*.[0-9]*.[0-9]*' '*:*'
+		dom=whois.arin.net
+tld=com tld=net
+		dom=whois.internic.net
+tld=int	dom=whois.iana.org
+tld=gov	dom=whois.nic.gov
+tld=org	dom=whois.publicinterestregistry.net
+tld=biz	dom=whois.nic.biz
+tld=coop	dom=whois.nic.coop	# doesn't work right.
+tld=info	dom=whois.afilias.info
+tld=jobs	dom=jobswhois.verisign-grs.com
+tld=mobi	dom=whois.dotmobiregistry.net
+tld=museum	dom=whois.museum
+tld=name	dom=whois.nic.name
+tld=pro	dom=whois.registrypro.pro
+tld=travel	dom=whois.nic.travel
+
+#
+# ip mappings
+#
+
+ipnet=24.132.0.0		ipmask=/114	ip=24.132.0.0	dom=whois.ripe.net
+ipnet=41.0.0.0		ipmask=/104	ip=41.0.0.0	dom=whois.afrinic.net
+ipnet=43.0.0.0		ipmask=/104	ip=43.0.0.0	dom=whois.v6nic.net
+ipnet=59.0.0.0		ipmask=/107	ip=59.0.0.0	dom=whois.nic.or.kr
+ipnet=58.0.0.0		ipmask=/103	ip=58.0.0.0	dom=whois.apnic.net
+ipnet=61.72.0.0	ipmask=/109	ip=61.72.0.0	dom=whois.nic.or.kr
+ipnet=61.80.0.0	ipmask=/110	ip=61.80.0.0	dom=whois.nic.or.kr
+ipnet=61.84.0.0	ipmask=/111	ip=61.84.0.0	dom=whois.nic.or.kr
+ipnet=61.112.0.0	ipmask=/108	ip=61.112.0.0	dom=whois.nic.ad.jp
+ipnet=61.192.0.0	ipmask=/108	ip=61.192.0.0	dom=whois.nic.ad.jp
+ipnet=61.208.0.0	ipmask=/109	ip=61.208.0.0	dom=whois.nic.ad.jp
+ipnet=60.0.0.0		ipmask=/103	ip=60.0.0.0	dom=whois.apnic.net
+ipnet=62.0.0.0		ipmask=/104	ip=62.0.0.0	dom=whois.ripe.net
+ipnet=77.0.0.0		ipmask=/104	ip=77.0.0.0	dom=whois.ripe.net
+ipnet=78.0.0.0		ipmask=/103	ip=78.0.0.0	dom=whois.ripe.net
+ipnet=80.0.0.0		ipmask=/100	ip=80.0.0.0	dom=whois.ripe.net
+ipnet=96.0.0.0		ipmask=/102	ip=96.0.0.0	dom=whois.arin.net
+ipnet=114.0.0.0	ipmask=/103	ip=114.0.0.0	dom=whois.apnic.net
+ipnet=116.0.0.0	ipmask=/102	ip=116.0.0.0	dom=whois.apnic.net
+ipnet=121.128.0.0	ipmask=/106	ip=121.128.0.0	dom=whois.nic.or.kr
+ipnet=125.128.0.0	ipmask=/107	ip=125.128.0.0	dom=whois.nic.or.kr
+ipnet=120.0.0.0	ipmask=/102	ip=120.0.0.0	dom=whois.apnic.net
+ipnet=124.0.0.0	ipmask=/103	ip=124.0.0.0	dom=whois.apnic.net
+ipnet=126.0.0.0	ipmask=/104	ip=126.0.0.0	dom=whois.apnic.net
+ipnet=96.0.0.0		ipmask=/99	ip=96.0.0.0	dom=unallocated/96
+ipnet=0.0.0.0		ipmask=/97	ip=0.0.0.0	dom=whois.arin.net
+ipnet=133.0.0.0	ipmask=/104	ip=133.0.0.0	dom=whois.nic.ad.jp
+ipnet=139.20.0.0	ipmask=/110	ip=139.20.0.0	dom=whois.ripe.net
+ipnet=139.24.0.0	ipmask=/110	ip=139.24.0.0	dom=whois.ripe.net
+ipnet=139.28.0.0	ipmask=/111	ip=139.28.0.0	dom=whois.ripe.net
+ipnet=141.0.0.0	ipmask=/106	ip=141.0.0.0	dom=whois.ripe.net
+ipnet=141.64.0.0	ipmask=/108	ip=141.64.0.0	dom=whois.ripe.net
+ipnet=141.80.0.0	ipmask=/110	ip=141.80.0.0	dom=whois.ripe.net
+ipnet=141.84.0.0	ipmask=/111	ip=141.84.0.0	dom=whois.ripe.net
+ipnet=145.0.0.0	ipmask=/104	ip=145.0.0.0	dom=whois.ripe.net
+ipnet=146.48.0.0	ipmask=/112	ip=146.48.0.0	dom=whois.ripe.net
+ipnet=149.202.0.0	ipmask=/111	ip=149.202.0.0	dom=whois.ripe.net
+ipnet=149.204.0.0	ipmask=/112	ip=149.204.0.0	dom=whois.ripe.net
+ipnet=149.206.0.0	ipmask=/111	ip=149.206.0.0	dom=whois.ripe.net
+ipnet=149.208.0.0	ipmask=/108	ip=149.208.0.0	dom=whois.ripe.net
+ipnet=149.224.0.0	ipmask=/108	ip=149.224.0.0	dom=whois.ripe.net
+ipnet=149.240.0.0	ipmask=/109	ip=149.240.0.0	dom=whois.ripe.net
+ipnet=149.248.0.0	ipmask=/110	ip=149.248.0.0	dom=whois.ripe.net
+ipnet=150.183.0.0	ipmask=/112	ip=150.183.0.0	dom=whois.nic.or.kr
+ipnet=150.254.0.0	ipmask=/112	ip=150.254.0.0	dom=whois.ripe.net
+ipnet=151.0.0.0	ipmask=/106	ip=151.0.0.0	dom=whois.ripe.net
+ipnet=151.64.0.0	ipmask=/107	ip=151.64.0.0	dom=whois.ripe.net
+ipnet=151.96.0.0	ipmask=/110	ip=151.96.0.0	dom=whois.ripe.net
+ipnet=151.100.0.0	ipmask=/112	ip=151.100.0.0	dom=whois.ripe.net
+ipnet=155.232.0.0	ipmask=/109	ip=155.232.0.0	dom=whois.afrinic.net
+ipnet=155.240.0.0	ipmask=/112	ip=155.240.0.0	dom=whois.afrinic.net
+ipnet=160.216.0.0	ipmask=/110	ip=160.216.0.0	dom=whois.ripe.net
+ipnet=160.220.0.0	ipmask=/112	ip=160.220.0.0	dom=whois.ripe.net
+ipnet=160.44.0.0	ipmask=/110	ip=160.44.0.0	dom=whois.ripe.net
+ipnet=160.48.0.0	ipmask=/108	ip=160.48.0.0	dom=whois.ripe.net
+ipnet=160.115.0.0	ipmask=/112	ip=160.115.0.0	dom=whois.afrinic.net
+ipnet=160.116.0.0	ipmask=/110	ip=160.116.0.0	dom=whois.afrinic.net
+ipnet=160.120.0.0	ipmask=/110	ip=160.120.0.0	dom=whois.afrinic.net
+ipnet=160.124.0.0	ipmask=/112	ip=160.124.0.0	dom=whois.afrinic.net
+ipnet=163.156.0.0	ipmask=/110	ip=163.156.0.0	dom=whois.ripe.net
+ipnet=163.160.0.0	ipmask=/108	ip=163.160.0.0	dom=whois.ripe.net
+ipnet=163.195.0.0	ipmask=/112	ip=163.195.0.0	dom=whois.afrinic.net
+ipnet=163.196.0.0	ipmask=/110	ip=163.196.0.0	dom=whois.afrinic.net
+ipnet=163.200.0.0	ipmask=/110	ip=163.200.0.0	dom=whois.afrinic.net
+ipnet=164.0.0.0	ipmask=/107	ip=164.0.0.0	dom=whois.ripe.net
+ipnet=164.32.0.0	ipmask=/109	ip=164.32.0.0	dom=whois.ripe.net
+ipnet=164.40.0.0	ipmask=/112	ip=164.40.0.0	dom=whois.ripe.net
+ipnet=164.128.0.0	ipmask=/108	ip=164.128.0.0	dom=whois.ripe.net
+ipnet=164.146.0.0	ipmask=/111	ip=164.146.0.0	dom=whois.afrinic.net
+ipnet=164.148.0.0	ipmask=/110	ip=164.148.0.0	dom=whois.afrinic.net
+ipnet=165.143.0.0	ipmask=/112	ip=165.143.0.0	dom=whois.afrinic.net
+ipnet=165.144.0.0	ipmask=/110	ip=165.144.0.0	dom=whois.afrinic.net
+ipnet=165.148.0.0	ipmask=/111	ip=165.148.0.0	dom=whois.afrinic.net
+ipnet=169.208.0.0	ipmask=/108	ip=169.208.0.0	dom=whois.apnic.net
+ipnet=171.16.0.0	ipmask=/108	ip=171.16.0.0	dom=whois.ripe.net
+ipnet=171.32.0.0	ipmask=/111	ip=171.32.0.0	dom=whois.ripe.net
+ipnet=186.0.0.0	ipmask=/103	ip=186.0.0.0	dom=whois.lacnic.net
+ipnet=188.0.0.0	ipmask=/104	ip=188.0.0.0	dom=whois.ripe.net
+ipnet=189.0.0.0	ipmask=/104	ip=189.0.0.0	dom=whois.lacnic.net
+ipnet=190.0.0.0	ipmask=/104	ip=190.0.0.0	dom=whois.lacnic.net
+ipnet=128.0.0.0	ipmask=/98	ip=128.0.0.0	dom=whois.arin.net
+ipnet=192.71.0.0	ipmask=/112	ip=192.71.0.0	dom=whois.ripe.net
+ipnet=192.72.253.0	ipmask=/120	ip=192.72.253.0	dom=whois.arin.net
+ipnet=192.72.254.0	ipmask=/120	ip=192.72.254.0	dom=whois.arin.net
+ipnet=192.72.0.0	ipmask=/112	ip=192.72.0.0	dom=whois.apnic.net
+ipnet=192.106.0.0	ipmask=/112	ip=192.106.0.0	dom=whois.ripe.net
+ipnet=192.114.0.0	ipmask=/111	ip=192.114.0.0	dom=whois.ripe.net
+ipnet=192.116.0.0	ipmask=/111	ip=192.116.0.0	dom=whois.ripe.net
+ipnet=192.118.0.0	ipmask=/112	ip=192.118.0.0	dom=whois.ripe.net
+ipnet=192.162.0.0	ipmask=/112	ip=192.162.0.0	dom=whois.ripe.net
+ipnet=192.164.0.0	ipmask=/110	ip=192.164.0.0	dom=whois.ripe.net
+ipnet=192.0.0.0	ipmask=/104	ip=192.0.0.0	dom=whois.arin.net
+ipnet=193.0.0.0	ipmask=/104	ip=193.0.0.0	dom=whois.ripe.net
+ipnet=194.0.0.0	ipmask=/103	ip=194.0.0.0	dom=whois.ripe.net
+ipnet=196.0.0.0	ipmask=/104	ip=196.0.0.0	dom=whois.afrinic.net
+ipnet=196.0.0.0	ipmask=/102	ip=196.0.0.0	dom=whois.arin.net
+ipnet=200.17.0.0	ipmask=/112	ip=200.17.0.0	dom=whois.nic.br
+ipnet=200.18.0.0	ipmask=/111	ip=200.18.0.0	dom=whois.nic.br
+ipnet=200.20.0.0	ipmask=/112	ip=200.20.0.0	dom=whois.nic.br
+ipnet=200.96.0.0	ipmask=/109	ip=200.96.0.0	dom=whois.nic.br
+ipnet=200.128.0.0	ipmask=/105	ip=200.128.0.0	dom=whois.nic.br
+ipnet=200.0.0.0	ipmask=/103	ip=200.0.0.0	dom=whois.lacnic.net
+ipnet=202.11.0.0	ipmask=/112	ip=202.11.0.0	dom=whois.nic.ad.jp
+ipnet=202.13.0.0	ipmask=/112	ip=202.13.0.0	dom=whois.nic.ad.jp
+ipnet=202.15.0.0	ipmask=/112	ip=202.15.0.0	dom=whois.nic.ad.jp
+ipnet=202.16.0.0	ipmask=/110	ip=202.16.0.0	dom=whois.nic.ad.jp
+ipnet=202.20.128.0	ipmask=/113	ip=202.20.128.0	dom=whois.nic.or.kr
+ipnet=202.23.0.0	ipmask=/112	ip=202.23.0.0	dom=whois.nic.ad.jp
+ipnet=202.24.0.0	ipmask=/111	ip=202.24.0.0	dom=whois.nic.ad.jp
+ipnet=202.26.0.0	ipmask=/112	ip=202.26.0.0	dom=whois.nic.ad.jp
+ipnet=202.30.0.0	ipmask=/111	ip=202.30.0.0	dom=whois.nic.or.kr
+ipnet=202.32.0.0	ipmask=/110	ip=202.32.0.0	dom=whois.nic.ad.jp
+ipnet=202.48.0.0	ipmask=/112	ip=202.48.0.0	dom=whois.nic.ad.jp
+ipnet=202.39.128.0	ipmask=/113	ip=202.39.128.0	dom=whois.twnic.net
+ipnet=202.208.0.0	ipmask=/108	ip=202.208.0.0	dom=whois.nic.ad.jp
+ipnet=202.224.0.0	ipmask=/107	ip=202.224.0.0	dom=whois.nic.ad.jp
+ipnet=203.0.0.0	ipmask=/106	ip=203.0.0.0	dom=whois.apnic.net
+ipnet=203.66.0.0	ipmask=/112	ip=203.66.0.0	dom=whois.twnic.net
+ipnet=203.69.0.0	ipmask=/112	ip=203.69.0.0	dom=whois.twnic.net
+ipnet=203.74.0.0	ipmask=/111	ip=203.74.0.0	dom=whois.twnic.net
+ipnet=203.136.0.0	ipmask=/110	ip=203.136.0.0	dom=whois.nic.ad.jp
+ipnet=203.140.0.0	ipmask=/111	ip=203.140.0.0	dom=whois.nic.ad.jp
+ipnet=203.178.0.0	ipmask=/111	ip=203.178.0.0	dom=whois.nic.ad.jp
+ipnet=203.180.0.0	ipmask=/110	ip=203.180.0.0	dom=whois.nic.ad.jp
+ipnet=203.224.0.0	ipmask=/107	ip=203.224.0.0	dom=whois.nic.or.kr
+ipnet=202.0.0.0	ipmask=/103	ip=202.0.0.0	dom=whois.apnic.net
+ipnet=204.0.0.0	ipmask=/110	ip=204.0.0.0	dom=rwhois.gin.ntt.net
+ipnet=204.0.0.0	ipmask=/102	ip=204.0.0.0	dom=whois.arin.net
+ipnet=208.0.0.0	ipmask=/103	ip=208.0.0.0	dom=whois.arin.net
+ipnet=209.94.192.0	ipmask=/115	ip=209.94.192.0	dom=whois.lacnic.net
+ipnet=210.59.128.0	ipmask=/113	ip=210.59.128.0	dom=whois.twnic.net
+ipnet=210.61.0.0	ipmask=/112	ip=210.61.0.0	dom=whois.twnic.net
+ipnet=210.62.252.0	ipmask=/118	ip=210.62.252.0	dom=whois.twnic.net
+ipnet=210.65.0.0	ipmask=/112	ip=210.65.0.0	dom=whois.twnic.net
+ipnet=210.71.128.0	ipmask=/112	ip=210.71.128.0	dom=whois.twnic.net
+ipnet=210.90.0.0	ipmask=/111	ip=210.90.0.0	dom=whois.nic.or.kr
+ipnet=210.92.0.0	ipmask=/110	ip=210.92.0.0	dom=whois.nic.or.kr
+ipnet=210.96.0.0	ipmask=/107	ip=210.96.0.0	dom=whois.nic.or.kr
+ipnet=210.128.0.0	ipmask=/107	ip=210.128.0.0	dom=whois.nic.ad.jp
+ipnet=210.160.0.0	ipmask=/108	ip=210.160.0.0	dom=whois.nic.ad.jp
+ipnet=210.178.0.0	ipmask=/111	ip=210.178.0.0	dom=whois.nic.or.kr
+ipnet=210.180.0.0	ipmask=/110	ip=210.180.0.0	dom=whois.nic.or.kr
+ipnet=210.188.0.0	ipmask=/110	ip=210.188.0.0	dom=whois.nic.ad.jp
+ipnet=210.196.0.0	ipmask=/110	ip=210.196.0.0	dom=whois.nic.ad.jp
+ipnet=210.204.0.0	ipmask=/110	ip=210.204.0.0	dom=whois.nic.or.kr
+ipnet=210.216.0.0	ipmask=/109	ip=210.216.0.0	dom=whois.nic.or.kr
+ipnet=210.224.0.0	ipmask=/108	ip=210.224.0.0	dom=whois.nic.ad.jp
+ipnet=210.240.0.0	ipmask=/112	ip=210.240.0.0	dom=whois.twnic.net
+ipnet=210.241.0.0	ipmask=/111	ip=210.241.0.0	dom=whois.twnic.net
+ipnet=210.241.224.0	ipmask=/115	ip=210.241.224.0	dom=whois.twnic.net
+ipnet=210.242.0.0	ipmask=/111	ip=210.242.0.0	dom=whois.twnic.net
+ipnet=210.248.0.0	ipmask=/109	ip=210.248.0.0	dom=whois.nic.ad.jp
+ipnet=211.0.0.0	ipmask=/108	ip=211.0.0.0	dom=whois.nic.ad.jp
+ipnet=211.16.0.0	ipmask=/110	ip=211.16.0.0	dom=whois.nic.ad.jp
+ipnet=211.20.0.0	ipmask=/111	ip=211.20.0.0	dom=whois.twnic.net
+ipnet=211.22.0.0	ipmask=/112	ip=211.22.0.0	dom=whois.twnic.net
+ipnet=211.32.0.0	ipmask=/107	ip=211.32.0.0	dom=whois.nic.or.kr
+ipnet=211.75.0.0	ipmask=/112	ip=211.75.0.0	dom=whois.twnic.net
+ipnet=211.72.0.0	ipmask=/112	ip=211.72.0.0	dom=whois.twnic.net
+ipnet=211.104.0.0	ipmask=/109	ip=211.104.0.0	dom=whois.nic.or.kr
+ipnet=211.112.0.0	ipmask=/109	ip=211.112.0.0	dom=whois.nic.or.kr
+ipnet=211.120.0.0	ipmask=/109	ip=211.120.0.0	dom=whois.nic.ad.jp
+ipnet=211.128.0.0	ipmask=/109	ip=211.128.0.0	dom=whois.nic.ad.jp
+ipnet=211.168.0.0	ipmask=/109	ip=211.168.0.0	dom=whois.nic.or.kr
+ipnet=211.176.0.0	ipmask=/108	ip=211.176.0.0	dom=whois.nic.or.kr
+ipnet=211.192.0.0	ipmask=/106	ip=211.192.0.0	dom=whois.nic.or.kr
+ipnet=210.0.0.0	ipmask=/103	ip=210.0.0.0	dom=whois.apnic.net
+ipnet=213.154.32.0	ipmask=/115	ip=213.154.32.0	dom=whois.afrinic.net
+ipnet=213.154.64.0	ipmask=/115	ip=213.154.64.0	dom=whois.afrinic.net
+ipnet=212.0.0.0	ipmask=/103	ip=212.0.0.0	dom=whois.ripe.net
+ipnet=214.0.0.0	ipmask=/103	ip=214.0.0.0	dom=whois.arin.net
+ipnet=216.0.0.0	ipmask=/104	ip=216.0.0.0	dom=whois.arin.net
+ipnet=217.0.0.0	ipmask=/104	ip=217.0.0.0	dom=whois.ripe.net
+ipnet=218.36.0.0	ipmask=/110	ip=218.36.0.0	dom=whois.nic.or.kr
+ipnet=218.40.0.0	ipmask=/109	ip=218.40.0.0	dom=whois.nic.ad.jp
+ipnet=218.48.0.0	ipmask=/109	ip=218.48.0.0	dom=whois.nic.or.kr
+ipnet=219.96.0.0	ipmask=/107	ip=219.96.0.0	dom=whois.nic.ad.jp
+ipnet=218.144.0.0	ipmask=/108	ip=218.144.0.0	dom=whois.nic.or.kr
+ipnet=218.160.0.0	ipmask=/108	ip=218.160.0.0	dom=whois.twnic.net
+ipnet=218.216.0.0	ipmask=/109	ip=218.216.0.0	dom=whois.nic.ad.jp
+ipnet=218.224.0.0	ipmask=/109	ip=218.224.0.0	dom=whois.nic.ad.jp
+ipnet=218.232.0.0	ipmask=/109	ip=218.232.0.0	dom=whois.nic.or.kr
+ipnet=219.240.0.0	ipmask=/111	ip=219.240.0.0	dom=whois.nic.or.kr
+ipnet=219.248.0.0	ipmask=/109	ip=219.248.0.0	dom=whois.nic.or.kr
+ipnet=218.0.0.0	ipmask=/103	ip=218.0.0.0	dom=whois.apnic.net
+ipnet=220.64.0.0	ipmask=/107	ip=220.64.0.0	dom=whois.nic.or.kr
+ipnet=220.96.0.0	ipmask=/110	ip=220.96.0.0	dom=whois.nic.ad.jp
+ipnet=220.103.0.0	ipmask=/112	ip=220.103.0.0	dom=whois.nic.or.kr
+ipnet=220.104.0.0	ipmask=/109	ip=220.104.0.0	dom=whois.nic.ad.jp
+ipnet=220.149.0.0	ipmask=/112	ip=220.149.0.0	dom=whois.nic.or.kr
+ipnet=221.138.0.0	ipmask=/109	ip=221.138.0.0	dom=whois.nic.or.kr
+ipnet=221.144.0.0	ipmask=/108	ip=221.144.0.0	dom=whois.nic.or.kr
+ipnet=221.160.0.0	ipmask=/109	ip=221.160.0.0	dom=whois.nic.or.kr
+ipnet=222.96.0.0	ipmask=/108	ip=222.96.0.0	dom=whois.nic.or.kr
+ipnet=222.112.0.0	ipmask=/109	ip=222.112.0.0	dom=whois.nic.or.kr
+ipnet=222.120.0.0	ipmask=/111	ip=222.120.0.0	dom=whois.nic.or.kr
+ipnet=222.122.0.0	ipmask=/112	ip=222.122.0.0	dom=whois.nic.or.kr
+ipnet=222.232.0.0	ipmask=/109	ip=222.232.0.0	dom=whois.nic.or.kr
+ipnet=223.0.0.0	ipmask=/104	ip=223.0.0.0	dom=unallocated/223
+ipnet=220.0.0.0	ipmask=/102	ip=220.0.0.0	dom=whois.apnic.net
+#
+# careful: the ip must be entered in exactly as %I would output
+#
+ipnet=2001:0000::	ipmask=/32	ip=2001::	dom=whois.teredo.net
+ipnet=2001:0200::	ipmask=/23	ip=2001:200::	dom=whois.apnic.net
+ipnet=2001:0400::	ipmask=/23	ip=2001:400::	dom=whois.arin.net
+ipnet=2001:0600::	ipmask=/23	ip=2001:600::	dom=whois.ripe.net
+ipnet=2001:0800::	ipmask=/22	ip=2001:800::	dom=whois.ripe.net
+ipnet=2001:0c00::		ipmask=/22	ip=2001:c00::	dom=whois.apnic.net
+ipnet=2001:1000::	ipmask=/22	ip=2001:1000::	dom=whois.lacnic.net
+ipnet=2001:1400::	ipmask=/22	ip=2001:1400::	dom=whois.ripe.net
+ipnet=2001:1800::	ipmask=/23	ip=2001:1800::	dom=whois.arin.net
+ipnet=2001:1a00::	ipmask=/23	ip=2001:1a00::	dom=whois.ripe.net
+ipnet=2001:1c00::		ipmask=/22	ip=2001:1c00::	dom=whois.ripe.net
+ipnet=2001:2000::	ipmask=/19	ip=2001:2000::	dom=whois.ripe.net
+ipnet=2001:4000::	ipmask=/23	ip=2001:4000::	dom=whois.ripe.net
+ipnet=2001:4200::	ipmask=/23	ip=2001:4200::	dom=whois.afrinic.net
+ipnet=2001:4400::	ipmask=/23	ip=2001:4400::	dom=whois.apnic.net
+ipnet=2001:4600::	ipmask=/23	ip=2001:4600::	dom=whois.ripe.net
+ipnet=2001:4800::	ipmask=/23	ip=2001:4800::	dom=whois.arin.net
+ipnet=2001:4a00::	ipmask=/23	ip=2001:4a00::	dom=whois.ripe.net
+ipnet=2001:4c00::		ipmask=/22	ip=2001:4c00::	dom=whois.ripe.net
+ipnet=2001:5000::	ipmask=/20	ip=2001:5000::	dom=whois.ripe.net
+ipnet=2001:8000::	ipmask=/18	ip=2001:8000::	dom=whois.apnic.net
+ipnet=2002:0000::	ipmask=/16	ip=2002::	dom=6to4
+ipnet=2003:0000::	ipmask=/18	ip=2003::	dom=whois.ripe.net
+ipnet=2400:0000::	ipmask=/20	ip=2400::	dom=whois.nic.or.kr
+ipnet=2400:0000::	ipmask=/12	ip=2400::	dom=whois.apnic.net
+ipnet=2600:0000::	ipmask=/12	ip=2600::	dom=whois.arin.net
+ipnet=2610:0000::	ipmask=/23	ip=2610::	dom=whois.arin.net
+ipnet=2620:0000::	ipmask=/23	ip=2620::	dom=whois.arin.net
+ipnet=2800:0000::	ipmask=/12	ip=2800::	dom=whois.apnic.net
+ipnet=2a00:0000::	ipmask=/12	ip=2a00::	dom=whois.ripe.net
+ipnet=2c00:0000::		ipmask=/12	ip=2c00::	dom=whois.afrinic.net
+ipnet=3ffe:0000::		ipmask=/16	ip=3ffe::	dom=whois.6bone.net

@@ -1,0 +1,72 @@
+.TH VMAP 9
+.SH NAME
+vmap. vmappat \- physical to virtual mapping
+.SH SYNOPSIS
+.de PB
+.PP
+.ft L
+.nf
+..
+#include "fns.h"
+.PB
+enum {
+	PATUC		= 0,		/* uncachable */
+	PATWC		= 1,		/* use write-combining buffers */
+	PATWT		= 4,		/* write-through */
+	PATWP		= 5,		/* write protect */
+	PATWB		= 6,		/* write back */
+	PATUCMINUS	= 7,		/* UC-; strongly uncacheable */
+};
+.PB
+.PD 0
+.ta +\w'\fL      'u +\w'\fL    'u +6n +4n
+void*	vmap(uintmem base, usize size)
+.PB
+void*	vmappat(uintmem base, usize size, uint pattype)
+.PB
+void	vunmap(void*)
+.PB
+int	vmapsync(uintmem addr)
+.SH DESCRIPTION
+.I Vmap
+creates and returns a virtual address for the physical
+address
+.I base
+on the local processor.
+The most common use for this is to map PCI BARs.
+.PP
+The actual map may be larger than the requested size
+if the base is not smallest page-aligned or the size is
+not a multiple of the smallest page size.  It is an error
+to map the same region of memory twice, but overlap
+is calculated before rounding to smallest page size.
+It is also an error to map an unknown region.
+The default
+memory type is uncachable memory, or
+.BR PATUC .
+But
+.I vmappat
+allows the memory type to be user-selected.
+.PP
+If the new map is accessed on another processor
+it will fault.
+.I Fault
+can restore the mapping with
+.IR vmapsync ,
+which returns 0 if a matching map is found and
+restored, and -1 otherwise.
+.SH SOURCE
+.B /sys/src/nix/*/mmu.c
+.SH "SEE ALSO"
+.IR adr (9nix)
+.SH DIAGNOSTICS
+.I Vmap
+and
+.I Vmappat
+return
+.B nil
+on failure.
+.I Vmapsync
+returns -1 if no map is found.
+.SH BUGS
+PAT is x86- and x86-64-specific.

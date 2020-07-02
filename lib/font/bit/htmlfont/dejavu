@@ -1,0 +1,35 @@
+# format: sf	font
+# where s is a 1 character size designator
+#	s	small
+#	n	normal
+#	l	large
+#	v	very large
+# and face is a 1 character face designator
+#	r	roman
+#	i	italic
+#	b	bold
+#	t	typewriter
+
+tr	/lib/font/bit/dejavusans/dejavusans.10.font
+sr	/lib/font/bit/dejavusans/dejavusans.12.font
+nr	/lib/font/bit/dejavusans/dejavusans.14.font
+lr	/lib/font/bit/dejavusans/dejavusans.16.font
+vr	/lib/font/bit/dejavusans/dejavusans.20.font
+
+ti	/lib/font/bit/dejavusanso/dejavusanso.10.font
+si	/lib/font/bit/dejavusanso/dejavusanso.12.font
+ni	/lib/font/bit/dejavusanso/dejavusanso.14.font
+li	/lib/font/bit/dejavusanso/dejavusanso.16.font
+vi	/lib/font/bit/dejavusanso/dejavusanso.20.font
+
+tb	/lib/font/bit/dejavusansb/dejavusansb.10.font
+sb	/lib/font/bit/dejavusansb/dejavusansb.12.font
+nb	/lib/font/bit/dejavusansb/dejavusansb.14.font
+lb	/lib/font/bit/dejavusansb/dejavusansb.16.font
+vb	/lib/font/bit/dejavusansb/dejavusansb.20.font
+
+tt	/lib/font/bit/dejavusansm/dejavusansm.10.font
+st	/lib/font/bit/dejavusansm/dejavusansm.12.font
+nt	/lib/font/bit/dejavusansm/dejavusansm.14.font
+lt	/lib/font/bit/dejavusansm/dejavusansm.16.font
+vt	/lib/font/bit/dejavusansm/dejavusansm.20.font

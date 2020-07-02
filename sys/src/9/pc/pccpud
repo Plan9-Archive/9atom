@@ -1,0 +1,106 @@
+dev
+	root
+	cons
+	arch
+	pnp		pci	bios32
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	rtc
+	ssl
+	tls
+	bridge		log
+	sdp		thwack unthwack
+	cap
+	kprof
+	trace		archtrace
+
+	ether		netif
+	cec
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum386 inferno
+	aoe
+
+	draw		screen vga vgax swcursor
+	mouse		mouse
+	vga
+	kbmap
+	kbin
+
+	sd		sdalloc
+	floppy		dma
+
+	uart
+	usb
+
+link
+	realmode
+	devpccard
+	ether8169	pci ethermii
+	ether82543gc	pci
+	ether82557	pci
+	ether82563	pci
+	ether83815	pci
+	etherigbe	pci ethermii
+	ether82598	pci
+	ethermedium
+	netdevmedium
+	loopbackmedium
+	usbuhci
+	usbohci
+	usbehci		usbehcipc
+
+misc
+	physalloc
+	alloc
+	swap
+	xalloc
+
+	archacpi		mp nomp mpacpi apic msi
+	archmp	mp nomp mpacpi apic msi
+
+	sdaoe
+	sdide		pci sdscsi
+	sdiahci		pci sdscsi led
+	sdloop
+#	sdmv50xx	pci sdscsi
+	sdloop
+	sd53c8xx	pci sdscsi
+	sdmylex		pci sdscsi
+	sdodin		pci sdscsi led
+
+#	uartaxp		pci
+	uarti8250	uartp8250
+	uartox958	pci uartp8250
+	uartpci		pci uartp8250
+
+	vgavesa
+
+ip
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+
+port
+	int cpuserver = 1;
+
+boot cpu boot #S/sdC0/
+	tcp
+	il
+	local
+
+bootdir
+	bootpccpud.out boot
+	/386/bin/ip/ipconfig
+	/386/bin/auth/factotum
+	/386/bin/disk/kfs
+	/386/bin/usb/usbd
+lib
+	/$objtype/lib/libaml.a
+flags
+	LD		-e -p

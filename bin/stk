@@ -1,0 +1,3 @@
+#!/bin/rc
+for(i)
+	echo 'stk()' | acid $i

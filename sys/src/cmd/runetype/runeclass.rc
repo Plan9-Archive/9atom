@@ -1,0 +1,52 @@
+#!/bin/rc
+rfork e
+. common.rc
+
+awk '-F;' '
+' ^ $hex ^ '
+
+BEGIN {
+}
+
+$3 ~ /^L.$/ {
+	cp = hex($1);
+	if(cp > last)
+		last = cp
+#	if(length($14)>=4)
+#		lc[cp] = $14
+	if(length($6) >= 4 && $6 !~ /<.*/)
+		val[cp] = $6
+}
+
+END {
+	for(i = 0; i < last; i++){
+		cp = i
+		while(length(r = val[cp]) > 0){
+			cp = hex(r)
+			if(cp == 0)
+				print "broke at [" $0 "] r= " r
+		}
+#		if(length(r = lc[cp]) > 0)
+#			cp = hex(r)
+		if(cp != i){
+			str = sprintf("\\u%04x", i)
+			tab[cp] = tab[cp] str
+			cmt[cp] = cmt[cp] sprintf("\\u%04x", i);
+		}
+	}
+
+	print "static";
+	print "Rune\t*__unfoldbase[] =";
+	print "{";
+
+	for(i = 0; i < last; i++)
+		if(length(tab[i]) > 0){
+			str = sprintf("\\u%04x", i)
+			print "/* " str " */\tL\"" str tab[i] "\","
+		#	print "\t\""  str tab[i] "\",	/* " str " */"
+		}
+
+	print "};";
+	print "";
+
+} ' <{Unicode} | Sprint

@@ -1,0 +1,13 @@
+--rw-rw-r-- M 39892 glenda sys  16207 May 28  2008 /n/sources/plan9/sys/src/boot/pc/ether8390.c
+--rw-rw-r-- M 39892 glenda sys   5741 Jul 23  2008 /n/sources/plan9/sys/src/boot/pc/8250.c
+--rw-rw-r-- M 39892 glenda sys   3965 Aug 26  2008 /n/sources/plan9/sys/src/boot/pc/console.c
+--rw-rw-r-- M 39892 glenda sys  23400 Nov  5  2008 /n/sources/plan9/sys/src/boot/pc/ether83815.c
+	must test with soekris
+
+--rw-rw-r-- M 39892 glenda sys  12037 Sep 12 21:36 /n/sources/plan9/sys/src/boot/pc/load.c
+
+
+--rw-rw-r-- M 39892 geoff  sys   9557 May 26 13:54 /n/sources/plan9/sys/src/boot/pc/devbios.c
+--rw-rw-r-- M 39892 geoff  sys   3148 Jul  8 14:07 /n/sources/plan9/sys/src/boot/pc/sdbios.c
+
+void	prcpuid(void);

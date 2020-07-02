@@ -1,0 +1,14 @@
+</$objtype/mkfile
+BIN=/$objtype/bin
+MAN=/sys/man/1
+TARG=aoedbfs
+
+OFILES=\
+	aoedbfs.$O\
+
+#HFILES=none
+
+</sys/src/cmd/mkone
+
+clean:
+	rm -f $O.out *.$O $TARG

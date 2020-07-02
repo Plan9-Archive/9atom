@@ -1,0 +1,3 @@
+#!/bin/rc
+
+relnfs -f -m512 $* # && rm .longnames

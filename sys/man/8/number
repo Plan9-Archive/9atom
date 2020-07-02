@@ -1,0 +1,82 @@
+.TH NUMBER 8
+.SH NAME
+number \- C compatable numbers for shell scripts
+.SH SYNOPSIS
+.B aux/number
+[
+-v
+]
+[
+.B -f
+.I fmt
+]
+[
+.IR num ...
+]
+.SH DESCRIPTION
+.I Number
+parses its argument as simple C expression containing
+the operators
+.LR / ,
+.LR * ,
+.LR % ,
+.LR + ,
+.LR - ,
+.LR & ,
+.LR ^ ,
+and
+.LR | 
+on numbers parsed with
+.I strtoll
+(see
+.IR atof (2)).
+Numbers may be decorated with a binary scale
+.LR k ,
+.LR m ,
+.LR g ,
+.LR t ,
+.LR e ,
+.LR z ,
+.L y
+using 1024 as a base.  The result is printed as
+with
+.IR print (2).
+The default format is
+.BR %lld ;
+alternate formats can be specified with
+.IR -f .
+Formats are as in
+.IR print (2).
+The special format
+.L «
+prints the result as a sequence of
+left-shifts and ors.  The alternate format flag
+.L #
+combines strings of 1s.
+The format
+.L m
+prints the exact result using the same binary scale as above.
+The alternate format flag
+.L #
+allows rounding.  The format width
+changes the base from 1024.
+All operations are preformed in
+64-bit signed arithmetic.
+.SH EXAMPLE
+Print out the number of 512-byte blocks in 1MB in hex
+.IP
+.EX
+; aux/number -f '%#x' 1m/512
+0x800
+.EE
+.SH SOURCE
+.B /sys/src/cmd/aux/number.c
+.SH "SEE ALSO
+.IR dc (1),
+.IR atof (2),
+.IR getflags (8)
+.SH BUGS
+.I
+Number
+is too fancy yet has no loops, functions, unsigned arithmetic
+or arbitrary precicison.

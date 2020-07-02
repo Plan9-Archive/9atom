@@ -1,0 +1,30 @@
+.TH RCHISTORY 1
+.SH NAME
+-, -p \- rc history
+.SH SYNOPSIS
+.B -
+.I pattern
+.br
+.B -p
+.I pattern
+.SH DESCRIPTION
+
+Rchistory matches and prints (-p) or matches and executes
+(-) commands in the file pointed to by the environment
+variable
+.IR history .
+All arguments are concatinated with spaces and matched
+as a fixed string.
+.SH EXAMPLE
+.LP
+Inspect the last invocation of
+.IR mkfs (8).
+.sp 1
+.EX
+; -p mkfs
+disk/mkfs -pvd . -s /n/coraid/usr/quanstro/src/cmd/ /tmp/proto
+.EE
+.SH SOURCE
+.B /sys/src/cmd/rchistory/rchistory.c
+.SH SEE ALSO
+.IR rc (1).

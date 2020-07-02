@@ -1,0 +1,5 @@
+#!/bin/rc
+
+rfork e
+filepat='\.h$'
+exec g $*

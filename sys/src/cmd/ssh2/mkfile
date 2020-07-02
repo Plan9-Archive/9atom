@@ -1,0 +1,49 @@
+</$objtype/mkfile
+
+HFILES=sshtun.h
+
+TARG=\
+	sshtun\
+	sshsession\
+	ssh\
+	rsa2ssh2\
+	ssh2key\
+
+CIPHEROFILES=\
+	cipher3des.$O\
+	cipherblowfish.$O\
+	cipherrc4.$O\
+	cipheraes.$O\
+
+FSOFILES=\
+	dh.$O\
+	pubkey.$O\
+	transport.$O\
+
+BIN=/$objtype/bin
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${FSOFILES:%.$O=%.c}\
+	${CIPHEROFILES:%.$O=%.c}\
+	${TARG:%=%.c}\
+
+</sys/src/cmd/mkmany
+
+$O.ssh: \
+	dial.$O\
+	getgeom.$O\
+
+$O.sshtun: \
+	$CIPHEROFILES\
+	$FSOFILES\
+
+$O.rsa2ssh2:	\
+	transport.$O
+
+$O.ssh2key:	\
+	transport.$O
+
+$BIN/sshtun: $O.sshtun
+	cp $O.sshtun $BIN/sshtun

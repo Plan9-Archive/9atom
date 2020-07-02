@@ -1,0 +1,35 @@
+# format: sf	font
+# where s is a 1 character size designator
+#	s	small
+#	n	normal
+#	l	large
+#	v	very large
+# and face is a 1 character face designator
+#	r	roman
+#	i	italic
+#	b	bold
+#	t	typewriter
+
+tr	/lib/font/bit/vera/vera.10.font
+sr	/lib/font/bit/vera/vera.12.font
+nr	/lib/font/bit/vera/vera.14.font
+lr	/lib/font/bit/vera/vera.16.font
+vr	/lib/font/bit/vera/vera.20.font
+
+ti	/lib/font/bit/verait/vera.10.font
+si	/lib/font/bit/verait/vera.12.font
+ni	/lib/font/bit/verait/vera.14.font
+li	/lib/font/bit/verait/vera.16.font
+vi	/lib/font/bit/verait/vera.20.font
+
+tb	/lib/font/bit/verabd/vera.10.font
+sb	/lib/font/bit/verabd/vera.12.font
+nb	/lib/font/bit/verabd/vera.14.font
+lb	/lib/font/bit/verabd/vera.16.font
+vb	/lib/font/bit/verabd/vera.20.font
+
+tt	/lib/font/bit/veram/vera.10.font
+st	/lib/font/bit/veram/vera.12.font
+nt	/lib/font/bit/veram/vera.14.font
+lt	/lib/font/bit/veram/vera.16.font
+vt	/lib/font/bit/veram/vera.20.font

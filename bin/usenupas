@@ -1,0 +1,6 @@
+#!/bin/rc
+
+if(test -d /$objtype/bin/nupas){
+	bind /$objtype/bin/nupas /bin/upas
+	bind -b /$objtype/bin/nupas /acme/bin/$objtype
+}

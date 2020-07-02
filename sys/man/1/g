@@ -1,0 +1,71 @@
+.TH G 1
+.SH NAME
+g, gf, gh \- grep source
+.SH SYNOPSIS
+.B g
+.I re
+[
+.I "grep flags"
+]
+[
+.I dir
+] ...
+.br
+.B gf
+.I re
+[
+.I "grep flags"
+]
+[
+.I dir
+] ...
+.br
+.B gh
+.I re
+[
+.I "grep flags"
+]
+[
+.I dir
+] ...
+.SH DESCRIPTION
+These commands invoke grep with -n
+and force tagging of output lines by file name.
+.I Gf
+modifies the regular expression given to only
+match C functions declared as in
+.IR style (6).
+Files matching the pattern
+.L $filepat
+are searched.  The default pattern is
+.L "\\\\.[Cbchlmsy]$"
+for
+.I g
+and
+.I gf
+while the default pattern is
+.L "\\\\.[h]$"
+for
+.BR gh .
+.PP
+If no
+.I dir
+arguments are given, then only files in the
+current directory are considered.  Otherwise,
+each
+.I dir
+argument is recursively searched for files
+matching the given pattern.
+.SH SOURCE
+.B /rc/bin/g
+.br
+.B /rc/bin/gf
+.br
+.B /rc/bin/gh
+.br
+.SH "SEE ALSO"
+.IR grep (1),
+.IR find (1).
+.SH BUGS
+As with all convienent magic, casting
+runes can have unexpected consequences.

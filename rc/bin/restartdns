@@ -1,0 +1,111 @@
+#!/bin/rc
+rfork en
+nl='
+'
+mailto=(quanstro)
+allow=(ladd)
+recursive=()
+gcidr = (
+	# only blocks that can map to google's a records
+	72.14.192.0/18
+	74.125.0.0/16
+	209.85.128.0/17
+	216.239.32.0/19
+	173.194.0.0/16
+)
+
+if(! ~ `{cat /dev/user} `{cat /dev/hostowner}){
+	echo 'restartdns: must be hostowner' >[1=2];
+	exit user
+}
+
+9fs other
+
+fn syslog{
+	echo $sysname `{date} restartdns: $* > /sys/log/dns
+}
+
+fn pgroup{
+	ifs=$nl g=`{cat /proc/$1/noteid}
+	for(i in `{grep -l $g /proc/*/noteid | sed 's:/proc/([^/]+)/noteid:\1:g'})
+		if(test -d /proc/$i)
+			echo $i
+}
+
+fn reaper{
+	nbroken=()
+	for(i in `{ps | awk '$6 == "Broken" && $7 == "dns" {print $2}'}){
+		r = /n/other/$user/dnssnap/$sysname.$i.`{date -n}
+		snap -o $r `{pgroup $i}
+		nbroken = ($nbroken $r)
+	}
+}
+
+fn getips{
+	ndb/dnsquery $* | sed 's/.*[ 	]//g'
+}
+
+fn google{
+	google=()
+	if(! ip/cidr -rf <{getips google.com} <{echo $gcidr})
+		google=1
+	if(ip/cidr -f /lib/badcidr <{getips 9fans.net} )
+		google=($google 2)
+}
+
+fn why{
+	if(! ~ $#nbroken 0){
+		echo getting mediæval on $#nbroken broken dns processes.
+		for(i in $nbroken)
+			echo $i
+	}
+	if(! ~ $#nwait 0){
+		echo getting mediæval on $#nwait deadlocked dns processes.
+		for(i in $nwait)
+			echo $i
+	}
+	if(! ~ $#google 0){
+		echo google broken
+		ndb/dnsquery google.com
+		ndb/dnsquery 9fans.net any
+	}
+}
+
+flagfmt='p,f'
+args=()
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 0){
+	aux/usage
+	exit usage
+}
+
+if(~ $#flagf 0){
+	if(! ~ $sysname $allow)
+		exit 'wrong system'
+	reaper
+	ifs=$nl nwait=`{ps -a |sed -n 's/.* +dns \[query lock wait for(.*)\]/\1/gp' | sort | uniq -c | awk '$1>2'}
+	google
+
+	if(~ $#nbroken 0 && ~ $#nwait 0 && ~ $#google 0)
+		exit 'none broken'
+	why
+	if(~ $service rx)
+		{date; echo; why; echo; ps -a | grep ' dns ' }| mail -s 'restartdns: '^$sysname $mailto
+}
+
+if(~ $flagp 1)
+	exit ''
+
+syslog slaying broken $#nbroken nwait $#nwait google $#google
+
+dns = ndb/dns
+slaydns = `{echo $dns | sed 's:.*/::g'}
+slay $slaydns | rc
+unmount '#s/dns' /net/dns >[2=]
+unmount '#s/dns_net.alt' /net.alt/dns >[2=]
+rm -f '#s/dns'  '#s/dns_net.alt'
+
+$dns -N 20000 -s
+if(~ $sysname $recursive)
+	$dns -sx /net.alt -f /lib/ndb/external
+if not
+	$dns -Rrsx /net.alt -f /lib/ndb/external

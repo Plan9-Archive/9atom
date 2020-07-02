@@ -1,0 +1,86 @@
+dev
+	root
+	cons
+	arch
+	pnp		pci	bios32
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	rtc
+	ssl
+	tls
+	cap
+	kprof
+	fs
+
+	ether		netif
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum386 inferno
+
+	draw		screen vga vgax swcursor
+	mouse		mouse
+	vga
+
+	sd		sdalloc
+	floppy		dma
+
+	uart
+	usb
+	kbin
+
+link
+	realmode
+	apm		apmjump
+	ether82557	pci
+	ethervt6102	pci ethermii
+	ethervt6105m	pci ethermii
+	ethermedium
+	netdevmedium
+	loopbackmedium
+	usbuhci
+	usbohci
+	usbehci		usbehcipc
+
+misc
+	physalloc
+	alloc
+	swap
+	xalloc
+
+	archmp	mp nomp mpacpi apic msi
+
+	sdide		pci sdscsi
+	sdiahci		pci sdscsi led
+
+	uarti8250	uartp8250
+	uartpci		pci uartp8250
+
+	vgamach64xx	+cur
+	vgas3 		+cur vgasavage
+
+ip
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+
+port
+	int cpuserver = 1;
+
+boot cpu boot #S/sdC0/
+	tcp
+	il
+	local
+
+bootdir
+	bootpcauth.out boot
+	/386/bin/ip/ipconfig
+	/386/bin/auth/factotum
+	/386/bin/fossil/fossil
+	/386/bin/venti/venti
+	/386/bin/disk/kfs
+	/386/bin/usb/usbd

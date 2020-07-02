@@ -1,0 +1,29 @@
+#!/bin/rc
+# consoleof - print console server for system
+
+fn usage {
+	echo >[1=2] usage: consoleof system
+	exit usage
+}
+
+if (! ~ $#* 1)
+	usage
+server=()
+for(i in /lib/ndb/consoledb.*){
+	dev=`{ndb/query -f $i console $1 dev}
+	if(! ~ $#dev 0){
+		server=` '.' {echo -n $i}
+		server=$server(2)
+		break
+	}
+}
+if(~ $#server 0){
+	# serial appliance?
+	server=`{ndb/query sys $1 console}
+}
+if(~ $#server 0){
+	echo >[1=2] consoleof: unknown console server for $1	
+	exit noconsole
+}
+echo $server
+exit ''

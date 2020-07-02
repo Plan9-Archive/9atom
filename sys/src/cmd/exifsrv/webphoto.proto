@@ -1,0 +1,23 @@
+usr	- sys sys
+	web	- sys sys
+		nav	- sys sys
+			*	- sys sys
+usr	- sys sys
+	photos	- sys sys
+sys	- sys sys
+	man	- sys sys
+		8	- sys sys
+			webphoto	- sys sys
+	src	- sys sys
+		cmd	- sys sys
+			exifsrv	- sys sys
+				*	- sys sys
+			ip	- sys sys
+				httpd	- sys sys
+					webphoto.c	- sys sys
+386	- sys sys
+	bin	- sys sys
+		exifsrv	- sys sys
+		ip	- sys sys
+			httpd	- sys sys
+				webphoto	- sys sys

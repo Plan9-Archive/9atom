@@ -1,0 +1,12 @@
+#!/bin/rc
+# dmaon - turn on ide dma, if possible
+rfork e
+if(! test -f '#S/sdctl')
+	exit ''
+ctlrs=`{sed -n 's/(^sd.) ata .*/\1/p' <'#S/sdctl'}
+if(~ $#ctlrs 0)
+	exit ''
+for(ctl in '#S/'$ctlrs^?/ctl)
+	if (! grep -s '^config .* dma 00000000 ' $ctl)
+		echo dma on >$ctl [2]>/dev/null || echo dmaon: $ctlr failed
+

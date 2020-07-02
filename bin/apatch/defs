@@ -1,0 +1,52 @@
+P=atom
+S=atom
+M=sources@9atom.org
+MS=sources@9atom.org
+PD=/n/$P/patch
+SD=/n/$S/plan9
+applied=$PD/applied
+patch=/rc/bin/apatch
+
+fn fail {
+	echo $0: aborted: $* >[1=2]
+	exit $"*
+}
+
+fn mountfs {
+	if(! test -d $PD || ! test -d $SD){
+		rm -f /srv/^($P $S)
+		test -d $PD || 9fs $* $P || fail no patch dir
+		test -d $SD || 9fs $* $S || fail no source dir
+	}
+}
+
+fn mountdist {
+	test -e /n/dist/386 || bind  $SD /n/dist || fail no dist
+	test -e /n/dist/386 || fail /root/386 does not exist
+
+	if(~ $1 -w){
+		{
+			touch  /n/dist/lib/xxx &&
+			rm -f /n/dist/lib/xxx
+		} >[2]/dev/null || fail no permission to write /n/dist/lib
+	}
+}
+
+fn cpfile {
+	if(! test -e $1){
+		echo $1 does not exist >[1=2] || fail exist
+	}
+	# was cp -x
+	if(test -f $1)
+		cp $1 $2 || fail cp
+	if(test -d $1){
+		mkdir -p $2 || fail mkdir $2
+		rm -rf $2/*
+		dircp $1 $2  || fail dircp $1 $2
+	}
+	~ 1 1
+}
+
+fn must {
+	$* || fail $*
+}

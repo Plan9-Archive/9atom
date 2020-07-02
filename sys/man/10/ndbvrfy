@@ -1,0 +1,56 @@
+.TH NDBVRFY 10
+.SH NAME
+ndb/vrfy, checkndb \- check ndb database
+.SH SYNOPSIS
+.B ndb/vrfy
+[
+.B -c
+] [
+-B -m
+.I ip/mask
+] [
+.I file ...
+]
+.br
+checkndb
+.SH DESCRIPTION
+.I Ndb/vrfy
+verifies the syntax database file given
+and applies a few ad-hoc heuristics.  With
+the
+.B -m
+flag, all IP addresses in
+.I file
+are checked against the given
+.IR ip/mask .
+Normally,
+.I ndb/vrfy
+checks attributes against a generic list of
+attributes.  with
+.BR -c,
+attributes suitable for use with
+.IR consolefs (8)
+are used.
+.PP
+.I Checkndb
+checks all the files in
+.B /lib/ndb
+for reasonableness in the Coraid environment.
+It is assumed that the owner's uid on the file server
+match the third octet of the network.  Thus it
+is assumed that
+.I tor
+owns
+.BR /lib/ndb/10.220.1 .
+and all the IP addresses in this file are within the
+.B 10.220.1.0/112
+network.
+.SH SOURCE
+.B /sys/src/cmd/ndb/vrfy.y
+.br
+.B /rc/bin/checkndb
+.SH SEE ALSO
+.IR consolefs (8),
+.IR ndb (8)
+.SH BUGS
+Hopeless provinciality.

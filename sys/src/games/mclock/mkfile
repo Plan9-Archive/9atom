@@ -1,0 +1,8 @@
+</$objtype/mkfile
+
+BIN=/$objtype/bin/games
+TARG=mclock
+OFILES=\
+	mclock.$O\
+
+</sys/src/cmd/mkone

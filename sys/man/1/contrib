@@ -1,0 +1,192 @@
+.TH CONTRIB 1
+.SH NAME
+create, install, list, pull, push, remove \- trivial package management
+.SH SYNOPSIS
+.B contrib/create
+[
+.B -d
+.I dependency
+]
+[
+.B -f
+]
+[
+.B -r
+.I root
+]
+[
+.B -u
+.I user
+]
+[
+.B -x
+.I exclude
+]
+.I name name.proto
+.br
+.B contrib/install
+[
+.B -f
+]
+[
+.B -r
+.I root
+]
+.I user/name
+.br
+.B contrib/list
+[
+.B -c
+|
+.B -v
+]
+[
+.I user
+|
+.I user/name
+]
+.br
+.B contrib/pull
+[
+.B -c
+.I file
+]
+[
+.B -s
+.I file
+] 
+.I name
+.br
+.B contrib/push
+.I name
+.br
+.B contrib/remove
+.I name
+.SH DESCRIPTION
+.I Contrib 
+is a simple package management system based on
+.IR replica (1).
+It can be used to create, install, upgrade and remove software packages
+in the sources repository. To create a package and become its maintainer
+it is necessary to have an authenticated sources account and a contrib directory
+.IR /n/sources/contrib/$user .
+.TP
+.I Contrib/create 
+Create builds a new package
+.IR name ,
+and performs an initial push to sources. 
+The file structure is defined by
+.IR name.proto .
+The
+.B -f
+option can be used to force the recreation of the package.
+Dependencies can be specified with the
+.B -d
+.I name
+option.
+If the package is staged away from its final destination a
+root directory for the published package may be specified with
+.B -r
+.IR root .
+If the user has a different name for their sources account from their current
+user account then this may be specified with the
+.B -u
+.I user
+option. Use the
+.B -x
+option to exclude the
+.I exclude
+files from the synchronization.
+.IP
+When
+.I create
+runs it puts the current window into hold mode and reads text describing
+the package.
+The first line of this text is printed by contrib/list and should be a
+short summary of the package's contents.
+.TP
+.I Contrib/install 
+Install the package
+.I name
+maintained by the user
+.I user
+to the local file system. The 
+.B -f 
+option forces the installation to continue irrespective of missing dependent
+packages. Packages are normally installed at
+.B /
+however an alternative root directory may be specified with
+.B -r
+.IR root .
+.TP
+.I Contrib/list
+List the available packages and a one line description of each. The
+.B -v
+option produces a more verbose multi-line form.
+The
+.B -c
+option lists changes to the packages since the last
+.I pull
+if installed
+or the its creation if not.
+.TP
+.I Contrib/pull
+Update the local package
+.I name
+from sources. Locally modified files cause a warning and
+are not overwritten unless the
+.B -c
+or 
+.B -s
+options are used \- as described in
+.IR replica (1).
+.TP
+.I Contrib/push
+Used by the package maintainer to update the package 
+.I name
+on sources from the local system.
+.IP
+When
+.I push
+runs it puts the current window into hold mode and reads text describing
+the changes to the package.
+.TP
+.I Contrib/remove
+Print the commands necessary to remove the package
+.IR name ,
+this allows the commands to be edited before they are sent
+to the shell.
+The commands printed for files which have been modified
+with respect to the repository are commented out.
+.SH EXAMPLE
+.LP
+Install the
+.B abaco
+web browser.
+.sp 1
+.EX
+% contrib/install fgb/abaco
+.EE
+.SH FILES
+.TF /n/sources/contrib/rob/replica
+.TP
+.B /usr/$user/lib/replica
+databases of packages created locally.
+.TP
+.B /dist/replica/*
+databases of packages installed locally.
+.TP
+.B /n/sources/contrib/rob/replica
+database of rob's packages.
+.TP
+.B /n/sources/contrib/rob/root
+files representing in rob's packages.
+.SH SOURCE
+.B /rc/bin/contrib
+.SH SEE ALSO
+.IR proto (2),
+.IR replica (1),
+.IR replica (8)
+.SH BUGS
+Send bug reports to
+.I benavento@gmail.com

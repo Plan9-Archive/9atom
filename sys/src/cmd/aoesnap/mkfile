@@ -1,0 +1,27 @@
+</$objtype/mkfile
+BIN=/$objtype/bin
+
+CFLAGS=-TFVw
+
+TARG=aoesnap
+OFILES=\
+	aoe.$O\
+	aoesnap.$O\
+	bio.$O\
+	goo.$O\
+	print.$O\
+	take.$O\
+	util.$O\
+
+HFILES=goo.h
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${OFILES:%.$O=%.c}\
+	${TARG:%=%.c}\
+	${TARG:%=/386/bin/%}\
+
+LIB=/$objtype/lib/libc.a
+OS=o$OS
+</sys/src/cmd/mkone

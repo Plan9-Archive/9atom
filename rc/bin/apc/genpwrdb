@@ -1,0 +1,13 @@
+#!/bin/rc
+rfork en
+
+{
+	sleep 0.3; echo apc
+	sleep 0.3; echo apc
+	sleep 0.3; echo olname all
+	sleep 3
+} | telnet -r $1 >[2=] | {
+	echo 'type=apc'
+	sed -n 's/[ 12][0-9]: (.*)/	console=\1/p' |
+		sed 's/Outlet /' ^ $1 ^ './g'
+}

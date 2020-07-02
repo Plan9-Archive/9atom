@@ -1,0 +1,11 @@
+#!/bin/rc
+# need a layout to boot directly from flash.
+p=`{cat '#P/cputype' >[2=]}
+~ $p(3) 88F6281 || {echo >[1=2] wrong cpu && exit usererror}
+test -d /dev/flash || bind -a '#F' /dev
+test -d /dev/flash || {echo >[1=2] no flash dev && exit noflash}
+nvram=()
+nvroff=()
+nvrlen=()
+echo erase 0x100000>/dev/flash/flashctl
+auth/wrkey

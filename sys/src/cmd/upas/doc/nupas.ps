@@ -1,0 +1,2950 @@
+%!PS-Adobe-2.0
+%%Version: 0.1
+%%DocumentFonts: (atend)
+%%Pages: (atend)
+%%EndComments
+%
+% Version 3.3.2 prologue for troff files.
+%
+
+/#copies 1 store
+/aspectratio 1 def
+/formsperpage 1 def
+/landscape false def
+/linewidth .3 def
+/magnification 1 def
+/margin 0 def
+/orientation 0 def
+/resolution 720 def
+/rotation 1 def
+/xoffset 0 def
+/yoffset 0 def
+
+/roundpage true def
+/useclippath true def
+/pagebbox [0 0 612 792] def
+
+/R  /Times-Roman def
+/I  /Times-Italic def
+/B  /Times-Bold def
+/BI /Times-BoldItalic def
+/H  /Helvetica def
+/HI /Helvetica-Oblique def
+/HB /Helvetica-Bold def
+/HX /Helvetica-BoldOblique def
+/CW /Courier def
+/CO /Courier def
+/CI /Courier-Oblique def
+/CB /Courier-Bold def
+/CX /Courier-BoldOblique def
+/PA /Palatino-Roman def
+/PI /Palatino-Italic def
+/PB /Palatino-Bold def
+/PX /Palatino-BoldItalic def
+/Hr /Helvetica-Narrow def
+/Hi /Helvetica-Narrow-Oblique def
+/Hb /Helvetica-Narrow-Bold def
+/Hx /Helvetica-Narrow-BoldOblique def
+/KR /Bookman-Light def
+/KI /Bookman-LightItalic def
+/KB /Bookman-Demi def
+/KX /Bookman-DemiItalic def
+/AR /AvantGarde-Book def
+/AI /AvantGarde-BookOblique def
+/AB /AvantGarde-Demi def
+/AX /AvantGarde-DemiOblique def
+/NR /NewCenturySchlbk-Roman def
+/NI /NewCenturySchlbk-Italic def
+/NB /NewCenturySchlbk-Bold def
+/NX /NewCenturySchlbk-BoldItalic def
+/ZD /ZapfDingbats def
+/ZI /ZapfChancery-MediumItalic def
+/S  /S def
+/S1 /S1 def
+/GR /Symbol def
+
+/inch {72 mul} bind def
+/min {2 copy gt {exch} if pop} bind def
+
+/setup {
+	counttomark 2 idiv {def} repeat pop
+
+	landscape {/orientation 90 orientation add def} if
+	/scaling 72 resolution div def
+	linewidth setlinewidth
+	1 setlinecap
+
+	pagedimensions
+	xcenter ycenter translate
+	orientation rotation mul rotate
+	width 2 div neg height 2 div translate
+	xoffset inch yoffset inch neg translate
+	margin 2 div dup neg translate
+	magnification dup aspectratio mul scale
+	scaling scaling scale
+
+	addmetrics
+	0 0 moveto
+} def
+
+/pagedimensions {
+	useclippath userdict /gotpagebbox known not and {
+		/pagebbox [clippath pathbbox newpath] def
+		roundpage currentdict /roundpagebbox known and {roundpagebbox} if
+	} if
+	pagebbox aload pop
+	4 -1 roll exch 4 1 roll 4 copy
+	landscape {4 2 roll} if
+	sub /width exch def
+	sub /height exch def
+	add 2 div /xcenter exch def
+	add 2 div /ycenter exch def
+	userdict /gotpagebbox true put
+} def
+
+/addmetrics {
+	/Symbol /S null Sdefs cf
+	/Times-Roman /S1 StandardEncoding dup length array copy S1defs cf
+} def
+
+/pagesetup {
+	/page exch def
+	currentdict /pagedict known currentdict page known and {
+		page load pagedict exch get cvx exec
+	} if
+} def
+
+/decodingdefs [
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg /y exch def counttomark 2 idiv {y moveto show} repeat}
+	{neg moveto {2 index stringwidth pop sub exch div 0 32 4 -1 roll widthshow} repeat}
+	{neg moveto {spacewidth sub 0.0 32 4 -1 roll widthshow} repeat}
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg setfunnytext}
+] def
+
+/setdecoding {/t decodingdefs 3 -1 roll get bind def} bind def
+
+/w {neg moveto show} bind def
+/m {neg dup /y exch def moveto} bind def
+/done {/lastpage where {pop lastpage} if} def
+
+/f {
+	dup /font exch def findfont exch
+	dup /ptsize exch def scaling div dup /size exch def scalefont setfont
+	linewidth ptsize mul scaling 10 mul div setlinewidth
+	/spacewidth ( ) stringwidth pop def
+} bind def
+
+/changefont {
+	/fontheight exch def
+	/fontslant exch def
+	currentfont [
+		1 0
+		fontheight ptsize div fontslant sin mul fontslant cos div
+		fontheight ptsize div
+		0 0
+	] makefont setfont
+} bind def
+
+/sf {f} bind def
+
+/cf {
+	dup length 2 idiv
+	/entries exch def
+	/chtab exch def
+	/newencoding exch def
+	/newfont exch def
+
+	findfont dup length 1 add dict
+	/newdict exch def
+	{1 index /FID ne {newdict 3 1 roll put}{pop pop} ifelse} forall
+
+	newencoding type /arraytype eq {newdict /Encoding newencoding put} if
+
+	newdict /Metrics entries dict put
+	newdict /Metrics get
+	begin
+		chtab aload pop
+		1 1 entries {pop def} for
+		newfont newdict definefont pop
+	end
+} bind def
+
+%
+% A few arrays used to adjust reference points and character widths in some
+% of the printer resident fonts. If square roots are too high try changing
+% the lines describing /radical and /radicalex to,
+%
+%	/radical	[0 -75 550 0]
+%	/radicalex	[-50 -75 500 0]
+%
+% Move braceleftbt a bit - default PostScript character is off a bit.
+%
+
+/Sdefs [
+	/bracketlefttp		[201 500]
+	/bracketleftbt		[201 500]
+	/bracketrighttp		[-81 380]
+	/bracketrightbt		[-83 380]
+	/braceleftbt		[203 490]
+	/bracketrightex		[220 -125 500 0]
+	/radical		[0 0 550 0]
+	/radicalex		[-50 0 500 0]
+	/parenleftex		[-20 -170 0 0]
+	/integral		[100 -50 500 0]
+	/infinity		[10 -75 730 0]
+] def
+
+/S1defs [
+	/underscore		[0 80 500 0]
+	/endash			[7 90 650 0]
+] def
+%
+% Tries to round clipping path dimensions, as stored in array pagebbox, so they
+% match one of the known sizes in the papersizes array. Lower left coordinates
+% are always set to 0.
+%
+
+/roundpagebbox {
+    7 dict begin
+	/papersizes [8.5 inch 11 inch 14 inch 17 inch] def
+
+	/mappapersize {
+		/val exch def
+		/slop .5 inch def
+		/diff slop def
+		/j 0 def
+		0 1 papersizes length 1 sub {
+			/i exch def
+			papersizes i get val sub abs
+			dup diff le {/diff exch def /j i def} {pop} ifelse
+		} for
+		diff slop lt {papersizes j get} {val} ifelse
+	} def
+
+	pagebbox 0 0 put
+	pagebbox 1 0 put
+	pagebbox dup 2 get mappapersize 2 exch put
+	pagebbox dup 3 get mappapersize 3 exch put
+    end
+} bind def
+
+%%EndProlog
+%%BeginSetup
+mark
+/magnification .9 def
+%
+% Encoding vector and redefinition of findfont for the ISO Latin1 standard.
+% The 18 characters missing from ROM based fonts on older printers are noted
+% below.
+%
+
+/ISOLatin1Encoding [
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/space
+	/exclam
+	/quotedbl
+	/numbersign
+	/dollar
+	/percent
+	/ampersand
+	/quoteright
+	/parenleft
+	/parenright
+	/asterisk
+	/plus
+	/comma
+	/minus
+	/period
+	/slash
+	/zero
+	/one
+	/two
+	/three
+	/four
+	/five
+	/six
+	/seven
+	/eight
+	/nine
+	/colon
+	/semicolon
+	/less
+	/equal
+	/greater
+	/question
+	/at
+	/A
+	/B
+	/C
+	/D
+	/E
+	/F
+	/G
+	/H
+	/I
+	/J
+	/K
+	/L
+	/M
+	/N
+	/O
+	/P
+	/Q
+	/R
+	/S
+	/T
+	/U
+	/V
+	/W
+	/X
+	/Y
+	/Z
+	/bracketleft
+	/backslash
+	/bracketright
+	/asciicircum
+	/underscore
+	/quoteleft
+	/a
+	/b
+	/c
+	/d
+	/e
+	/f
+	/g
+	/h
+	/i
+	/j
+	/k
+	/l
+	/m
+	/n
+	/o
+	/p
+	/q
+	/r
+	/s
+	/t
+	/u
+	/v
+	/w
+	/x
+	/y
+	/z
+	/braceleft
+	/bar
+	/braceright
+	/asciitilde
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/.notdef
+	/dotlessi
+	/grave
+	/acute
+	/circumflex
+	/tilde
+	/macron
+	/breve
+	/dotaccent
+	/dieresis
+	/.notdef
+	/ring
+	/cedilla
+	/.notdef
+	/hungarumlaut
+	/ogonek
+	/caron
+	/space
+	/exclamdown
+	/cent
+	/sterling
+	/currency
+	/yen
+	/brokenbar		% missing
+	/section
+	/dieresis
+	/copyright
+	/ordfeminine
+	/guillemotleft
+	/logicalnot
+	/hyphen
+	/registered
+	/macron
+	/degree			% missing
+	/plusminus		% missing
+	/twosuperior		% missing
+	/threesuperior		% missing
+	/acute
+	/mu			% missing
+	/paragraph
+	/periodcentered
+	/cedilla
+	/onesuperior		% missing
+	/ordmasculine
+	/guillemotright
+	/onequarter		% missing
+	/onehalf		% missing
+	/threequarters		% missing
+	/questiondown
+	/Agrave
+	/Aacute
+	/Acircumflex
+	/Atilde
+	/Adieresis
+	/Aring
+	/AE
+	/Ccedilla
+	/Egrave
+	/Eacute
+	/Ecircumflex
+	/Edieresis
+	/Igrave
+	/Iacute
+	/Icircumflex
+	/Idieresis
+	/Eth			% missing
+	/Ntilde
+	/Ograve
+	/Oacute
+	/Ocircumflex
+	/Otilde
+	/Odieresis
+	/multiply		% missing
+	/Oslash
+	/Ugrave
+	/Uacute
+	/Ucircumflex
+	/Udieresis
+	/Yacute			% missing
+	/Thorn			% missing
+	/germandbls
+	/agrave
+	/aacute
+	/acircumflex
+	/atilde
+	/adieresis
+	/aring
+	/ae
+	/ccedilla
+	/egrave
+	/eacute
+	/ecircumflex
+	/edieresis
+	/igrave
+	/iacute
+	/icircumflex
+	/idieresis
+	/eth			% missing
+	/ntilde
+	/ograve
+	/oacute
+	/ocircumflex
+	/otilde
+	/odieresis
+	/divide			% missing
+	/oslash
+	/ugrave
+	/uacute
+	/ucircumflex
+	/udieresis
+	/yacute			% missing
+	/thorn			% missing
+	/ydieresis
+] def
+
+/NewFontDirectory FontDirectory maxlength dict def
+
+%
+% Apparently no guarantee findfont is defined in systemdict so the obvious
+%
+%	systemdict /findfont get exec
+%
+% can generate an error. So far the only exception is a VT600 (version 48.0).
+%
+
+userdict /@RealFindfont known not {
+	userdict begin
+		/@RealFindfont systemdict begin /findfont load end def
+	end
+} if
+
+/findfont {
+	dup NewFontDirectory exch known not {
+		dup
+		%dup systemdict /findfont get exec	% not always in systemdict
+		dup userdict /@RealFindfont get exec
+		dup /Encoding get StandardEncoding eq {
+			dup length dict begin
+				{1 index /FID ne {def}{pop pop} ifelse} forall
+				/Encoding ISOLatin1Encoding def
+				currentdict
+			end
+			/DummyFontName exch definefont
+		} if
+		NewFontDirectory 3 1 roll put
+	} if
+	NewFontDirectory exch get
+} bind def
+
+%%Patch from lp
+%%EndPatch from lp
+
+setup
+%%EndSetup
+%%Page: 1 1
+/saveobj save def
+mark
+1 pagesetup
+13 /LucidaSans-Demi f
+(Scaling) 2669 1230 w
+(Upas) 3189 1230 w
+11 /LucidaSans-Italic f
+(Erik) 2672 1490 w
+(Quanstrom) 2917 1490 w
+(quanstro@coraid.com) 2511 1620 w
+(ABSTRACT) 2817 2095 w
+11 /LucidaSansUnicode00 f
+(The) 1116 2375 w
+(Plan) 1368 2375 w
+(9) 1643 2375 w
+(email) 1765 2375 w
+(system,) 2107 2375 w
+(Upas,) 2569 2375 w
+(uses) 2919 2375 w
+(traditional) 3214 2375 w
+(methods) 3817 2375 w
+(of) 4336 2375 w
+(delivery) 4498 2375 w
+(to) 4968 2375 w
+10 /LucidaSansUnicode00 f
+(UNIX) 1116 2505 w
+11 /LucidaSansUnicode00 f
+(\256) 1351 2505 w
+(mail) 1465 2505 w
+(boxes) 1737 2505 w
+(while) 2103 2505 w
+(using) 2427 2505 w
+(a) 2764 2505 w
+(user-level) 2870 2505 w
+(file) 3455 2505 w
+(system,) 3667 2505 w
+(Upas/fs,) 4121 2505 w
+(to) 4617 2505 w
+(trans\255) 4769 2505 w
+(late) 1116 2635 w
+(mail) 1366 2635 w
+(boxes) 1647 2635 w
+(of) 2022 2635 w
+(various) 2184 2635 w
+(formats) 2624 2635 w
+(into) 3091 2635 w
+(a) 3353 2635 w
+(single,) 3468 2635 w
+(convenient) 3875 2635 w
+(format) 4511 2635 w
+(for) 4923 2635 w
+(access.) 1116 2765 w
+(Unfortunately,) 1574 2765 w
+(it) 2377 2765 w
+(does) 2491 2765 w
+(not) 2786 2765 w
+(do) 3003 2765 w
+(so) 3179 2765 w
+(efficiently.) 3342 2765 w
+(Upas/fs) 3976 2765 w
+(reads) 4433 2765 w
+(entire) 4766 2765 w
+(folders) 1116 2895 w
+(into) 1535 2895 w
+(core.) 1790 2895 w
+(When) 2137 2895 w
+(deleting) 2477 2895 w
+(email) 2958 2895 w
+(from) 3294 2895 w
+(mail) 3596 2895 w
+(boxes,) 3870 2895 w
+(the) 4273 2895 w
+(entire) 4491 2895 w
+(mail) 4849 2895 w
+(box) 1116 3025 w
+(is) 1365 3025 w
+(rewritten.) 1499 3025 w
+(I) 2096 3025 w
+(describe) 2174 3025 w
+(how) 2671 3025 w
+(Upas/fs) 2937 3025 w
+(has) 3400 3025 w
+(been) 3631 3025 w
+(adapted) 3938 3025 w
+(to) 4415 3025 w
+(use) 4568 3025 w
+(cach\255) 4799 3025 w
+(ing,) 1116 3155 w
+(indexing) 1362 3155 w
+(and) 1871 3155 w
+(a) 2112 3155 w
+(new) 2216 3155 w
+(mail) 2474 3155 w
+(box) 2744 3155 w
+(format) 2990 3155 w
+(\(mdir\)) 3390 3155 w
+(to) 3753 3155 w
+(limit) 3904 3155 w
+(I/O,) 4186 3155 w
+(reduce) 4440 3155 w
+(core) 4846 3155 w
+(size) 1116 3285 w
+(and eliminate) 1364 3285 w
+(the) 2124 3285 w
+(need to rewrite) 2330 3285 w
+(mail) 3176 3285 w
+(boxes.) 3438 3285 w
+11 /LucidaSans-Demi f
+(1.) 720 3675 w
+(Introduction) 888 3675 w
+11 /LucidaSansUnicode00 f
+(Chained at) 1080 3905 w
+(his root) 1688 3905 w
+(two scion demons dwell) 2134 3905 w
+11 /LucidaSansUnicode20 f
+(\023) 1355 4035 w
+11 /LucidaSansUnicode00 f
+(Erasmus Darwin, The) 1445 4035 w
+(Botanic Garden) 2605 4035 w
+(At) 720 4265 w
+(Coraid,) 880 4265 w
+(email) 1308 4265 w
+(is) 1640 4265 w
+(the) 1771 4265 w
+(largest) 1985 4265 w
+(resource) 2393 4265 w
+(user) 2897 4265 w
+(in) 3171 4265 w
+(the) 3314 4265 w
+(system) 3528 4265 w
+(by) 3945 4265 w
+(orders) 4115 4265 w
+(of) 4503 4265 w
+(magnitude.) 4655 4265 w
+(As) 5340 4265 w
+(of) 720 4395 w
+(July,) 886 4395 w
+(2007,) 1170 4395 w
+(rewriting) 1539 4395 w
+(mail) 2075 4395 w
+(boxes) 2360 4395 w
+(was) 2739 4395 w
+(using) 2999 4395 w
+(300MB/day) 3349 4395 w
+(on) 4018 4395 w
+(the) 4211 4395 w
+(WORM) 4440 4395 w
+(and) 4842 4395 w
+(several) 5097 4395 w
+(users) 720 4525 w
+(required) 1058 4525 w
+(more) 1561 4525 w
+(than) 1888 4525 w
+(400MB) 2177 4525 w
+(of) 2594 4525 w
+(core.) 2753 4525 w
+(As) 3104 4525 w
+(of) 3287 4525 w
+(July,) 3447 4525 w
+(2008,) 3725 4525 w
+(rewriting) 4088 4525 w
+(mail) 4618 4525 w
+(boxes) 4897 4525 w
+(was) 5270 4525 w
+(using) 720 4655 w
+(800MB/day) 1056 4655 w
+(on) 1711 4655 w
+(the) 1890 4655 w
+(WORM) 2105 4655 w
+(and) 2494 4655 w
+(several) 2736 4655 w
+(users) 3155 4655 w
+(required) 3486 4655 w
+(more) 3981 4655 w
+(than) 4300 4655 w
+(1.2GB) 4581 4655 w
+(of) 4940 4655 w
+(core) 5091 4655 w
+(to) 5364 4655 w
+(read) 720 4785 w
+(email.) 1002 4785 w
+(Clearly) 1406 4785 w
+(these) 1816 4785 w
+(are) 2150 4785 w
+(difficult) 2363 4785 w
+(to) 2820 4785 w
+(sustain) 2973 4785 w
+(levels) 3400 4785 w
+(of) 3746 4785 w
+(growth,) 3900 4785 w
+(even) 4355 4785 w
+(without) 4650 4785 w
+(growth) 5098 4785 w
+(of) 720 4915 w
+(the) 867 4915 w
+(company.) 1077 4915 w
+(We) 1666 4915 w
+(needed) 1862 4915 w
+(to) 2293 4915 w
+(limit) 2440 4915 w
+(the) 2717 4915 w
+(amount) 2926 4915 w
+(of) 3371 4915 w
+(disk) 3517 4915 w
+(space) 3776 4915 w
+(used) 4118 4915 w
+(and,) 4411 4915 w
+(more) 4682 4915 w
+(urgently,) 4996 4915 w
+(reduce) 720 5045 w
+(Upas/fs) 1117 5045 w
+11 /LucidaSansUnicode20 f
+(\031) 1534 5045 w
+11 /LucidaSansUnicode00 f
+(core) 1604 5045 w
+(size.) 1869 5045 w
+(The) 720 5215 w
+(techniques) 967 5215 w
+(employed) 1597 5215 w
+(are) 2165 5215 w
+(simple.) 2381 5215 w
+(Mail) 2852 5215 w
+(is) 3120 5215 w
+(now) 3256 5215 w
+(stored) 3524 5215 w
+(in) 3913 5215 w
+(a) 4062 5215 w
+(directory) 4172 5215 w
+(with) 4695 5215 w
+(one) 4970 5215 w
+(mes\255) 5216 5215 w
+(sage) 720 5345 w
+(per) 1003 5345 w
+(file.) 1215 5345 w
+(This) 1488 5345 w
+(eliminates) 1749 5345 w
+(the) 2333 5345 w
+(need) 2540 5345 w
+(to) 2837 5345 w
+(rewrite) 2981 5345 w
+(mail) 3389 5345 w
+(boxes.) 3652 5345 w
+(Upas/fs) 4079 5345 w
+(now) 4532 5345 w
+(maintains an) 4787 5345 w
+(index) 720 5475 w
+(which) 1058 5475 w
+(allows) 1408 5475 w
+(it) 1782 5475 w
+(to) 1896 5475 w
+(present) 2045 5475 w
+(complete) 2489 5475 w
+(message) 3021 5475 w
+(summaries) 3529 5475 w
+(without) 4154 5475 w
+(reading) 4597 5475 w
+(indexed) 5043 5475 w
+(messages.) 720 5605 w
+(Combining) 1371 5605 w
+(the) 2011 5605 w
+(two) 2240 5605 w
+(techniques) 2491 5605 w
+(allows) 3131 5605 w
+(Upas/fs) 3522 5605 w
+(to) 3997 5605 w
+(read) 4163 5605 w
+(only) 4458 5605 w
+(new) 4740 5605 w
+(or) 5012 5605 w
+(refer\255) 5181 5605 w
+(enced) 720 5735 w
+(messages.) 1075 5735 w
+(Finally,) 1707 5735 w
+(caching) 2122 5735 w
+(limits) 2570 5735 w
+(both) 2904 5735 w
+(the) 3188 5735 w
+(total) 3398 5735 w
+(number) 3679 5735 w
+(of) 4132 5735 w
+(in-core) 4279 5735 w
+(messages) 4712 5735 w
+(and) 5274 5735 w
+(their total) 720 5865 w
+(size.) 1280 5865 w
+11 /LucidaSans-Demi f
+(2.) 720 6125 w
+(Mdir) 888 6125 w
+(Format) 1182 6125 w
+11 /LucidaSansUnicode00 f
+(In) 720 6295 w
+(addition) 875 6295 w
+(to) 1369 6295 w
+(meeting) 1532 6295 w
+(our) 2022 6295 w
+(urgent) 2258 6295 w
+(operational) 2666 6295 w
+(requirements) 3327 6295 w
+(of) 4095 6295 w
+(reducing) 4259 6295 w
+(memory) 4783 6295 w
+(and) 5274 6295 w
+(disk) 720 6425 w
+(footprint,) 977 6425 w
+(to) 1519 6425 w
+(meet) 1663 6425 w
+(the) 1966 6425 w
+(expectations) 2173 6425 w
+(of) 2891 6425 w
+(our) 3035 6425 w
+(users) 3251 6425 w
+(we) 3574 6425 w
+(require) 3756 6425 w
+(a) 4174 6425 w
+(solution that) 4270 6425 w
+(is able) 4982 6425 w
+(to) 5364 6425 w
+(handle) 720 6555 w
+(folders) 1126 6555 w
+(up) 1544 6555 w
+(to) 1727 6555 w
+(ten) 1881 6555 w
+(thousand) 2098 6555 w
+(messages,) 2642 6555 w
+(open) 3246 6555 w
+(folders) 3558 6555 w
+(quickly,) 3976 6555 w
+(list) 4435 6555 w
+(the) 4642 6555 w
+(contents) 4859 6555 w
+(of) 5364 6555 w
+(folders quickly and support) 720 6685 w
+(the) 2223 6685 w
+(current) 2429 6685 w
+(set) 2849 6685 w
+(of) 3043 6685 w
+(mail) 3186 6685 w
+(readers.) 3448 6685 w
+(There) 720 6855 w
+(are) 1065 6855 w
+(several) 1272 6855 w
+(potential) 1686 6855 w
+(styles) 2199 6855 w
+(of) 2543 6855 w
+(mail) 2691 6855 w
+(boxes.) 2958 6855 w
+(The) 3389 6855 w
+(maildir[1]) 3628 6855 w
+(format) 4182 6855 w
+(has) 4579 6855 w
+(some) 4804 6855 w
+(attrac\255) 5131 6855 w
+(tive) 720 6985 w
+(properties.) 965 6985 w
+(Mail) 1635 6985 w
+(can) 1907 6985 w
+(be) 2144 6985 w
+(delivered) 2327 6985 w
+(to) 2869 6985 w
+(or) 3029 6985 w
+(deleted) 3193 6985 w
+(from) 3642 6985 w
+(a) 3949 6985 w
+(mail) 4062 6985 w
+(box) 4341 6985 w
+(without) 4596 6985 w
+(locking.) 5050 6985 w
+(New) 720 7115 w
+(mail) 985 7115 w
+(or) 1249 7115 w
+(deleted) 1398 7115 w
+(mail) 1832 7115 w
+(may) 2096 7115 w
+(be) 2353 7115 w
+(detected) 2521 7115 w
+(with) 3020 7115 w
+(a) 3283 7115 w
+(directory) 3381 7115 w
+(scan.) 3892 7115 w
+(When) 4240 7115 w
+(used) 4570 7115 w
+(with) 4863 7115 w
+(WORM) 5127 7115 w
+(storage,) 720 7245 w
+(the) 1197 7245 w
+(amount) 1410 7245 w
+(of) 1859 7245 w
+(storage) 2009 7245 w
+(required) 2451 7245 w
+(is) 2945 7245 w
+(no) 3075 7245 w
+(more) 3252 7245 w
+(than) 3570 7245 w
+(the) 3850 7245 w
+(size) 4063 7245 w
+(of) 4318 7245 w
+(new) 4468 7245 w
+(mail) 4724 7245 w
+(received.) 4992 7245 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 1 1
+%%Page: 2 2
+/saveobj save def
+mark
+2 pagesetup
+11 /LucidaSansUnicode00 f
+(Mbox) 720 850 w
+(format) 1063 850 w
+(can) 1465 850 w
+(require) 1695 850 w
+(that) 2123 850 w
+(a) 2379 850 w
+(new) 2485 850 w
+(copy) 2745 850 w
+(of) 3039 850 w
+(the) 3193 850 w
+(inbox) 3410 850 w
+(be) 3759 850 w
+(stored) 3936 850 w
+(every) 4322 850 w
+(day.) 4651 850 w
+(Even) 4954 850 w
+(with) 5246 850 w
+(storage) 720 980 w
+(that) 1162 980 w
+(coalesces) 1415 980 w
+(duplicate) 1964 980 w
+(blocks) 2495 980 w
+(such) 2880 980 w
+(as) 3169 980 w
+(Venti,) 3327 980 w
+(deleting) 3678 980 w
+(a) 4153 980 w
+(message) 4255 980 w
+(will) 4763 980 w
+(generally) 4985 980 w
+(require) 720 1110 w
+(new) 1138 1110 w
+(storage) 1388 1110 w
+(since) 1823 1110 w
+(messages are) 2132 1110 w
+(not) 2893 1110 w
+(disk-block) 3104 1110 w
+(aligned.) 3712 1110 w
+(Maildir does not) 4209 1110 w
+(reduce) 5110 1110 w
+(the) 720 1240 w
+(cost) 939 1240 w
+(of) 1207 1240 w
+(the) 1363 1240 w
+(common) 1582 1240 w
+(task) 2092 1240 w
+(of) 2362 1240 w
+(a) 2518 1240 w
+(summary) 2627 1240 w
+(listing) 3166 1240 w
+(of) 3543 1240 w
+(mail) 3699 1240 w
+(such) 3974 1240 w
+(as) 4269 1240 w
+(generated) 4433 1240 w
+(by) 5018 1240 w
+(acme) 5191 1240 w
+(Mail.) 720 1370 w
+(The) 720 1540 w
+(mails[2]) 968 1540 w
+(format) 1441 1540 w
+(proposes) 1847 1540 w
+(a) 2388 1540 w
+(directory) 2499 1540 w
+(per) 3023 1540 w
+(mail.) 3249 1540 w
+(A) 3596 1540 w
+(copy) 3722 1540 w
+(of) 4021 1540 w
+(the) 4179 1540 w
+(mail) 4400 1540 w
+(as) 4677 1540 w
+(delivered) 4844 1540 w
+(is) 5384 1540 w
+(stored) 720 1670 w
+(and) 1097 1670 w
+(each) 1332 1670 w
+(mime) 1616 1670 w
+(part) 1951 1670 w
+(is) 2204 1670 w
+(decoded) 2328 1670 w
+(in) 2818 1670 w
+(such) 2954 1670 w
+(a) 3238 1670 w
+(way) 3335 1670 w
+(that) 3574 1670 w
+(a) 3821 1670 w
+(mail) 3918 1670 w
+(reader) 4181 1670 w
+(could) 4561 1670 w
+(display) 4889 1670 w
+(the) 5301 1670 w
+(file) 720 1800 w
+(directly.) 930 1800 w
+(Command) 1438 1800 w
+(line) 2027 1800 w
+(tools) 2265 1800 w
+(in) 2572 1800 w
+(the) 2716 1800 w
+(style) 2931 1800 w
+(of) 3223 1800 w
+(MH[3]) 3375 1800 w
+(are) 3736 1800 w
+(used) 3948 1800 w
+(to) 4247 1800 w
+(display) 4399 1800 w
+(and) 4819 1800 w
+(process) 5061 1800 w
+(mail.) 720 1930 w
+(Upas/fs) 1058 1930 w
+(is) 1516 1930 w
+(not) 1645 1930 w
+(necessary) 1862 1930 w
+(for) 2426 1930 w
+(reading) 2620 1930 w
+(local) 3066 1930 w
+(mail.) 3355 1930 w
+(Mails) 3693 1930 w
+(has) 4010 1930 w
+(the) 4236 1930 w
+(potential) 4448 1930 w
+(to) 4962 1930 w
+(reduce) 5110 1930 w
+(memory) 720 2060 w
+(footprint) 1199 2060 w
+(below) 1714 2060 w
+(that) 2073 2060 w
+(offered) 2328 2060 w
+(by) 2759 2060 w
+(mdirs) 2929 2060 w
+(for) 3277 2060 w
+(native) 3474 2060 w
+(email) 3839 2060 w
+(reading.) 4172 2060 w
+(However) 4691 2060 w
+(all) 5194 2060 w
+(of) 5364 2060 w
+(the) 720 2190 w
+(largest) 935 2190 w
+(mail) 1344 2190 w
+(boxes) 1615 2190 w
+(at) 1980 2190 w
+(our) 2126 2190 w
+(site) 2350 2190 w
+(are) 2585 2190 w
+(served) 2797 2190 w
+(exclusively) 3192 2190 w
+(through) 3816 2190 w
+(IMAP.) 4284 2190 w
+(The) 4661 2190 w
+(preformat\255) 4903 2190 w
+(ting by mails would be) 720 2320 w
+(unnecessary for such accounts.) 1965 2320 w
+(Other) 720 2490 w
+(mail) 1082 2490 w
+(servers) 1369 2490 w
+(such) 1812 2490 w
+(as) 2120 2490 w
+(Lotus) 2298 2490 w
+(Notes[4]) 2649 2490 w
+(store) 3158 2490 w
+(email) 3490 2490 w
+(in) 3840 2490 w
+(a) 4001 2490 w
+(custom) 4123 2490 w
+(database) 4574 2490 w
+(format) 5115 2490 w
+(which) 720 2620 w
+(allows) 1070 2620 w
+(for) 1444 2620 w
+(fielded) 1638 2620 w
+(and) 2046 2620 w
+(full-text) 2285 2620 w
+(searching) 2773 2620 w
+(of) 3329 2620 w
+(mail) 3477 2620 w
+(folders.) 3744 2620 w
+(Such) 4226 2620 w
+(a) 4517 2620 w
+(format) 4618 2620 w
+(provides) 5015 2620 w
+(very) 720 2750 w
+(quick) 992 2750 w
+(mail) 1332 2750 w
+(listings) 1610 2750 w
+(and) 2046 2750 w
+(good) 2295 2750 w
+(search) 2617 2750 w
+(capabilities.) 3016 2750 w
+(Such) 3741 2750 w
+(a) 4044 2750 w
+(solution) 4157 2750 w
+(would) 4640 2750 w
+(not) 5013 2750 w
+(lend) 5241 2750 w
+(itself) 720 2880 w
+(well) 1019 2880 w
+(to a) 1265 2880 w
+(tool-based environment,) 1504 2880 w
+(nor would it) 2904 2880 w
+(be) 3583 2880 w
+(simple.) 3749 2880 w
+(Maildir) 720 3050 w
+(format) 1124 3050 w
+(seemed) 1519 3050 w
+(the) 1970 3050 w
+(best) 2179 3050 w
+(basic) 2445 3050 w
+(format) 2757 3050 w
+(but) 3152 3050 w
+(its) 3368 3050 w
+(particulars) 3535 3050 w
+(are) 4139 3050 w
+(tied) 4346 3050 w
+(to) 4589 3050 w
+(the) 4736 3050 w
+10 /LucidaSansUnicode00 f
+(UNIX) 4943 3050 w
+11 /LucidaSansUnicode00 f
+(envi\255) 5217 3050 w
+(ronment;) 720 3180 w
+(mdir) 1246 3180 w
+(is) 1532 3180 w
+(a) 1658 3180 w
+(descendant.) 1757 3180 w
+(A) 2477 3180 w
+(mdir) 2591 3180 w
+(folder) 2877 3180 w
+(is) 3231 3180 w
+(a) 3357 3180 w
+(directory) 3456 3180 w
+(with) 3967 3180 w
+(the) 4230 3180 w
+(name) 4438 3180 w
+(of) 4768 3180 w
+(the) 4913 3180 w
+(folder.) 5121 3180 w
+(Messages) 720 3310 w
+(in) 1282 3310 w
+(the) 1428 3310 w
+(mdir) 1645 3310 w
+(folder) 1939 3310 w
+(are) 2301 3310 w
+(stored) 2515 3310 w
+(in) 2902 3310 w
+(a) 3049 3310 w
+(file) 3157 3310 w
+(named) 3371 3310 w
+11 /LucidaSans-Italic f
+(utime.seq) 3780 3310 w
+11 /LucidaSansUnicode00 f
+(.) 4296 3310 w
+11 /LucidaSans-Italic f
+(Utime) 4413 3310 w
+11 /LucidaSansUnicode00 f
+(is) 4770 3310 w
+(defined) 4905 3310 w
+(as) 5355 3310 w
+(the) 720 3440 w
+(decimal) 942 3440 w
+10 /LucidaSansUnicode00 f
+(UNIX) 1404 3440 w
+11 /LucidaSansUnicode00 f
+(seconds) 1690 3440 w
+(when) 2174 3440 w
+(the) 2507 3440 w
+(message) 2728 3440 w
+(was) 3245 3440 w
+(added) 3497 3440 w
+(to) 3877 3440 w
+(the) 4035 3440 w
+(folder.) 4256 3440 w
+(For) 4692 3440 w
+(the) 4913 3440 w
+(inbox,) 5134 3440 w
+(this) 720 3570 w
+(time) 960 3570 w
+(will) 1240 3570 w
+(correspond) 1464 3570 w
+(to) 2111 3570 w
+(the) 2262 3570 w
+10 /LucidaSansUnicode00 f
+(UNIX) 2473 3570 w
+11 /LucidaSansUnicode20 f
+(\034) 2751 3570 w
+11 /LucidaSansUnicode00 f
+(From) 2792 3570 w
+11 /LucidaSansUnicode20 f
+(\035) 3108 3570 w
+11 /LucidaSansUnicode00 f
+(line.) 3193 3570 w
+11 /LucidaSans-Italic f
+(Seq) 3501 3570 w
+11 /LucidaSansUnicode00 f
+(is) 3731 3570 w
+(a) 3863 3570 w
+(two-digit) 3968 3570 w
+(sequence) 4511 3570 w
+(number) 5058 3570 w
+(starting) 720 3700 w
+(with) 1175 3700 w
+11 /LucidaTypewriter f
+(00.) 1444 3700 w
+11 /LucidaSansUnicode00 f
+(The) 1724 3700 w
+(lowest) 1966 3700 w
+(available) 2352 3700 w
+(sequence) 2862 3700 w
+(number) 3408 3700 w
+(is) 3865 3700 w
+(used) 3996 3700 w
+(to) 4294 3700 w
+(store) 4444 3700 w
+(the) 4757 3700 w
+(message.) 4970 3700 w
+(Thus,) 720 3830 w
+(the) 1064 3830 w
+(first) 1283 3830 w
+(email) 1547 3830 w
+(possible) 1885 3830 w
+(would) 2377 3830 w
+(be) 2747 3830 w
+(named) 2927 3830 w
+11 /LucidaTypewriter f
+(0.00.) 3338 3830 w
+11 /LucidaSansUnicode00 f
+(To) 3782 3830 w
+(prevent) 3967 3830 w
+(accidents,) 4420 3830 w
+(message) 5005 3830 w
+(files) 720 3960 w
+(are) 996 3960 w
+(stored) 1217 3960 w
+(with) 1609 3960 w
+(the) 1887 3960 w
+(append-only) 2110 3960 w
+(and) 2848 3960 w
+(exclusive-access) 3098 3960 w
+(bits) 4053 3960 w
+(turned) 4303 3960 w
+(on.) 4708 3960 w
+(The) 4965 3960 w
+(mes\255) 5216 3960 w
+(sage) 720 4090 w
+(is) 1010 4090 w
+(stored) 1141 4090 w
+(in) 1524 4090 w
+(the) 1667 4090 w
+(same) 1881 4090 w
+(format) 2205 4090 w
+(it) 2605 4090 w
+(would) 2721 4090 w
+(be) 3085 4090 w
+(in) 3259 4090 w
+(mbox) 3402 4090 w
+(format;) 3750 4090 w
+(each) 4185 4090 w
+(message) 4475 4090 w
+(is) 4985 4090 w
+(a) 5116 4090 w
+(valid) 5221 4090 w
+(mbox folder with a) 720 4220 w
+(single) 1768 4220 w
+(message.) 2121 4220 w
+11 /LucidaSans-Demi f
+(3.) 720 4480 w
+(Indexing) 888 4480 w
+11 /LucidaSansUnicode00 f
+(When) 720 4650 w
+(upas/fs) 1052 4650 w
+(finds) 1500 4650 w
+(an) 1805 4650 w
+(unindexed) 1974 4650 w
+(message,) 2579 4650 w
+(it) 3121 4650 w
+(is) 3234 4650 w
+(added) 3362 4650 w
+(to) 3732 4650 w
+(the) 3880 4650 w
+(index.) 4091 4650 w
+(The) 4499 4650 w
+(index) 4738 4650 w
+(is) 5076 4650 w
+(a) 5204 4650 w
+(file) 5305 4650 w
+(named) 720 4780 w
+11 /LucidaSans-Italic f
+(foldername) 1130 4780 w
+11 /LucidaSansUnicode00 f
+(.idx) 1740 4780 w
+(and) 1991 4780 w
+(consists) 2237 4780 w
+(a) 2717 4780 w
+(signature) 2825 4780 w
+(and) 3373 4780 w
+(one) 3618 4780 w
+(line) 3862 4780 w
+(per) 4103 4780 w
+(MIME) 4326 4780 w
+(part.) 4654 4780 w
+(Each) 4987 4780 w
+(line) 5278 4780 w
+(contains) 720 4910 w
+(the) 1212 4910 w
+(SHA1) 1427 4910 w
+(checksum) 1756 4910 w
+(of) 2332 4910 w
+(the) 2484 4910 w
+(message) 2699 4910 w
+(\(or) 3210 4910 w
+(a) 3402 4910 w
+(place) 3507 4910 w
+(holder) 3831 4910 w
+(for) 4218 4910 w
+(subparts\),) 4415 4910 w
+(one) 4995 4910 w
+(field) 5236 4910 w
+(per) 720 5040 w
+(entry) 947 5040 w
+(in) 1271 5040 w
+(the) 1422 5040 w
+11 /LucidaSans-Italic f
+(messageid/info) 1644 5040 w
+11 /LucidaSansUnicode00 f
+(file,) 2511 5040 w
+(flags) 2763 5040 w
+(and) 3071 5040 w
+(the) 3319 5040 w
+(number) 3540 5040 w
+(of) 4004 5040 w
+(subparts.) 4162 5040 w
+(The) 4747 5040 w
+(flags) 4996 5040 w
+(are) 5304 5040 w
+(currently a) 720 5170 w
+(superset) 1325 5170 w
+(of) 1819 5170 w
+(the) 1962 5170 w
+(standard IMAP) 2168 5170 w
+(flags.) 2972 5170 w
+(They provide) 3335 5170 w
+(the) 4062 5170 w
+(similar) 4268 5170 w
+(functionality) 4664 5170 w
+(to) 5364 5170 w
+(maildir) 720 5300 w
+11 /LucidaSansUnicode20 f
+(\031) 1093 5300 w
+11 /LucidaSansUnicode00 f
+(s) 1128 5300 w
+(modified) 1224 5300 w
+(file) 1738 5300 w
+(names.) 1945 5300 w
+(Thus) 2404 5300 w
+(the) 2705 5300 w
+11 /LucidaSansUnicode20 f
+(\030) 2916 5300 w
+11 /LucidaSansUnicode00 f
+(S) 2951 5300 w
+11 /LucidaSansUnicode20 f
+(\031) 3010 5300 w
+11 /LucidaSansUnicode00 f
+(\(answered\)) 3084 5300 w
+(flag) 3703 5300 w
+(remains) 3944 5300 w
+(set) 4409 5300 w
+(between) 4607 5300 w
+(invoca\255) 5095 5300 w
+(tions) 720 5430 w
+(of) 1029 5430 w
+(mail) 1182 5430 w
+(readers.) 1454 5430 w
+(Other) 1969 5430 w
+(mutable) 2316 5430 w
+(information) 2796 5430 w
+(about) 3465 5430 w
+(a) 3816 5430 w
+(message) 3923 5430 w
+(may) 4436 5430 w
+(be) 4702 5430 w
+(stored) 4879 5430 w
+(in) 5265 5430 w
+(a) 5411 5430 w
+(similar way.) 720 5560 w
+(Since) 720 5730 w
+(the) 1032 5730 w
+11 /LucidaSans-Italic f
+(info) 1238 5730 w
+11 /LucidaSansUnicode00 f
+(file) 1478 5730 w
+(is read by all) 1680 5730 w
+(the) 2396 5730 w
+(mail) 2602 5730 w
+(readers to produce) 2864 5730 w
+(mail) 3913 5730 w
+(listings,) 4176 5730 w
+(mail) 4632 5730 w
+(boxes) 4895 5730 w
+(may) 5252 5730 w
+(be) 720 5860 w
+(listed) 893 5860 w
+(without) 1227 5860 w
+(opening) 1671 5860 w
+(any) 2147 5860 w
+(mail) 2375 5860 w
+(files) 2644 5860 w
+(when) 2909 5860 w
+(no) 3234 5860 w
+(new) 3410 5860 w
+(mail) 3666 5860 w
+(has) 3934 5860 w
+(arrived.) 4160 5860 w
+(Similarly,) 4642 5860 w
+(open\255) 5170 5860 w
+(ing) 720 5990 w
+(a) 934 5990 w
+(new) 1041 5990 w
+(mail) 1302 5990 w
+(box) 1575 5990 w
+(requires) 1824 5990 w
+(reading) 2309 5990 w
+(the) 2760 5990 w
+(index) 2977 5990 w
+(and) 3321 5990 w
+(checking) 3565 5990 w
+(new) 4085 5990 w
+(mail.) 4346 5990 w
+(Index) 4689 5990 w
+(files) 5034 5990 w
+(are) 5304 5990 w
+(typically) 720 6120 w
+(between) 1197 6120 w
+(0.5%) 1686 6120 w
+(and) 1973 6120 w
+(5%) 2211 6120 w
+(the) 2394 6120 w
+(size) 2605 6120 w
+(of) 2858 6120 w
+(the) 3005 6120 w
+(full) 3215 6120 w
+(mail) 3427 6120 w
+(box.) 3693 6120 w
+(Each) 4005 6120 w
+(time) 4288 6120 w
+(the) 4564 6120 w
+(index) 4774 6120 w
+(is) 5111 6120 w
+(gen\255) 5238 6120 w
+(erated, it) 720 6250 w
+(is fully rewritten.) 1238 6250 w
+11 /LucidaSans-Demi f
+(4.) 720 6510 w
+(Caching) 888 6510 w
+11 /LucidaSansUnicode00 f
+(Upas/fs) 720 6680 w
+(stores) 1186 6680 w
+(each) 1562 6680 w
+(message) 1858 6680 w
+(in) 2374 6680 w
+(a) 2523 6680 w
+11 /LucidaTypewriter f
+(Message) 2634 6680 w
+11 /LucidaSansUnicode00 f
+(structure.) 3237 6680 w
+(To) 3839 6680 w
+(enable) 4025 6680 w
+(caching,) 4429 6680 w
+(this) 4923 6680 w
+(struc\255) 5170 6680 w
+(ture) 720 6810 w
+(was) 973 6810 w
+(split) 1212 6810 w
+(into) 1479 6810 w
+(four) 1724 6810 w
+(parts:) 1982 6810 w
+(The) 2326 6810 w
+11 /LucidaTypewriter f
+(Idx) 2562 6810 w
+11 /LucidaSansUnicode00 f
+(\(or) 2836 6810 w
+(index\),) 3021 6810 w
+(message) 3427 6810 w
+(subparts,) 3931 6810 w
+(information) 4468 6810 w
+(on) 5129 6810 w
+(the) 5301 6810 w
+(cache) 720 6940 w
+(state) 1069 6940 w
+(of) 1376 6940 w
+(the) 1530 6940 w
+(message) 1747 6940 w
+(and) 2260 6940 w
+(a) 2504 6940 w
+(set) 2611 6940 w
+(of) 2816 6940 w
+(pointers) 2970 6940 w
+(into) 3456 6940 w
+(the) 3710 6940 w
+(processed) 3927 6940 w
+(header) 4516 6940 w
+(and) 4930 6940 w
+(body.) 5175 6940 w
+(Only) 720 7070 w
+(the) 1009 7070 w
+(pointers) 1226 7070 w
+(to) 1711 7070 w
+(the) 1864 7070 w
+(processed) 2080 7070 w
+(header) 2667 7070 w
+(and) 3079 7070 w
+(body) 3322 7070 w
+(are) 3629 7070 w
+(subject) 3842 7070 w
+(to) 4272 7070 w
+(caching.) 4425 7070 w
+(The) 4949 7070 w
+(avail\255) 5193 7070 w
+(able) 720 7200 w
+(cache) 979 7200 w
+(states are) 1317 7200 w
+11 /LucidaTypewriter f
+(Cidx) 1872 7200 w
+11 /LucidaSansUnicode00 f
+(,) 2188 7200 w
+11 /LucidaTypewriter f
+(Cheader) 2258 7200 w
+11 /LucidaSansUnicode00 f
+(and) 2846 7200 w
+11 /LucidaTypewriter f
+(Cbody) 3079 7200 w
+11 /LucidaSansUnicode00 f
+(.) 3474 7200 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 2 2
+%%Page: 3 3
+/saveobj save def
+mark
+3 pagesetup
+11 /LucidaSansUnicode00 f
+(When) 720 850 w
+(the) 1063 850 w
+(header) 1284 850 w
+(and) 1701 850 w
+(body) 1949 850 w
+(are) 2261 850 w
+(not) 2479 850 w
+(present,) 2705 850 w
+(the) 3193 850 w
+(average) 3414 850 w
+(message) 3880 850 w
+(with) 4397 850 w
+(subparts) 4673 850 w
+(takes) 5188 850 w
+(roughly) 720 980 w
+(3KB) 1166 980 w
+(of) 1412 980 w
+(memory.) 1561 980 w
+(Thus) 2107 980 w
+(a) 2408 980 w
+(10,000) 2509 980 w
+(message) 2929 980 w
+(mail) 3436 980 w
+(box) 3703 980 w
+(would) 3946 980 w
+(require) 4307 980 w
+(roughly) 4730 980 w
+(30MB) 5175 980 w
+(of) 720 1110 w
+(core) 870 1110 w
+(in) 1142 1110 w
+(addition) 1284 1110 w
+(to) 1765 1110 w
+(any) 1915 1110 w
+(cached) 2143 1110 w
+(messages.) 2557 1110 w
+(Reads) 3192 1110 w
+(of) 3551 1110 w
+(the) 3701 1110 w
+11 /LucidaTypewriter f
+(info) 3914 1110 w
+11 /LucidaSansUnicode00 f
+(or) 4272 1110 w
+11 /LucidaTypewriter f
+(subject) 4426 1110 w
+11 /LucidaSansUnicode00 f
+(files) 5021 1110 w
+(can) 5287 1110 w
+(be) 720 1240 w
+(satisfied from the) 886 1240 w
+(information in the) 1867 1240 w
+11 /LucidaTypewriter f
+(Idx) 2867 1240 w
+11 /LucidaSansUnicode00 f
+(structure.) 3139 1240 w
+(Since) 720 1410 w
+(there) 1040 1410 w
+(are) 1361 1410 w
+(a) 1573 1410 w
+(fair) 1678 1410 w
+(number) 1901 1410 w
+(of) 2359 1410 w
+(very) 2511 1410 w
+(large) 2776 1410 w
+(messages,) 3088 1410 w
+(requests) 3690 1410 w
+(that) 4193 1410 w
+(can) 4448 1410 w
+(be) 4677 1410 w
+(satisfied) 4852 1410 w
+(by) 5346 1410 w
+(reading) 720 1540 w
+(the) 1163 1540 w
+(message) 1372 1540 w
+(headers) 1876 1540 w
+(do) 2336 1540 w
+(not) 2509 1540 w
+(result) 2722 1540 w
+(in) 3063 1540 w
+(the) 3200 1540 w
+(full) 3408 1540 w
+(message) 3618 1540 w
+(being) 4122 1540 w
+(read.) 4458 1540 w
+(Reads) 4802 1540 w
+(of) 5156 1540 w
+(the) 5301 1540 w
+11 /LucidaTypewriter f
+(header) 720 1670 w
+11 /LucidaSansUnicode00 f
+(or) 1235 1670 w
+11 /LucidaTypewriter f
+(rawheader) 1388 1670 w
+11 /LucidaSansUnicode00 f
+(files) 2140 1670 w
+(of) 2404 1670 w
+(top-level) 2553 1670 w
+(messages) 3080 1670 w
+(are) 3645 1670 w
+(satisfied) 3855 1670 w
+(in) 4347 1670 w
+(this) 4489 1670 w
+(way.) 4728 1670 w
+(Reading) 5043 1670 w
+(the) 720 1800 w
+(same) 930 1800 w
+(files) 1250 1800 w
+(for) 1512 1800 w
+(subparts,) 1704 1800 w
+(however,) 2243 1800 w
+(results) 2763 1800 w
+(in) 3161 1800 w
+(the) 3299 1800 w
+(entire) 3508 1800 w
+(message) 3856 1800 w
+(being) 4361 1800 w
+(read.) 4698 1800 w
+(Caching) 5043 1800 w
+(the) 720 1930 w
+(header results in the) 926 1930 w
+11 /LucidaTypewriter f
+(Cheader) 2064 1930 w
+11 /LucidaSansUnicode00 f
+(cache) 2652 1930 w
+(state.) 2990 1930 w
+(Similarly,) 720 2100 w
+(reading) 1251 2100 w
+(the) 1700 2100 w
+11 /LucidaTypewriter f
+(body) 1915 2100 w
+11 /LucidaSansUnicode00 f
+(requires) 2275 2100 w
+(the) 2758 2100 w
+(body) 2973 2100 w
+(to) 3279 2100 w
+(be) 3431 2100 w
+(read,) 3606 2100 w
+(processed) 3922 2100 w
+(and) 4508 2100 w
+(results) 4751 2100 w
+(in) 5156 2100 w
+(the) 5301 2100 w
+11 /LucidaTypewriter f
+(Cbody) 720 2230 w
+11 /LucidaSansUnicode00 f
+(cache) 1178 2230 w
+(state.) 1544 2230 w
+(Reading) 1938 2230 w
+(from) 2430 2230 w
+(MIME) 2747 2230 w
+(subparts) 3090 2230 w
+(also) 3617 2230 w
+(results) 3895 2230 w
+(in) 4317 2230 w
+(the) 4479 2230 w
+11 /LucidaTypewriter f
+(Cbody) 4712 2230 w
+11 /LucidaSansUnicode00 f
+(cache) 5169 2230 w
+(state.) 720 2360 w
+(The) 720 2530 w
+(cache) 960 2530 w
+(has) 1304 2530 w
+(a) 1530 2530 w
+(simple) 1632 2530 w
+(LRU) 2026 2530 w
+(replacement) 2270 2530 w
+(policy.) 2972 2530 w
+(Each) 3397 2530 w
+(time) 3683 2530 w
+(a) 3962 2530 w
+(cached) 4065 2530 w
+(member) 4479 2530 w
+(of) 4963 2530 w
+(a) 5113 2530 w
+(mes\255) 5216 2530 w
+(sage) 720 2660 w
+(is) 1017 2660 w
+(accessed,) 1155 2660 w
+(it) 1718 2660 w
+(is) 1841 2660 w
+(moved) 1979 2660 w
+(to) 2386 2660 w
+(the) 2544 2660 w
+(head) 2764 2660 w
+(of) 3073 2660 w
+(the) 3230 2660 w
+(list.) 3450 2660 w
+(The) 3730 2660 w
+(cache) 3978 2660 w
+(contains) 4330 2660 w
+(a) 4828 2660 w
+(maximum) 4938 2660 w
+(number) 720 2790 w
+(of) 1183 2790 w
+(messages) 1340 2790 w
+(and) 1912 2790 w
+(a) 2159 2790 w
+(maximum) 2269 2790 w
+(size.) 2852 2790 w
+(While) 3184 2790 w
+(the) 3522 2790 w
+(maximum) 3743 2790 w
+(number) 4327 2790 w
+(of) 4791 2790 w
+(messages) 4949 2790 w
+(may) 720 2920 w
+(not) 986 2920 w
+(be) 1208 2920 w
+(exceeded,) 1385 2920 w
+(the) 1975 2920 w
+(maximum) 2192 2920 w
+(cache) 2772 2920 w
+(size) 3120 2920 w
+(may) 3378 2920 w
+(be) 3643 2920 w
+(exceeded) 3819 2920 w
+(if) 4373 2920 w
+(the) 4491 2920 w
+(sum) 4707 2920 w
+(of) 4978 2920 w
+(all) 5131 2920 w
+(the) 5301 2920 w
+(currently) 720 3050 w
+(referenced) 1249 3050 w
+(messages) 1876 3050 w
+(is) 2454 3050 w
+(greater) 2597 3050 w
+(than) 3037 3050 w
+(the) 3331 3050 w
+(size) 3558 3050 w
+(of) 3827 3050 w
+(the) 3991 3050 w
+(cache.) 4218 3050 w
+(In) 4647 3050 w
+(this) 4803 3050 w
+(case) 5056 3050 w
+(all) 5347 3050 w
+(unreferenced) 720 3180 w
+(messages) 1473 3180 w
+(will) 2041 3180 w
+(be) 2267 3180 w
+(freed.) 2443 3180 w
+(When) 2836 3180 w
+(removing) 3173 3180 w
+(a) 3718 3180 w
+(message) 3823 3180 w
+(from) 4334 3180 w
+(the) 4633 3180 w
+(cache) 4848 3180 w
+(all) 5195 3180 w
+(of) 5364 3180 w
+(the) 720 3310 w
+(cacheable) 926 3310 w
+(information is freed.) 1488 3310 w
+11 /LucidaSans-Demi f
+(5.) 720 3570 w
+(Collateral damage) 888 3570 w
+11 /LucidaSansUnicode00 f
+(Each new) 1080 3800 w
+(user of) 1609 3800 w
+(a) 2018 3800 w
+(new) 2114 3800 w
+(system uncovers a) 2364 3800 w
+(new) 3383 3800 w
+(class of) 3633 3800 w
+(bugs.) 4072 3800 w
+11 /LucidaSansUnicode20 f
+(\024) 1355 3930 w
+11 /LucidaSansUnicode00 f
+(Brian Kernighan) 1500 3930 w
+(In) 720 4160 w
+(addition) 856 4160 w
+(to) 1331 4160 w
+(upas/fs,) 1475 4160 w
+(programs) 1955 4160 w
+(that) 2504 4160 w
+(have) 2751 4160 w
+(assumptions) 3035 4160 w
+(about) 3747 4160 w
+(how) 4089 4160 w
+(mail) 4345 4160 w
+(boxes) 4608 4160 w
+(are) 4965 4160 w
+(struc\255) 5170 4160 w
+(tured) 720 4290 w
+(needed) 1049 4290 w
+(to) 1485 4290 w
+(be) 1637 4290 w
+(modified.) 1811 4290 w
+(Programs) 2398 4290 w
+(which) 2946 4290 w
+(deliver) 3298 4290 w
+(mail) 3700 4290 w
+(to) 3970 4290 w
+(mail) 4121 4290 w
+(boxes) 4391 4290 w
+(\(deliver,) 4755 4290 w
+(mar\255) 5228 4290 w
+(shal,) 720 4420 w
+(ml,) 1017 4420 w
+(smtp\)) 1232 4420 w
+(and) 1582 4420 w
+(append) 1826 4420 w
+(messages) 2270 4420 w
+(to) 2839 4420 w
+(folders) 2993 4420 w
+(were) 3411 4420 w
+(given) 3711 4420 w
+(a) 4044 4420 w
+(common) 4151 4420 w
+(\(nedmail\)) 4659 4420 w
+(func\255) 5203 4420 w
+(tion) 720 4550 w
+(to) 979 4550 w
+(call.) 1138 4550 w
+(Since) 1440 4550 w
+(this) 1768 4550 w
+(was) 2016 4550 w
+(done) 2269 4550 w
+(by) 2586 4550 w
+(modifying) 2763 4550 w
+(functions) 3350 4550 w
+(in) 3898 4550 w
+(the) 4049 4550 w
+(Upas) 4271 4550 w
+(common) 4584 4550 w
+(library,) 5096 4550 w
+(this) 720 4680 w
+(presented) 958 4680 w
+(a) 1533 4680 w
+(problem) 1635 4680 w
+(for) 2122 4680 w
+(programs) 2316 4680 w
+(not) 2870 4680 w
+(traditionally) 3088 4680 w
+(part) 3768 4680 w
+(of) 4026 4680 w
+(Upas) 4176 4680 w
+(such) 4480 4680 w
+(as) 4770 4680 w
+(acme) 4929 4680 w
+(Mail) 5252 4680 w
+(and) 720 4810 w
+(imap4d.) 969 4810 w
+(Rather) 1492 4810 w
+(than) 1889 4810 w
+(fold) 2178 4810 w
+(these) 2438 4810 w
+(programs) 2778 4810 w
+(into) 3342 4810 w
+(Upas,) 3601 4810 w
+(a) 3949 4810 w
+(new) 4061 4810 w
+(program,) 4326 4810 w
+(mbappend,) 4868 4810 w
+(was added to Upas.) 720 4940 w
+(Imap4d) 720 5110 w
+(also) 1166 5110 w
+(requires) 1427 5110 w
+(the) 1911 5110 w
+(ability) 2127 5110 w
+(to) 2496 5110 w
+(rename) 2649 5110 w
+(and) 3094 5110 w
+(remove) 3337 5110 w
+(folders.) 3777 5110 w
+(While) 4264 5110 w
+(an) 4598 5110 w
+(external) 4772 5110 w
+(pro\255) 5255 5110 w
+(gram) 720 5240 w
+(would) 1032 5240 w
+(work) 1389 5240 w
+(for this as well, that) 1685 5240 w
+(approach has some) 2784 5240 w
+(drawbacks.) 3857 5240 w
+(Most) 4528 5240 w
+(importantly,) 4822 5240 w
+(IMAP) 720 5370 w
+(folders) 1023 5370 w
+(can) 1434 5370 w
+11 /LucidaSansUnicode20 f
+(\031) 1619 5370 w
+11 /LucidaSansUnicode00 f
+(t) 1654 5370 w
+(be) 1734 5370 w
+(moved) 1904 5370 w
+(or) 2300 5370 w
+(renamed) 2452 5370 w
+(in) 2961 5370 w
+(the) 3101 5370 w
+(same) 3312 5370 w
+(way) 3633 5370 w
+(without) 3876 5370 w
+(reimplementing) 4318 5370 w
+(func\255) 5203 5370 w
+(tionality) 720 5500 w
+(that) 1196 5500 w
+(is) 1452 5500 w
+(already) 1585 5500 w
+(in) 2017 5500 w
+(upas/fs.) 2162 5500 w
+(It) 2686 5500 w
+(also) 2804 5500 w
+(emphasises) 3064 5500 w
+(the) 3732 5500 w
+(asymmetry) 3947 5500 w
+(between) 4574 5500 w
+(reading) 5067 5500 w
+(and) 720 5630 w
+(deleting) 962 5630 w
+(email) 1440 5630 w
+(and) 1773 5630 w
+(other) 2015 5630 w
+(folder) 2342 5630 w
+(actions.) 2703 5630 w
+(Folder) 3199 5630 w
+(renaming) 3578 5630 w
+(and) 4129 5630 w
+(removal) 4372 5630 w
+(were) 4843 5630 w
+(added) 5142 5630 w
+(to) 720 5760 w
+(upas/fs.) 868 5760 w
+(It) 1352 5760 w
+(is) 1465 5760 w
+(intended) 1593 5760 w
+(that) 2103 5760 w
+(mbappend) 2353 5760 w
+(will) 2961 5760 w
+(be) 3181 5760 w
+(removed) 3351 5760 w
+(soon) 3854 5760 w
+(and) 4151 5760 w
+(replaced) 4388 5760 w
+(with) 4883 5760 w
+(equiv\255) 5148 5760 w
+(alent) 720 5890 w
+(upas/fs functionality ) 1019 5890 w
+11 /LucidaSansUnicode20 f
+(\024) 2162 5890 w
+11 /LucidaSansUnicode00 f
+(at) 2307 5890 w
+(least) 2444 5890 w
+(for non-delivery programs.) 2731 5890 w
+(Mdirs) 720 6060 w
+(also) 1063 6060 w
+(expose) 1325 6060 w
+(an) 1754 6060 w
+(oddity) 1930 6060 w
+(about) 2312 6060 w
+(file) 2665 6060 w
+(permissions.) 2879 6060 w
+(An) 3641 6060 w
+(append-only) 3832 6060 w
+(file) 4565 6060 w
+(that) 4779 6060 w
+(is) 5037 6060 w
+(mode) 5172 6060 w
+11 /LucidaTypewriter f
+(0622) 720 6190 w
+11 /LucidaSansUnicode00 f
+(may) 1078 6190 w
+(be) 1340 6190 w
+(appended) 1513 6190 w
+(to) 2084 6190 w
+(by) 2234 6190 w
+(anyone,) 2402 6190 w
+(but) 2861 6190 w
+(is) 3080 6190 w
+(readable) 3209 6190 w
+(only) 3711 6190 w
+(by) 3976 6190 w
+(the) 4143 6190 w
+(owner.) 4355 6190 w
+(With) 4793 6190 w
+(a) 5070 6190 w
+(direc\255) 5172 6190 w
+(tory,) 720 6320 w
+(such) 1004 6320 w
+(a) 1291 6320 w
+(setup) 1391 6320 w
+(is) 1726 6320 w
+(not) 1853 6320 w
+(directly) 2068 6320 w
+(possible) 2501 6320 w
+(as) 2983 6320 w
+(write) 3139 6320 w
+(permission) 3443 6320 w
+(to) 4072 6320 w
+(a) 4220 6320 w
+(directory) 4321 6320 w
+(implies) 4835 6320 w
+(per\255) 5260 6320 w
+(mission) 720 6450 w
+(to) 1173 6450 w
+(remove.) 1321 6450 w
+(There) 1825 6450 w
+(are) 2170 6450 w
+(a) 2377 6450 w
+(number) 2477 6450 w
+(of) 2930 6450 w
+(solutions) 3077 6450 w
+(to) 3603 6450 w
+(this) 3750 6450 w
+(problem.) 3986 6450 w
+(Delivery) 4541 6450 w
+(could) 5010 6450 w
+(be) 5341 6450 w
+(made) 720 6580 w
+(asymmetrical) 1052 6580 w
+11 /LucidaSansUnicode20 f
+(\024) 1759 6580 w
+11 /LucidaSansUnicode00 f
+(incoming) 1869 6580 w
+(files) 2400 6580 w
+(could) 2661 6580 w
+(be) 2991 6580 w
+(written) 3160 6580 w
+(to) 3572 6580 w
+(a) 3719 6580 w
+(mbox.) 3819 6580 w
+(Or,) 4198 6580 w
+(following) 4403 6580 w
+(the) 4934 6580 w
+(exam\255) 5144 6580 w
+(ple) 720 6710 w
+(of) 933 6710 w
+(the) 1091 6710 w
+(outbound) 1312 6710 w
+(mail) 1879 6710 w
+(queue,) 2156 6710 w
+(each) 2570 6710 w
+(user) 2867 6710 w
+(could) 3147 6710 w
+(deliver) 3488 6710 w
+(to) 3896 6710 w
+(a) 4053 6710 w
+(directory) 4163 6710 w
+(owned) 4686 6710 w
+(by) 5086 6710 w
+(that) 5261 6710 w
+(user.) 720 6840 w
+(In) 1061 6840 w
+(many) 1201 6840 w
+(BSD-derived) 1530 6840 w
+10 /LucidaSansUnicode00 f
+(UNIX) 2234 6840 w
+11 /LucidaSansUnicode00 f
+(systems,) 2510 6840 w
+(the) 3016 6840 w
+11 /LucidaSansUnicode20 f
+(\034) 3228 6840 w
+11 /LucidaSansUnicode00 f
+(sticky) 3269 6840 w
+(bit) 3616 6840 w
+11 /LucidaSansUnicode20 f
+(\035) 3758 6840 w
+11 /LucidaSansUnicode00 f
+(on) 3840 6840 w
+(directories) 4016 6840 w
+(is) 4624 6840 w
+(used) 4753 6840 w
+(to) 5049 6840 w
+(mod\255) 5198 6840 w
+(ify) 720 6970 w
+(the) 891 6970 w
+(meaning) 1103 6970 w
+(of) 1605 6970 w
+(the) 1754 6970 w
+11 /LucidaTypewriter f
+(w) 1966 6970 w
+11 /LucidaSansUnicode00 f
+(bit) 2086 6970 w
+(for) 2269 6970 w
+(users) 2463 6970 w
+(matching) 2791 6970 w
+(only) 3328 6970 w
+(the) 3593 6970 w
+(other) 3805 6970 w
+(bits.) 4129 6970 w
+(For) 4438 6970 w
+(them,) 4650 6970 w
+(the) 4999 6970 w
+11 /LucidaTypewriter f
+(w) 5211 6970 w
+11 /LucidaSansUnicode00 f
+(bit) 5330 6970 w
+(gives permission to create) 720 7100 w
+(but) 2159 7100 w
+(not) 2372 7100 w
+(to remove.) 2583 7100 w
+(While) 720 7270 w
+(this) 1063 7270 w
+(is) 1314 7270 w
+(somewhat) 1456 7270 w
+(of) 2052 7270 w
+(a) 2214 7270 w
+(one-off) 2329 7270 w
+(situation,) 2793 7270 w
+(I) 3348 7270 w
+(chose) 3434 7270 w
+(to) 3797 7270 w
+(implement) 3959 7270 w
+(a) 4583 7270 w
+(version) 4698 7270 w
+(of) 5139 7270 w
+(the) 5301 7270 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 3 3
+%%Page: 4 4
+/saveobj save def
+mark
+4 pagesetup
+11 /LucidaSansUnicode20 f
+(\034) 720 850 w
+11 /LucidaSansUnicode00 f
+(sticky) 761 850 w
+(bit) 1106 850 w
+11 /LucidaSansUnicode20 f
+(\035) 1248 850 w
+11 /LucidaSansUnicode00 f
+(using) 1328 850 w
+(the) 1659 850 w
+(existing) 1869 850 w
+(append-only) 2333 850 w
+(bit) 3057 850 w
+(on) 3237 850 w
+(our) 3410 850 w
+(file) 3628 850 w
+(server.) 3833 850 w
+(This) 4268 850 w
+(was) 4531 850 w
+(implemented) 4771 850 w
+(as) 720 980 w
+(an) 887 980 w
+(extra) 1066 980 w
+(permission) 1392 980 w
+(check) 2031 980 w
+(when) 2387 980 w
+(removing) 2720 980 w
+(files.) 3271 980 w
+(Fewer) 3614 980 w
+(than) 3977 980 w
+(10) 4265 980 w
+(lines) 4453 980 w
+(of) 4754 980 w
+(code) 4913 980 w
+(were) 5218 980 w
+(required.) 720 1110 w
+11 /LucidaSans-Demi f
+(6.) 720 1370 w
+(Performance) 888 1370 w
+11 /LucidaSansUnicode00 f
+(A) 720 1540 w
+(representative) 849 1540 w
+(local) 1665 1540 w
+(mail) 1967 1540 w
+(box) 2248 1540 w
+(was) 2505 1540 w
+(used) 2761 1540 w
+(to) 3070 1540 w
+(generate) 3232 1540 w
+(some) 3755 1540 w
+(rough) 4096 1540 w
+(performance) 4466 1540 w
+(num\255) 5198 1540 w
+(bers.) 720 1670 w
+(The) 1067 1670 w
+(mail) 1311 1670 w
+(box) 1583 1670 w
+(is) 1830 1670 w
+(110MB) 1962 1670 w
+(and) 2372 1670 w
+(contains) 2614 1670 w
+(868) 3107 1670 w
+(messages.) 3358 1670 w
+(These) 3995 1670 w
+(figures) 4356 1670 w
+(are) 4772 1670 w
+(shown) 4984 1670 w
+(in) 5372 1670 w
+(table) 720 1800 w
+(1.) 1031 1800 w
+(In) 1216 1800 w
+(the) 1362 1800 w
+(worse) 1580 1800 w
+(case) 1942 1800 w
+11 /LucidaSansUnicode20 f
+(\024) 2177 1800 w
+11 /LucidaSansUnicode00 f
+(an) 2287 1800 w
+(unindexed) 2463 1800 w
+(mail) 3075 1800 w
+(box) 3349 1800 w
+11 /LucidaSansUnicode20 f
+(\024) 3552 1800 w
+11 /LucidaSansUnicode00 f
+(the) 3662 1800 w
+(new) 3880 1800 w
+(upas/fs) 4142 1800 w
+(uses) 4598 1800 w
+(18%) 4887 1800 w
+(of) 5146 1800 w
+(the) 5301 1800 w
+(memory) 720 1930 w
+(of) 1200 1930 w
+(the) 1353 1930 w
+(original) 1569 1930 w
+(while) 2019 1930 w
+(using) 2342 1930 w
+(13%) 2678 1930 w
+(more) 2934 1930 w
+(cpu.) 3254 1930 w
+(In) 3561 1930 w
+(the) 3705 1930 w
+(best) 3920 1930 w
+(case,) 4192 1930 w
+(it) 4506 1930 w
+(uses) 4623 1930 w
+(only) 4909 1930 w
+(5%) 5177 1930 w
+(of) 5364 1930 w
+(the) 720 2060 w
+(memory) 930 2060 w
+(while) 1404 2060 w
+(using) 1722 2060 w
+(only) 2053 2060 w
+(13%) 2316 2060 w
+(of) 2567 2060 w
+(the) 2715 2060 w
+(cpu.) 2926 2060 w
+(Clearly,) 3229 2060 w
+(a) 3669 2060 w
+(larger) 3770 2060 w
+(mail) 4123 2060 w
+(box) 4390 2060 w
+(will) 4633 2060 w
+(make) 4854 2060 w
+(these) 5183 2060 w
+(ratios) 720 2190 w
+(more) 1062 2190 w
+(attractive.) 1378 2190 w
+(In) 1985 2190 w
+(the) 2125 2190 w
+(two) 2336 2190 w
+(months) 2569 2190 w
+(since) 3011 2190 w
+(the) 3325 2190 w
+(snapshot) 3536 2190 w
+(was) 4062 2190 w
+(taken,) 4304 2190 w
+(that) 4675 2190 w
+(same) 4925 2190 w
+(mail) 5245 2190 w
+(box has grown to 220MB) 720 2320 w
+(and contains 1814 messages.) 2090 2320 w
+11 /S f
+(_) 1637 2465 w
+(_____________________________________________________) 1639 2465 w
+11 /LucidaSansUnicode00 f
+(Table) 2527 2595 w
+(1 ) 2855 2595 w
+11 /LucidaSansUnicode20 f
+(\023) 2959 2595 w
+11 /LucidaSansUnicode00 f
+(Performance) 3049 2595 w
+11 /S f
+(_) 1637 2615 w
+(_____________________________________________________) 1639 2615 w
+11 /LucidaSansUnicode00 f
+(action) 1963 2745 w
+(user) 2701 2745 w
+(system) 3103 2745 w
+(real) 3663 2745 w
+(core) 4049 2745 w
+(size) 4314 2745 w
+(s) 2789 2875 w
+(s) 3262 2875 w
+(s) 3735 2875 w
+(MB) 4208 2875 w
+11 /S f
+(_) 1637 2895 w
+(_____________________________________________________) 1639 2895 w
+11 /LucidaSansUnicode00 f
+(old fs read) 1775 3025 w
+(1.69) 2696 3025 w
+(0.84) 3169 3025 w
+(6.07) 3642 3025 w
+(135) 4132 3025 w
+11 /S f
+(_) 1637 3045 w
+(_____________________________________________________) 1639 3045 w
+11 /LucidaSansUnicode00 f
+(initial) 1775 3175 w
+(read) 2108 3175 w
+(1.65) 2696 3175 w
+(0.90) 3169 3175 w
+(6.90) 3642 3175 w
+(25) 4201 3175 w
+11 /S f
+(_) 1637 3195 w
+(_____________________________________________________) 1639 3195 w
+11 /LucidaSansUnicode00 f
+(indexed read) 1775 3325 w
+(0.64) 2696 3325 w
+(0.03) 3169 3325 w
+(0.77) 3642 3325 w
+(6.5) 4270 3325 w
+11 /S f
+(_) 1637 3345 w
+(_____________________________________________________) 1639 3345 w
+(\347) 1637 3345 w
+(\347) 1637 3235 w
+(\347) 1637 3125 w
+(\347) 1637 3015 w
+(\347) 1637 2905 w
+(\347) 1637 2795 w
+(\347) 1637 2685 w
+(\347) 1637 2575 w
+(\347) 2585 3345 w
+(\347) 2585 3275 w
+(\347) 2585 3165 w
+(\347) 2585 3055 w
+(\347) 2585 2945 w
+(\347) 2585 2835 w
+(\347) 2585 2725 w
+(\347) 2992 3345 w
+(\347) 2992 3275 w
+(\347) 2992 3165 w
+(\347) 2992 3055 w
+(\347) 2992 2945 w
+(\347) 2992 2835 w
+(\347) 2992 2725 w
+(\347) 3531 3345 w
+(\347) 3531 3275 w
+(\347) 3531 3165 w
+(\347) 3531 3055 w
+(\347) 3531 2945 w
+(\347) 3531 2835 w
+(\347) 3531 2725 w
+(\347) 3938 3345 w
+(\347) 3938 3275 w
+(\347) 3938 3165 w
+(\347) 3938 3055 w
+(\347) 3938 2945 w
+(\347) 3938 2835 w
+(\347) 3938 2725 w
+(\347) 4554 3345 w
+(\347) 4554 3235 w
+(\347) 4554 3125 w
+(\347) 4554 3015 w
+(\347) 4554 2905 w
+(\347) 4554 2795 w
+(\347) 4554 2685 w
+(\347) 4554 2575 w
+11 /LucidaSans-Demi f
+(7.) 720 3730 w
+(Future) 888 3730 w
+(Work) 1292 3730 w
+11 /LucidaSansUnicode00 f
+(While) 720 3900 w
+(Upas) 1055 3900 w
+11 /LucidaSansUnicode20 f
+(\031) 1317 3900 w
+11 /LucidaSansUnicode00 f
+(memory) 1398 3900 w
+(usage) 1879 3900 w
+(has) 2240 3900 w
+(been) 2471 3900 w
+(drastically) 2778 3900 w
+(reduced,) 3366 3900 w
+(it) 3878 3900 w
+(is) 3997 3900 w
+(still) 4132 3900 w
+(a) 4372 3900 w
+(work-in-progress.) 4480 3900 w
+(Caching) 720 4030 w
+(and) 1234 4030 w
+(indexing) 1517 4030 w
+(are) 2068 4030 w
+(adequate) 2321 4030 w
+(but) 2898 4030 w
+(primitive.) 3160 4030 w
+(Upas/fs) 3786 4030 w
+(is) 4287 4030 w
+(still) 4459 4030 w
+(inconsistently) 4736 4030 w
+(bypassed) 720 4160 w
+(for) 1265 4160 w
+(appending) 1465 4160 w
+(messages) 2078 4160 w
+(to) 2648 4160 w
+(mail) 2803 4160 w
+(boxes.) 3077 4160 w
+(There) 3515 4160 w
+(are) 3868 4160 w
+(also) 4083 4160 w
+(some) 4346 4160 w
+(features) 4680 4160 w
+(which) 5163 4160 w
+(remain) 720 4290 w
+(incomplete.) 1156 4290 w
+(Finally,) 1883 4290 w
+(the) 2325 4290 w
+(small) 2562 4290 w
+(increase) 2911 4290 w
+(in) 3419 4290 w
+(scale) 3585 4290 w
+(brings) 3918 4290 w
+(some) 4321 4290 w
+(new) 4673 4290 w
+(questions) 4953 4290 w
+(about) 720 4420 w
+(the) 1061 4420 w
+(organization) 1267 4420 w
+(of) 2010 4420 w
+(email.) 2153 4420 w
+(It) 720 4590 w
+(may) 829 4590 w
+(be) 1085 4590 w
+(useful) 1252 4590 w
+(for) 1615 4590 w
+(mail) 1804 4590 w
+(boxes) 2067 4590 w
+(with) 2425 4590 w
+(very) 2688 4590 w
+(large) 2946 4590 w
+(numbers) 3251 4590 w
+(of) 3758 4590 w
+(messages) 3903 4590 w
+(to) 4463 4590 w
+(divide) 4608 4590 w
+(the) 4966 4590 w
+(index) 5174 4590 w
+(into) 720 4720 w
+(fixed-size) 972 4720 w
+(chunks.) 1564 4720 w
+(Then) 2058 4720 w
+(messages) 2369 4720 w
+(could) 2936 4720 w
+(be) 3272 4720 w
+(read) 3446 4720 w
+(into) 3726 4720 w
+(a) 3977 4720 w
+(fixed-sized) 4081 4720 w
+(pool) 4741 4720 w
+(of) 5019 4720 w
+(struc\255) 5170 4720 w
+(tures) 720 4850 w
+(as) 1031 4850 w
+(needed.) 1187 4850 w
+(However) 1688 4850 w
+(it) 2186 4850 w
+(is) 2298 4850 w
+(currently) 2425 4850 w
+(hard) 2938 4850 w
+(to) 3220 4850 w
+(see) 3367 4850 w
+(how) 3586 4850 w
+(clients) 3845 4850 w
+(could) 4231 4850 w
+(easily) 4563 4850 w
+(interface) 4903 4850 w
+(a) 5411 4850 w
+(mail) 720 4980 w
+(box) 985 4980 w
+(large) 1226 4980 w
+(enough) 1532 4980 w
+(for) 1971 4980 w
+(this) 2162 4980 w
+(technique) 2397 4980 w
+(to) 2960 4980 w
+(be) 3105 4980 w
+(useful.) 3273 4980 w
+(Currently,) 3707 4980 w
+(all) 4273 4980 w
+(clients) 4435 4980 w
+(assume) 4819 4980 w
+(that) 5261 4980 w
+(it) 720 5110 w
+(is) 829 5110 w
+(reasonable) 953 5110 w
+(to) 1572 5110 w
+(allocate) 1716 5110 w
+(an) 2164 5110 w
+(in-core) 2330 5110 w
+(data) 2761 5110 w
+(structure) 3030 5110 w
+(for) 3549 5110 w
+(each) 3739 5110 w
+(message) 4023 5110 w
+(in) 4527 5110 w
+(a) 4664 5110 w
+(mail) 4762 5110 w
+(box.) 5026 5110 w
+(To) 5336 5110 w
+(take) 720 5240 w
+(advantage) 990 5240 w
+(of) 1580 5240 w
+(a) 1730 5240 w
+(chunked) 1833 5240 w
+(index,) 2330 5240 w
+(clients) 2705 5240 w
+(\(or) 3094 5240 w
+(the) 3284 5240 w
+(server\)) 3497 5240 w
+(would) 3902 5240 w
+(need) 4265 5240 w
+(a) 4568 5240 w
+(way) 4671 5240 w
+(of) 4916 5240 w
+(limiting) 5065 5240 w
+(the) 720 5370 w
+(number) 928 5370 w
+(of) 1379 5370 w
+(messages) 1525 5370 w
+(considered) 2086 5370 w
+(at) 2710 5370 w
+(a) 2850 5370 w
+(time.) 2949 5370 w
+(Also,) 3294 5370 w
+(for) 3598 5370 w
+(such) 3789 5370 w
+(large) 4075 5370 w
+(mail) 4381 5370 w
+(boxes,) 4646 5370 w
+(it) 5040 5370 w
+(would) 5151 5370 w
+(be) 720 5500 w
+(important) 891 5500 w
+(to) 1457 5500 w
+(separate) 1605 5500 w
+(the) 2102 5500 w
+(incoming) 2312 5500 w
+(messages) 2844 5500 w
+(from) 3406 5500 w
+(older) 3700 5500 w
+(messages) 4014 5500 w
+(to) 4576 5500 w
+(limit) 4723 5500 w
+(the) 5001 5500 w
+(work) 5211 5500 w
+(required to scan for new) 720 5630 w
+(messages.) 2064 5630 w
+(Caching) 720 5800 w
+(is) 1205 5800 w
+(particularly) 1349 5800 w
+(unsatisfactory.) 2005 5800 w
+(Files) 2882 5800 w
+(should) 3180 5800 w
+(be) 3597 5800 w
+(read) 3785 5800 w
+(in) 4079 5800 w
+(fixed-sized) 4236 5800 w
+(buffers) 4910 5800 w
+(so) 5349 5800 w
+(maximum) 720 5930 w
+(memory) 1290 5930 w
+(usage) 1761 5930 w
+(does) 2112 5930 w
+(not) 2402 5930 w
+(depend) 2614 5930 w
+(on) 3049 5930 w
+(the) 3220 5930 w
+(size) 3427 5930 w
+(of) 3676 5930 w
+(the) 3820 5930 w
+(largest) 4027 5930 w
+(file) 4428 5930 w
+(in the) 4631 5930 w
+(mail) 4972 5930 w
+(box.) 5234 5930 w
+(Unfortunately,) 720 6060 w
+(current) 1523 6060 w
+(data) 1949 6060 w
+(structures) 2222 6060 w
+(do) 2801 6060 w
+(not) 2978 6060 w
+(readily) 3195 6060 w
+(support) 3594 6060 w
+(this.) 4050 6060 w
+(In) 4358 6060 w
+(practice,) 4500 6060 w
+(this) 4999 6060 w
+(limi\255) 5238 6060 w
+(tation has not) 720 6190 w
+(yet) 1496 6190 w
+(been noticeable.) 1691 6190 w
+(There) 720 6360 w
+(are) 1077 6360 w
+(also) 1296 6360 w
+(a) 1563 6360 w
+(few) 1675 6360 w
+(features) 1914 6360 w
+(that) 2401 6360 w
+(need) 2663 6360 w
+(to) 2976 6360 w
+(be) 3136 6360 w
+(completed.) 3319 6360 w
+(Tracking) 4001 6360 w
+(of) 4516 6360 w
+(references) 4676 6360 w
+(has) 5287 6360 w
+(been) 720 6490 w
+(added) 1034 6490 w
+(to) 1417 6490 w
+(marshal) 1578 6490 w
+(and) 2055 6490 w
+(upas/fs.) 2305 6490 w
+(In) 2836 6490 w
+(addition,) 2988 6490 w
+(the) 3514 6490 w
+(index) 3737 6490 w
+(provides) 4087 6490 w
+(a) 4596 6490 w
+(place) 4709 6490 w
+(to) 5041 6490 w
+(store) 5201 6490 w
+(mutable) 720 6620 w
+(information) 1199 6620 w
+(about) 1868 6620 w
+(a) 2219 6620 w
+(message.) 2325 6620 w
+(These) 2907 6620 w
+(capabilities) 3269 6620 w
+(should) 3917 6620 w
+(be) 4322 6620 w
+(built) 4498 6620 w
+(upon) 4785 6620 w
+(to) 5102 6620 w
+(pro\255) 5255 6620 w
+(vide) 720 6750 w
+(general) 975 6750 w
+(threading and tagging capabilities.) 1408 6750 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 4 4
+%%Page: 5 5
+/saveobj save def
+mark
+5 pagesetup
+11 /LucidaSans-Demi f
+(8.) 720 850 w
+(Speculation) 888 850 w
+11 /LucidaSansUnicode00 f
+(Freed) 720 1020 w
+(from) 1066 1020 w
+(the) 1370 1020 w
+(limitation) 1591 1020 w
+(that) 2149 1020 w
+(all) 2410 1020 w
+(messages) 2585 1020 w
+(in) 3158 1020 w
+(a) 3308 1020 w
+(mail) 3419 1020 w
+(box) 3696 1020 w
+(must) 3949 1020 w
+(be) 4266 1020 w
+(read) 4447 1020 w
+(and) 4734 1020 w
+(stored) 4982 1020 w
+(in) 5372 1020 w
+(memory) 720 1150 w
+(before) 1191 1150 w
+(a) 1572 1150 w
+(single) 1668 1150 w
+(message) 2021 1150 w
+(may be) 2523 1150 w
+(accessed, it) 2944 1150 w
+(is interesting to speculate) 3600 1150 w
+(on a) 5018 1150 w
+(few) 5284 1150 w
+(further possibilites.) 720 1280 w
+(For) 720 1450 w
+(example,) 931 1450 w
+(it) 1462 1450 w
+(may) 1576 1450 w
+(be) 1837 1450 w
+(useful) 2009 1450 w
+(to) 2377 1450 w
+(replace) 2526 1450 w
+(separate) 2954 1450 w
+(mail) 3452 1450 w
+(boxes) 3720 1450 w
+(with) 4082 1450 w
+(a) 4349 1450 w
+(single) 4451 1450 w
+(collection) 4810 1450 w
+(of) 5364 1450 w
+(messages) 720 1580 w
+(assigned) 1286 1580 w
+(to) 1801 1580 w
+(one) 1951 1580 w
+(or) 2190 1580 w
+(more) 2344 1580 w
+(virtual) 2662 1580 w
+(mail) 3040 1580 w
+(boxes.) 3309 1580 w
+(The) 3742 1580 w
+(association) 3983 1580 w
+(between) 4622 1580 w
+(a) 5113 1580 w
+(mes\255) 5216 1580 w
+(sage) 720 1710 w
+(and) 1012 1710 w
+(a) 1256 1710 w
+(mail) 1363 1710 w
+(box) 1636 1710 w
+(would) 1885 1710 w
+(be) 2252 1710 w
+(a) 2429 1710 w
+11 /LucidaSansUnicode20 f
+(\034) 2536 1710 w
+11 /LucidaSansUnicode00 f
+(tag.) 2577 1710 w
+11 /LucidaSansUnicode20 f
+(\035) 2782 1710 w
+11 /LucidaSansUnicode00 f
+(A) 2869 1710 w
+(message) 2991 1710 w
+(could) 3504 1710 w
+(be) 3842 1710 w
+(added) 4019 1710 w
+(to) 4395 1710 w
+(or) 4549 1710 w
+(removed) 4707 1710 w
+(from) 5217 1710 w
+(one) 720 1840 w
+(or) 963 1840 w
+(more) 1121 1840 w
+(mail) 1443 1840 w
+(boxes) 1716 1840 w
+(without) 2083 1840 w
+(modifying) 2531 1840 w
+(the) 3113 1840 w
+(mdir) 3330 1840 w
+(file.) 3624 1840 w
+(If) 3907 1840 w
+(threads) 4025 1840 w
+(were) 4472 1840 w
+(implemented) 4771 1840 w
+(by) 720 1970 w
+(tagging) 904 1970 w
+(each) 1368 1970 w
+(message) 1673 1970 w
+(with) 2198 1970 w
+(its) 2482 1970 w
+(references,) 2669 1970 w
+(it) 3321 1970 w
+(would) 3452 1970 w
+(be) 3831 1970 w
+(possible) 4020 1970 w
+(to) 4521 1970 w
+(follow) 4687 1970 w
+(threads) 5070 1970 w
+(across) 720 2100 w
+(mail) 1102 2100 w
+(boxes,) 1370 2100 w
+(even) 1767 2100 w
+(to) 2057 2100 w
+(messages) 2206 2100 w
+(removed) 2770 2100 w
+(from) 3275 2100 w
+(all) 3571 2100 w
+(mail) 3737 2100 w
+(boxes,) 4005 2100 w
+(provided) 4402 2100 w
+(the) 4913 2100 w
+(under\255) 5124 2100 w
+(lying) 720 2230 w
+(file) 1022 2230 w
+(were) 1234 2230 w
+(not) 1534 2230 w
+(also) 1756 2230 w
+(removed.) 2018 2230 w
+(If) 2598 2230 w
+(a) 2717 2230 w
+(facility) 2824 2230 w
+(for) 3222 2230 w
+(adding) 3421 2230 w
+(arbitrary,) 3834 2230 w
+(automatic) 4371 2230 w
+(tags) 4946 2230 w
+(were) 5218 2230 w
+(enabled,) 720 2360 w
+(it) 1218 2360 w
+(would) 1331 2360 w
+(be) 1692 2360 w
+(possible) 1863 2360 w
+(to) 2346 2360 w
+(tag) 2494 2360 w
+(messages) 2704 2360 w
+(with) 3267 2360 w
+(the) 3532 2360 w
+(email) 3742 2360 w
+(address) 4070 2360 w
+(in) 4527 2360 w
+(the) 4666 2360 w
+(SMTP) 4876 2360 w
+(From) 5199 2360 w
+(line.) 720 2490 w
+11 /LucidaSans-Demi f
+(9.) 720 2750 w
+(References) 888 2750 w
+11 /LucidaSansUnicode00 f
+([1]D. Bernstein, ) 720 2920 w
+11 /LucidaSansUnicode20 f
+(\034) 1582 2920 w
+11 /LucidaSansUnicode00 f
+(Using maildir format) 1623 2920 w
+11 /LucidaSansUnicode20 f
+(\035) 2723 2920 w
+11 /LucidaSansUnicode00 f
+(, published online) 2764 2920 w
+(at) 3758 2920 w
+(http://cr.yp.to/proto/maildir.html) 720 3050 w
+([2]F. Ballesteros published online) 720 3220 w
+(at) 2527 3220 w
+(http://lsub.org/magic/man2html/1/mails) 2664 3220 w
+([3]MH Wikipedia) 720 3390 w
+(entry, http://en.wikipedia.org/wiki/MH_Message_Handling_System) 1623 3390 w
+([4]Lotus Notes Wikipedia) 720 3560 w
+(entry, http://en.wikipedia.org/wiki/Lotus_Notes) 2079 3560 w
+([5]D.) 720 3730 w
+(Presotto,) 1034 3730 w
+11 /LucidaSansUnicode20 f
+(\034) 1564 3730 w
+11 /LucidaSansUnicode00 f
+(Upas) 1605 3730 w
+11 /LucidaSansUnicode20 f
+(\024) 1867 3730 w
+11 /LucidaSansUnicode00 f
+(a) 1977 3730 w
+(Simpler) 2093 3730 w
+(Approach) 2549 3730 w
+(to) 3115 3730 w
+(Network) 3279 3730 w
+(Mail) 3780 3730 w
+11 /LucidaSansUnicode20 f
+(\035) 4000 3730 w
+11 /LucidaSansUnicode00 f
+(,) 4041 3730 w
+(Proceedings) 4132 3730 w
+(of) 4834 3730 w
+(the) 4998 3730 w
+(10th) 5225 3730 w
+(Usenix conference, 1985.) 720 3860 w
+cleartomark
+showpage
+saveobj restore
+%%EndPage: 5 5
+%%Trailer
+done
+%%DocumentFonts: LucidaSansUnicode20 S LucidaSansUnicode00 LucidaSans-Demi LucidaSans-Italic LucidaTypewriter
+%%Pages: 5

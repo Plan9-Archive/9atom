@@ -1,0 +1,36 @@
+Plan 9 for raspberry pi (bcm2835).
+
+9pi is a Plan 9 terminal, which can boot with local fossil root on
+the sd card (/dev/sdM0), or with root from a Plan 9 server via tcp.
+
+9picpu is a Plan 9 cpu server, which could be used in a headless
+configuration without screen, keyboard or mouse.
+
+9pifat is a minimal configuration which boots a shell script boot.rc
+with root in /plan9 on the dos partition, maybe useful for embedded
+applications where a full Plan 9 system is not needed.
+
+Booting from sd card:
+- start with a normal rpi distro sd (e.g. 2012-08-16-wheezy-raspbian)
+  [NB: versions of start.elf earlier than this may not be compatible]
+- copy 9pi to root directory
+- add or change "kernel=" line in config.txt to "kernel=9pi"
+- plan9.ini is built from the "kernel arguments" in cmdline.txt - each
+  var=value entry becomes one plan9.ini line, so entries with spaces will
+  need single quotes.
+
+Network booting with u-boot:
+- start with a normal rpi u-boot sd (e.g. raspberry-pi-uboot-20120707)
+- update the start.elf with a version from a newer rpi distro (see above)
+- install 9pi on bootp host; e.g. for Plan 9, add to ndb/local:
+	sys=pi dom=pi ip=N.N.N.N ether=NNNNNNNNNNNN bootf=/sys/src/9/bcm/9pi
+- u-boot commands for network boot, with plan9.ini file from bootp host:
+	usb start; dhcp; tftp 100 %C; go 8000
+
+If you want a serial console, there's a serial port (115200b/s) on
+P1 connector pins (GND,TXD,RXD)=(6,8,10).  These are 3v TTL signals:
+use a level-shifter to convert to RS232, or a USB-to-TTL-serial adapter.
+Add the line "console=0 b115200" to the plan9.ini file on the server,
+or the parameter "console='0 b115200'" to cmdline.txt on the SD card.
+
+

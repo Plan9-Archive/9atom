@@ -1,0 +1,35 @@
+#!/bin/rc
+rfork e
+rflag=0
+if(~ $1 -r)
+	rflag=1
+cd /mnt/consoles
+for(i in *){
+	x = `{ndb/query -f/lib/ndb/consoledb.$sysname console $i clog}
+	if(~ $rflag 0 && ~ $x $sysname){
+		log=/sys/log/clog/$i
+		if(~ $rflag 1){
+			mkdir -p /tmp/clog
+			log=/tmp/clog/$i
+		}
+		while(~ 1 1){
+			echo aux/clog $log /mnt/consoles/$i
+			aux/clog /mnt/consoles/$i $log && echo clog exits $status
+			sleep 10;
+		}
+	}&
+}
+fn rotate{
+	rm /tmp/oclog/*
+	cp /tmp/clog/* /tmp/oclog
+	rm /tmp/clog/*
+}
+if(~ $rflag 1){
+	mkdir -p /tmp/oclog /tmp/clog
+	while(~ 1 1){
+		sleep 600
+		s=`{du -a /tmp/clog| sed 's/[ 	].*//g'}
+		if(test $s -gt 10000)
+			rotate
+	}
+}&

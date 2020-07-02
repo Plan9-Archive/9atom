@@ -1,0 +1,32 @@
+#!/bin/rc
+
+awk '
+BEGIN{
+	collect = isdir = 0
+}
+
+/^[ \t]*$/{
+	next
+}
+/^#/{
+	next
+}
+collect && /^[^	\t]/{
+	collect = isdir = 0
+}
+collect && $0 ~ /[^ \t]+/{
+#	for(i = 2; i <= NF; i++)
+		tab[$0]++;
+}
+$0 ~ /^[^ \t]/{
+	if($1 ~ "dirs"){
+		dirs = 1;
+		collect = 1;
+	}
+	next;
+}
+
+END{
+	for(i in tab)
+		print "<" i "/mkfrag"
+}' $*

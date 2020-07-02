@@ -1,0 +1,35 @@
+#!/bin/rc
+
+awk -v 'op='$1	'
+BEGIN{
+	collect = isflag = 0
+}
+
+/^[ \t]*$/{
+	next
+}
+/^#/{
+	next
+}
+collect && /^[^	\t]/{
+	collect = isflag = 0
+}
+collect && $0 ~ /[^ \t]+/{
+	if($1 ~ op)
+	for(i = 2; i <= NF; i++)
+		flag[$i]++;
+}
+$0 ~ /^[^ \t]/{
+	if($1 ~ "flags"){
+		flags = 1;
+		collect = 1;
+	}
+	next;
+}
+
+END{
+	x = ""
+	for(i in flag)
+		x = x " " i
+	print x;
+}' $*(2-)

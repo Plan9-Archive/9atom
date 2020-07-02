@@ -1,0 +1,347 @@
+#!/bin/rc
+
+c='
+previous mapping included:
+
+	0x3260,	0x327b,	/* ㉠ - ㉻ */
+	0x328a,	0x32b0,	/* ㊊ - ㊰ */
+	0x32d0,	0x32fe,	/* ㋐ - ㋾ */
+
+in __alpha2[] but these are type symbol; however U+24b6 is
+of type symbol, but we include it. this is because there is 
+a lowercase mapping.
+
+should we  load up all the caracters and glark the 
+decomposition mapping. if we have U+X as <circle> bozo, where bozo
+is a letter, then U+X is a letter, too?
+
+or should isalpharune(U+24b6) be false?
+
+if we need to check references, we can just load an array with each
+codepoint as long as there aren''t any forward references.
+
+'
+c=()
+
+. common.rc
+
+Unicode | awk -F';' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	mdes="";	# description of mark.
+	last=0;		# last in range
+	ldes="";	# last desc.
+}
+
+BEGIN {
+	# hard-code values in the ascii range.
+
+	print "static";
+	print "Rune\t__space2[] =";
+	print "{"
+	print "\t0x0009,\t0x000a,\t/* tab and newline */";
+	print "\t0x0020,\t0x0020,\t/* space */";
+	print "\t0x00a0,\t0x00a0,\t/* non-breaking space */";
+
+	init();
+}
+
+FNR < 256 { next; }
+
+"WS" == $5 || $3 ~ /Z[psl]/ || ("Cc" == $3 && "S" == $5) || ("Cf" == $3 && $2 ~ /.* SPACE/) {
+	codepoint=hex($1);
+
+	if (last + 1 == codepoint){
+		last = codepoint;
+		ldes = tolower($2);
+		next;
+	}
+
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* %s - %s */\n", mark, last, mdes, ldes);
+	} else if (last) {
+		printf("\t0x%04x, 0x%04x,\t/* %s */\n", mark, last, ldes);
+	}
+
+	init();
+	mark=last=codepoint;
+	ldes=mdes=tolower($2);
+}
+
+
+
+END {
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* %s - %s */\n", mark, last, mdes, ldes);
+	} else if (last) {
+		printf("\t0x%04x, 0x%04x,\t/* %s */\n", mark, last, ldes);
+	}
+	print "};"
+	print ""
+}
+ ' | Sprint
+
+awk '-F;' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	last=0;		# last in range
+}
+
+function special(codepoint){
+	if(codepoint == 6618)
+		codepoint=6618-1	# 0x19da wierd extra 1.  ignore.
+	return codepoint
+}
+
+function pr(m, l){
+	l = special(l)
+	while(l - m > 0){
+		if((l-m+1) % 10 != 0)
+			printf("//botch");	# only handle base 10
+		printf("\t0x%04x, 0x%04x,\t/* \\u%04x\\u%04x\\u%04x\\u%04x\\u%04x\\u%04x\\u%04x\\u%04x\\u%04x\\u%04x */\n", m, l, m, m+1, m+2, m+3, m+4, m+5, m+6, m+7, m+8, m+9)
+		m += 10
+	}
+}
+
+BEGIN {
+	print "static";
+	print "Rune\t__digit2[] =";
+	print "{";
+
+	init();
+}
+
+"Nd" == $3 {
+	codepoint=hex($1);
+	if (last + 1 == codepoint){
+		last = codepoint;
+		next;
+	}
+	if(last)
+		pr(mark, last);
+
+	init();
+	mark=last=codepoint;
+}
+
+END {
+	if(last)
+		pr(mark, last);
+
+	print "};";
+	print "";
+} ' <{Unicode} | Sprint
+
+awk '-F;' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	last=0;		# last in range
+}
+
+BEGIN {
+	print "static";
+	print "Rune\t__alpha2[] =";
+	print "{";
+
+	init();
+}
+
+"Lo" == $3 || "Lm" == $3 {
+	codepoint=hex($1);
+
+	if (last + 1 == codepoint){
+		last = codepoint;
+		next;
+	}
+
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x */\n", mark, last, mark, last);
+	} else if (last) {
+		single = single sprintf("\t0x%04x,\t/* \\u%04x */\n", mark, mark);
+	}
+
+	init();
+	mark=last=codepoint;
+}
+
+END {
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x */\n", mark, last, mark, last);
+	} else if (last) {
+		single = single sprintf("\t0x%04x,\t/* \\u%04x */\n", mark, mark);
+	}
+
+	print "};";
+	print "";
+
+	print "static";
+	print "Rune\t__alpha1[] =";
+	print "{";
+
+	print single;
+
+	print "};";
+	print "";
+
+} ' <{Unicode} | Sprint
+
+awk '-F;' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	last=0;		# last in range
+	offset=0;		# (new - mark)
+	o_cp=0;
+}
+
+BEGIN {
+	print "static";
+	print "Rune\t__toupper2[] =";
+	print "{";
+
+	init();
+}
+
+# we allow Upper(C) to be nil, that way islower(c) works.
+
+"Ll" == $3 || length($(NF-2)) {
+	codepoint=hex($1);
+	o=hex($(NF-2));
+	of=o-codepoint;
+
+	if (last + 1 == codepoint && of == offset){
+		last = codepoint;
+		next;
+	}
+
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x, \\u%04x-\\u%04x */\n", mark, last, o_cp, mark, last, mark+offset, last+offset);
+	} else if (last) {
+		single = single sprintf("\t0x%04x, 0x%04x,\t/* \\u%04x, \\u%04x */\n", mark, o_cp, mark, o_cp);
+	}
+
+	init();
+	mark=last=codepoint;
+	offset=of;
+	o_cp = o
+}
+
+END {
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x, \\u%04x-\\u%04x */\n", mark, last, o_cp, mark, last, mark+offset, last+offset);
+	} else if (last) {
+		single = single sprintf("\t0x%04x, 0x%04x,\t/* \\u%04x, \\u%04x */\n", mark, o_cp, mark, o_cp);
+	}
+
+	print "};";
+	print "";
+
+	print "static";
+	print "Rune\t__toupper1[] =";
+	print "{";
+
+	# FIXME: that should be a \u0000, bug gawk chokes on \\u0000 and [\\]
+	# [[:punct:]] yields "memory exhausted".
+
+	gsub(".u0000", "<nil>", single);
+	print single;
+
+	print "};";
+	print "";
+
+} ' <{Unicode} | Sprint
+
+awk '-F;' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	last=0;		# last in range
+	offset=0;		# (new - mark)
+	o_cp=0;
+}
+
+BEGIN {
+	print "static";
+	print "Rune\t__tolower2[] =";
+	print "{";
+
+	init();
+}
+
+# we allow Lower(C) to be nil, that way isupper(c) works.
+
+"Lu" == $3 || length($(NF-1)) {
+	codepoint=hex($1);
+	o=hex($(NF-1));
+	of=o-codepoint;
+
+	if (last + 1 == codepoint && of == offset){
+		last = codepoint;
+		next;
+	}
+
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x, \\u%04x-\\u%04x */\n", mark, last, o_cp, mark, last, mark+offset, last+offset);
+	} else if (last) {
+		single = single sprintf("\t0x%04x, 0x%04x,\t/* \\u%04x, \\u%04x */\n", mark, o_cp, mark, o_cp);
+	}
+
+	init();
+	mark=last=codepoint;
+	offset=of;
+	o_cp = o
+}
+
+END {
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x, 0x%04x,\t/* \\u%04x-\\u%04x, \\u%04x-\\u%04x */\n", mark, last, o_cp, mark, last, mark+offset, last+offset);
+	} else if (last) {
+		single = single sprintf("\t0x%04x, 0x%04x,\t/* \\u%04x, \\u%04x */\n", mark, o_cp, mark, o_cp);
+	}
+
+	print "};";
+	print "";
+
+
+	print "/*";
+	print " * We allow the target character to be nil so isupperrune() works,";
+	print " * even for bogus unicode that doesn''t have a tolower().";
+	print " */"
+	print ""
+
+	print "static";
+	print "Rune\t__tolower1[] =";
+	print "{";
+
+	# FIXME: that should be a \u0000, bug gawk chokes on \\u0000 and [\\]
+	# [[:punct:]] yields "memory exhausted".
+
+	gsub(".u0000", "<nil>", single);
+	print single;
+
+	print "};";
+	print "";
+
+} ' <{Unicode} | Sprint
+
+echo 'static
+Rune	__totitle1[] = 
+{'
+
+awk '-F;' '"Lt" == $3 { 
+	printf("\t0x%s, 0x%s,\t/* \\u%s, \\u%s */\n", $(NF-1), $1, $(NF-1), $1);
+	if (length($NF)) {
+		printf("\t0x%s, 0x%s,\t/* \\u%s, \\u%s */\n", $15, $1, $15, $1);
+	}
+}' <{Unicode} | tr 'A-Z' 'a-z' | Sprint
+
+echo '};
+'

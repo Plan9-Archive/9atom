@@ -1,0 +1,44 @@
+.TH COMPOSE 1 
+.SH NAME
+compose  \- compose images
+.SH SYNOPSIS
+.B compose
+[
+.B -t
+][
+.B -c
+.I chan
+][
+.B -o
+.I drawop
+]
+.I file1 file2 ...
+.SH DESCRIPTION
+.I Compose
+uses the Porter-Duff operations to build a
+new image from base images.  The default
+operation is
+.BR SoverD .
+The default channel format is the taken
+from the first image.
+The composing operation and channel
+formats are is specified as
+in
+.IR draw (2)
+and
+.IR image (6).
+The base images
+may be in (most) any format;
+.IR imgtype (1)
+is used to intuit the file type and convert
+them to Plan 9 format.  The
+.B -t
+flag forces conversion to truecolor.
+.SH SOURCE
+.B /sys/src/cmd/compose
+.SH "SEE ALSO"
+.IR draw (2),
+.IR image (6),
+.IR imgtype (1),
+.IR page (1),
+.IR resample (1).

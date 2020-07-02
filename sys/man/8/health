@@ -1,0 +1,21 @@
+.TH HEALTH 8
+.SH NAME
+health \- SCSI disk health check
+.SH SYNOPSIS
+.B disk/health
+[
+.B /dev/sdXX ...
+]
+.SH DESCRIPTION
+.I Health
+prints information about
+.SM SCSI
+disk's health. It is hoped that this information will be useful
+in predicting disk failure. the collums reprisent: The device,
+the the number of blocks replaced, the read error count,
+the write error count,
+the life (as a percentage of the manufacturers estimate),
+and the current and absolute maximum temperature.
+.SH "SEE ALSO"
+.IR scsi (2),
+.IR scuzz (8).

@@ -1,0 +1,155 @@
+CONF=fs
+ZONE=/adm/timezone/US_Eastern
+p=9
+
+objtype=386
+</$objtype/mkfile
+
+TARG=$p$CONF'fs'
+
+DEV=\
+	apc.$O\
+	aoe.$O\
+	cw.$O\
+	devio.$O\
+	devtab.$O\
+	fworm.$O\
+	fjuke.$O\
+	mworm.$O\
+	wren.$O\
+
+IP=\
+	arp.$O\
+	icmp.$O\
+	il.$O\
+	ip.$O\
+	ipaux.$O\
+	iproute.$O\
+	sntp.$O\
+	udp.$O\
+
+PORT=\
+	9p2.$O\
+	auth.$O\
+	chk.$O\
+	clock.$O\
+	con.$O\
+	config.$O\
+	console.$O\
+	data.$O\
+	dentry.$O\
+	devcec.$O\
+	devcons.$O\
+	devcopy.$O\
+	fcmd.$O\
+	iobuf.$O\
+	lrand.$O\
+	main.$O\
+	print.$O\
+	proc.$O\
+	rawcopy.$O\
+	sub.$O\
+	time.$O\
+	uidgid.$O\
+
+PC=\
+	l.$O\
+	8250.$O\
+	8253.$O\
+	cga.$O\
+	devsd.$O\
+	dosfs.$O\
+	floppy.$O\
+	iasata.$O\
+	kbd.$O\
+	lock.$O\
+	malloc.$O\
+	mmu.$O\
+	mv50xx.$O\
+	nvr.$O\
+	pc.$O\
+	pci.$O\
+	sdata.$O\
+	sdscsi.$O\
+	toy.$O\
+	trap.$O\
+
+ETHER=\
+	etherctlr.$O\
+	ether2114x.$O\
+	ether8139.$O\
+	ether8169.$O\
+	ether82557.$O\
+	ether82563.$O\
+	ether83815.$O\
+	etherdp83820.$O\
+	etherelnk3.$O\
+	etherga620.$O\
+	etherif.$O\
+	etherigbe.$O\
+	ethermii.$O\
+
+SCSI=\
+	scsi.$O\
+	scsibuslogic.$O\
+	scsincr53c8xx.$O\
+
+OBJ=\
+	$PC\
+	$PORT\
+	$DEV\
+	$IP\
+	$ETHER\
+	$SCSI\
+
+HFILES=\
+	../port/all.h\
+	../port/lib.h\
+	../port/portdat.h\
+	../port/portfns.h\
+	dat.h\
+	../pc/fns.h\
+	../pc/io.h\
+	../pc/mem.h\
+	/$objtype/include/u.h\
+	/$objtype/include/ureg.h\
+
+LIB=\
+	-lauthsrv\
+	-lc\
+	-lsec\
+	-lfis
+
+CFLAGS=-FTVw -I. -I../port -I../pc
+
+all:V:	$TARG.gz
+
+<../pc/mkfile
+<../port/mkfile
+<../dev/mkfile
+<../ip/mkfile
+
+$TARG.gz: $TARG
+	gzip -9<$TARG>$TARG.gz
+
+$TARG:	$CONF.c $OBJ
+	$CC $CFLAGS -DDATE'='`{date -n} $CONF.c
+	$LD -o $target -l -T0x30100020 $OBJ $CONF.$O $LIB
+	size $target
+
+install:V: $TARG
+	cp $TARG /$objtype/
+	9fs stand && cp -x $TARG /n/stand/$objtype
+
+$TARG.$O:	../pc/dosfs.h
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $stem.s
+
+%.$O:	$HFILES
+
+clean:V:
+	rm -f *.[$OS] [$OS].out bootflp *.iso timezone.h sizes $TARG^proto $TARG.gz $TARG

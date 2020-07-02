@@ -1,0 +1,9 @@
+#!/bin/rc
+rfork e
+
+for(i)
+	for(e in `{ndb/query -m sys $i ether}){
+		pxe = /cfg/pxe/$e
+		if(test -e $pxe)
+			echo $pxe
+	}

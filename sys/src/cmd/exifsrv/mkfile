@@ -1,0 +1,8 @@
+</$objtype/mkfile
+
+BIN = /$objtype/bin
+OFILES = main.$O jpgparse.$O exif.$O 
+TARG = exifsrv
+
+</sys/src/cmd/mkone
+

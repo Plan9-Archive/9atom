@@ -1,0 +1,37 @@
+cache line size 32B
+L1 cache 16KB+16KB I+D, virtually indexed / physically addressed
+no TCM (tightly coupled memory)
+
+L2 cache 128KB, "primarily used by GPU"
+  (by default CPU doesn't see it)
+
+Physical memory map
+
+00000000	256M	dram
+  00000000	64		exception vectors
+  00000100	7936	boot ATAGs (inc. cmdline.txt)
+  00002000	4K		Mach
+  00003000	1K		L2 page table for exception vectors
+  00003400	3K		- unused -
+  00004000	16K		L1 page table for kernel
+  00008000  -       default kernel load address
+  01000000	16K		u-boot env
+20000000	16M		i/o registers
+
+Virtual memory map
+
+00000000	512M	user space
+7E000000	16M		i/o registers
+80000000	<=224M	kernel ram (reserve some for GPU)
+FFFF0000	4K		exception vectors
+
+Linux params at *R2 (default 0x100) are a sequence of ATAGs
+  struct atag {
+	u32int size;	/* size of ATAG in words, including header */
+    u32int tag;		/* ATAG_CORE is first, ATAG_NONE is last */
+	u32int data[size-2];
+  };
+  00000000	ATAG_NONE
+  54410001	ATAG_CORE
+  54410002	ATAG_MEM
+  54410009	ATAG_CMDLINE

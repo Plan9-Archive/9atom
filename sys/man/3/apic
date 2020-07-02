@@ -1,0 +1,125 @@
+.TH APIC 3
+.SH NAME
+apic \- Intel 32 and 64-bit Advanced Programmable Interrupt Controller
+.SH SYNOPSIS
+.nf
+.B bind -a #P /dev
+.sp 0.3v
+.B /dev/mpapic
+.B /dev/mpirq
+.B /dev/mptable
+.B /dev/mpvec
+.sp 0.3v
+*apicmode={flat, cluster, phys}
+*nomsi={0, 1}
+.fi
+.SH DESCRIPTION
+The APIC code implements the (x)APIC specification and
+message-signaled interrupts (MSI) for multiprocessor interrupt
+delivery.  They are supported by almost all
+.B 386
+and
+.B amd64
+machines.  APIC IDs less than 64 
+(or 256 by changing constants) are supported.  APIC
+code configures this hardware, picks a delivery mode,
+and assigns vectors in a round-robin fashon to interrupt targets.
+In flat or cluster delivery mode, the target is hardware's
+choice from a set of processors; in physical mode, a specific
+processor is targeted.  Flat mode may be used with 8
+or fewer processors.  Clusters are defined by hardware,
+and must have 4 or fewer processors. Delivery mode is
+overridden with
+.BR "*apicmode" ;
+.B phys
+is always a safe choice.
+.PP
+The APIC infrastructure supports two types of APICs.
+The local APIC (LAPIC) is APIC target and initiator
+attached to each core.  I/O APICs route bus interrupts to
+LAPICs.  Three types of interrupts are supported: self
+(such as a clock interrupt), inter-processor interrupts
+(IPIs) or bus interrupts.  Bus interrupts are are routed
+from devices through I/O APICs to a set of LAPICs.
+.PP
+The routing mechanism is a 64-bit vector stored in an
+I/O APIC that translates an input bus interrupt to a
+set of processors and a processor interrupt.  The set of
+processors may be specified (by order of preference)
+as a "flat" set of logical processors, a cluster
+of processors or a single physical processor.  The physical
+vectors select a target based on the LAPICs APIC ID,
+while logical vectors target the APIC DEST register.  Clusters
+are exactly matched, cores are matched as a bit vector.
+A flat logical vector targeting the first four processors
+would use a mask of 0x0f.
+.PP
+For PCI devices with MSI capability, the vector is
+programmed directly into the PCI device.  This allows
+the I/O APIC to be bypassed.  The interrupt targets
+LAPICs directly.  Thus MSI interrupts can function
+without knowing anything more than the LAPIC ids
+of the processors.
+.PP
+The available busses, interrupt routings and APICs are
+specified in the MP table.  A digested version of the
+MP table is available in
+.B /dev/mptable
+if a table is found.  The format is ad-hoc.
+.PP
+When the machine is in multiprocessor mode,
+.BR "*nomp=0" ,
+additional tables are available.
+.PP
+A description of the available APICs and their configuration
+is available in
+.BR /dev/mpapic.
+This file contains 7 fields: type
+.RB ( proc
+or
+.BR ioapic ),
+APIC number, APIC ID, APIC DEST, mask,
+flags
+.RB ( b
+bsp, 
+.B e
+enabled),
+and processor number.  Since the vector targeting
+code picks processors in round robin fashion regardless
+of mode, the mask will be the same for every processor
+in logical flat mode, the same for every processor in a
+cluster in logical cluster mode, and unique for every
+processor in physical mode.
+.PP
+The
+.B /dev/mpirq
+file contains a list of vector mappings by bus as reported
+by the MP structure.  This file is self-explanatory, and not
+intended to be parsed.
+.PP
+The
+.B /dev/mpvec
+file lists the configured I/O APIC vectors
+in the running system.  There are three fields: the I/O APIC
+number, the vector number, and the 64-bit vector.  a vector
+of 0x10000 is an unset, masked vector.
+.SH SOURCE
+.B /sys/src/9/pc/apic.c
+.br
+.BR /sys/src/9/pc/mp.c
+.br
+.BR /sys/src/9/pc/mp.h
+.SH "SEE ALSO"
+.IR plan9.ini (8)
+.br
+Intel 5500 Chipset and Intel 5520 Chipset Datasheet,
+.br
+Intel 64 Architecture x2APIC Specification
+.br
+Intel 64 and IA-32 Architectures Software Developer's Manual Volume 3A
+.br
+Intel Multiprocessor Specification, version 1.4
+.SH BUGS
+You are not expected to understand this.
+.PP
+No support for x2APIC.

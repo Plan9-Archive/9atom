@@ -1,0 +1,27 @@
+#!/bin/rc
+
+if(! ~ $#* 1){
+	echo 'usage: $patch/undo patch-name' >[1=2]
+	exit usage
+}
+. /rc/bin/apatch/defs
+mountfs
+
+test -e /n/dist/386 || bind / /n/dist || fail no dist
+
+d=/n/dist/dist/$patch/$1
+must cd $d
+
+fn xxx {
+	if(test -e $2.backup){
+		echo cp $2.backup $1 >[1=2]
+		cpfile $2.backup /n/dist$1
+	}
+	if not{
+		echo rm -rf /n/dist$1
+		rm -rf /n/dist$1
+	}
+}
+
+cat files | sed 's/^/xxx /' |rc
+rm -rf /n/dist/dist/$patch/$1

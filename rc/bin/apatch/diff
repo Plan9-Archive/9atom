@@ -1,0 +1,37 @@
+#!/bin/rc
+# $patch/diff [-w] patch-name
+rfork e
+fn usage {
+	echo 'usage: $patch/diff patch-name' >[1=2]
+	exit usage
+}
+
+flags=-ncr
+if(! ~ $#* 0 && ~ $1 -*){
+	flags=()
+	while (! ~ $#* 0 && ~ $1 -*) {
+		flags=($flags $1)
+		shift
+	}
+}
+if(! ~ $#* 1)
+	usage
+. /rc/bin/apatch/defs
+mountfs
+
+d=$PD/$1
+cd $d || fail no dir $d
+
+fn mkdiff {
+	if(test -e $2.orig){
+		echo $1:
+		diff $flags $2.orig $2
+	}
+	if not
+		echo new: $1
+}
+
+{
+	cat removed | sed 's/^/removed: /'
+	mkdiff `{cat files}
+} | tee $d/diffs

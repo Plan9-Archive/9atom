@@ -1,0 +1,41 @@
+#!/bin/rc
+
+rfork ne
+path=/bin
+
+fn fatal {
+	echo $*
+	exit $"*
+}
+
+
+if (! ~ $#* 1)
+	fatal 'usage: contrib/remove name' >[1=2]
+
+name=`{basename $1}
+cfg=/dist/replica/$name
+if(! test -x $cfg)
+	fatal no such replica: $name
+
+. $cfg
+
+mod=`{replica/updatedb  -l -p$clientproto -r$clientroot $clientdb >[2]/dev/null | awk '{print $2}'}
+files=`{cat $clientdb | awk '{print $1}' | sort -r}
+
+if (~ $clientroot /)
+	clientroot=''
+
+for (i in $files) {
+	m=false
+	for (j in $mod) 
+		if ( ~ $i $j )
+			m=true
+	if ( ~ $m true)
+		echo '#' rm -f $i '# locally modified; will not remove'
+	if not
+		echo rm -f $clientroot/$i
+
+}
+
+for (i in $cfg $clientdb $clientlog $clientchg)
+	echo rm -f $i

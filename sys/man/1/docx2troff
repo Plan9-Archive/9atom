@@ -1,0 +1,55 @@
+.TH DOCX2TROFF 1
+.SH NAME
+docx2troff, docx2txt, word2troff word2txt
+\- translate Microsoft™ Office™ documents
+.SH SYNOPSIS
+.B docx2troff
+[
+.I file.docx
+]
+.br
+.B docx2txt
+[
+.I file.docx
+]
+.br
+.B opc/word2troff
+.br
+.B opc/word2txt
+.SH DESCRIPTION
+Microsoft's new format for Office documents is a
+.IR zip 'ed
+directory hierarchy containing
+.I XML
+files. This format is known as the ``Open Packaging Convention'' or
+.IR OPC .
+.PP
+.I Docx2txt
+is an
+.IR rc (1)
+script that uses 
+.IR fs/zipfs (1)
+and
+.I opc/word2txt
+to extract the printable text from the body of a Microsoft Word docx document
+and write it on the standard output. Typically this is then piped through
+.IR fmt (1)
+to wrap paragraphs.
+.PP
+.I Docx2troff
+is similar, but emits troff source corresponding to the document. If the
+document contains tables additional commands will be emitted for
+.IR tbl (1)
+Opc/word2troff does not attempt to produce an exact facsimile of the
+source layout, but rather a reasonable looking troff version of
+the document.
+.SH SOURCE
+/sys/src/cmd/opc
+.SH SEE ALSO
+.IR xlsx2txt (1)
+.br
+.IR libxml (2)
+.br
+``2007 Office Document: Open XML Markup Explained'',
+http://www.microsoft.com/en-us/download/details.aspx?id=15359
+

@@ -1,0 +1,19 @@
+Bugs:
+	* fix text selection and double clicking;
+	* http://www.yahoo.co.jp (why this doesn't work for me and it does for erik?);
+
+Not Bugs:
+	* complaints like "gif: decode <stdin> failed: ReadGIF: can't recognize format ��"
+	  are caused by sites that return a jpeg and send Content-Type: image/gif.
+
+Not implented:
+	* frame's borders and scroll are ignored
+	* Image: resizing, and maps
+	* table atributes
+	* css
+	* Js
+
+Libhtml:
+	* http://en.wikipedia.org/wiki/Anax some content is missing;
+	* href get garbled like in google's "Did you mean xxx?"
+	  "&spell=foo" becomes " ell=foo", See Erik Quanstrom's patch.

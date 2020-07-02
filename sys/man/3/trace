@@ -1,0 +1,137 @@
+.TH TRACE 3 
+.SH NAME
+trace \- kernel tracing device.
+.SH SYNOPSIS
+.B bind #T /dev
+.B /dev/trace
+.B /dev/tracectl
+.SH DESCRIPTION
+The trace device provides a method for kernel tracing.  Sections of
+memory (\&“traces\&”) are selected;
+.B trace events 
+will be recorded whenever the program counter enters or leaves a
+function within those sections of memory.  This is useful in examining
+how many times a function is called, with what arguments, and how much
+time is spent in that function.
+.PP
+The timestamps recorded are taken from the
+.CW cycles()
+function, which is architecture-dependent.  In the x86, for example,
+the timestamp will be the value of the
+.B tsc
+register.
+.PP
+The
+.B tracectl
+file provides information on the current configuration and allows
+changes to be made.  The following are valid commands to be echoed
+into
+.B /dev/tracectl; 
+note that all addresses can be given as offsets from
+.B KTZERO, 
+although giving a full address will work too:
+.PP
+.IP "\f5all\fP" 1.2i
+enables tracing for all events.  During normal operation, function
+calls from interrupt context will be ignored; issuing an
+.B 'all'
+command will cause them to be recorded. The 
+.B 'stop'
+command resets the system to default operation.
+.IP "\f5size\fP \f2size\fP" 1.2i
+.br
+resizes the trace log to 
+.if t 2\s-2\v'-0.4m'size\v'0.4m\s+2  
+.if n 2^size
+elements.
+.IP "\f5start\fP" 1.2i
+turns on tracing.  Any traces that are on will now begin registering
+events to
+.B /dev/trace
+.IP "\f5stop\fP" 1.2i
+turns off tracing.
+.IP "\f5trace\fP \f2startaddr\fP \f2endaddr\fP \f5new\fP \f2name\fP" 1.2i
+creates a new trace between addresses
+.IR startaddr
+and
+.IR endaddr.
+.IP "\f5trace\fP \f2name\fP \f5remove\fP" 1.2i
+removes the specified trace
+.IP "\f5trace\fP \f2name\fP \f5on\fP" 1.2i
+enables the specified trace. No \&"hits\&" will be generated until the
+.B start
+command is given.
+.IP "\f5trace\fP \f2name\fP \f5off\fP" 1.2i
+disables the specified trace. No \&"hits\&" will ever occur.
+.IP "\f5watch\fP \f2pid\fP" 1.2i
+.br
+only records events from the given PID. Repeated
+.B watch
+commands will add to the list of PIDs.  If a PID of 0 is given, the
+system will revert to recording all events.
+.PP
+Trace events are recorded in
+.B /dev/trace
+as 121-byte lines (including the newline). The format of an event is:
+.IP "\f2eventtype PC timestamp caller-PID arg1 arg2 arg3 arg4"
+The 
+.IR event type
+is E for an entry and X for an exit.
+The 
+.IR PC
+is the current program counter.
+The
+.IR timestamp
+is the system cycles clock.
+The 
+.IR PID
+is the PID for the process originating the function call.  Arguments 1
+through 4 are the first four arguments of the function for a function
+entry; for an exit event,
+.IR arg 1
+is the return value.  If there are only two arguments to a function,
+for example, only
+.IR arg 1
+and
+.IR arg 2
+will have values, while the others will be zero.
+
+.SH EXAMPLE
+To record all calls to a function residing in memory between
+.B 0xffffffff8016c2c6
+and
+.B 0xffffffff8016c306
+over the course of one second:
+.IP
+.EX
+% bind -a '#T' /dev
+% echo trace 16c2c6 16c306 new a > /dev/tracectl
+% echo trace a on > /dev/tracectl
+% echo start > /dev/tracectl; sleep 1; echo stop > /dev/tracectl
+.EE
+.TP 0
+When that is completed, there are now events in
+.B /dev/trace :
+.IP
+.EX
+% cat /dev/trace
+E ffffffff8016c2c6 00000096d2011acb 0000000000000057 ffffffff80a8b2d8
+ffffffff80a8b2d8 ffffffff8016d446 ffffffff80a7c548
+X ffffffff8016c306 00000096d2011c3c 0000000000000057 ffffffff80251b38
+0000000000000000 0000000000000000 0000000000000000
+\&...
+.EE
+.SH ERRORS
+When creating a new trace with the 'new' command, the specified trace
+name cannot exist, the start address must be less than the end
+address, and both addresses must be greater than KTZERO and less than
+etext.  For the 'on', 'off', and 'remove' commands, the specified
+trace must exist or an error will occur.
+.SH SOURCE
+.B /sys/src/9/port/devtrace.c
+.br
+.B /sys/src/9/*/archtrace.c
+.SH "SEE ALSO"
+.IR 8l (1) ,
+.IR kprof (3) ,
+.IR prof (1)

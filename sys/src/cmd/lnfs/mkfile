@@ -1,0 +1,23 @@
+</$objtype/mkfile
+
+BIN=/$objtype/bin
+
+TARG = relnfs\
+	lnfs\
+#	ln2short\
+
+OFILES=
+
+HFILES=
+UPDATE=\
+	lnfs\
+	relnfs.c\
+	$HFILES\
+	${OFILES:%.$O=%.c}\
+	${TARG:%=%.c}\
+
+</sys/src/cmd/mkmany
+
+$O.lnfs:		lnfs.$O
+$O.relnfs:	relnfs.$O
+$O.ln2short:	ln2short.$O

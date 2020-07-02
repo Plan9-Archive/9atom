@@ -1,0 +1,29 @@
+#!/bin/rc
+# consoledbof - import and print consoledb path for system
+
+fn usage {
+	echo >[1=2] usage: consoledbof system
+	exit usage
+}
+
+if (! ~ $#* 1)
+	usage
+for(i in /lib/ndb/consoledb*){
+	server=`{ndb/query -f $i console $1}
+	if(! ~ $#server 0){
+		echo $i
+		exit ''
+	}
+}
+server=`{ndb/query sys $1 console}
+if(~ $#server 1){
+	import $server /lib/ndb /n/$server
+	if (! test -f /n/$server/consoledb) {
+		echo consoledbof: can''''t stat consoledb for $server >[1=2] 
+		exit noconsoledb
+	}
+	echo /n/$server/consoledb
+	exit ''
+}
+echo consoledbof: unknown console server for $1 >[1=2] 
+exit noconsole

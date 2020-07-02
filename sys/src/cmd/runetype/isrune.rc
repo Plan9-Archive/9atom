@@ -1,0 +1,65 @@
+#!/bin/rc
+
+. common.rc
+
+Unicode | awk -F';' '
+' ^ $hex ^ '
+
+function init() {
+	mark=0;		# decimal of 1st matching in range
+	mdes="";	# description of mark.
+	last=0;		# last in range
+	ldes="";	# last desc.
+}
+
+BEGIN {
+	print "static";
+	print "Rune\t*__isrune[] =";
+	print "{";
+
+	init();
+}
+
+{
+	codepoint = hex($1);
+	d = tolower($2)
+
+	if(d ~ /<(plane [0-9]+ )?private use/)
+		next;
+	key = ""
+	if(d ~ /<[^,>]+, (first|last)>/){
+		key = d
+		sub(/,.*/, "", key)
+	}
+	if(last + 1 == codepoint || length(key)>0 && key == okey){
+		if(key != okey)
+			okey=""
+		#if(length(key)>0)printf "KEY [%s] [%s]\n", key, okey
+		last = codepoint;
+		ldes = d;
+		next;
+	}
+
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* %s - %s */\n", mark, last, mdes, ldes);
+	} else if (last) {
+		printf("\t0x%04x, 0x%04x,\t/* %s */\n", mark, last, ldes);
+	}
+
+	init();
+	okey = key
+	mark=last=codepoint;
+	ldes=mdes=d;
+}
+
+END {
+	if (last && last > mark){
+		printf("\t0x%04x, 0x%04x,\t/* %s - %s */\n", mark, last, mdes, ldes);
+	} else if (last) {
+		printf("\t0x%04x, 0x%04x,\t/* %s */\n", mark, last, ldes);
+	}
+	print "};"
+	print ""
+}
+ ' | Sprint
+

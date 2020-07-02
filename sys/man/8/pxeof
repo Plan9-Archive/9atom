@@ -1,0 +1,20 @@
+.TH PXEOF 8
+.SH NAME
+pxeof \- map system name to PXE file
+.SH SYNOPSIS
+.B pxeof
+.I system...
+.SH DESCRIPTION
+.I Pxeof uses
+.I ndb (6)
+database to map system names to  a set of PXE files in
+.BR /cfg/pxe 
+by using system's
+.B ether=
+attributes.  All matching PXE files are printed on standard
+output.  Since the script does not have access to bios configuration,
+a match does not mean that the file will be used.
+.SH SOURCE
+.B /rc/bin/pxeof
+.SH "SEE ALSO"
+.IR plan9.ini (8)

@@ -1,0 +1,19 @@
+</$objtype/mkfile
+
+BIN=/$objtype/bin/aux
+
+TARG=realemu
+
+OFILES=\
+	arg.$O\
+	decode.$O\
+	fmt.$O\
+	main.$O\
+	pit.$O\
+	xec.$O\
+
+HFILES=\
+	dat.h\
+	fns.h\
+
+</sys/src/cmd/mkone

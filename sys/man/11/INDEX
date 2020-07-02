@@ -1,0 +1,9 @@
+adr adr
+physalloc physalloc
+physallocdump physalloc
+physfree physalloc
+physinit physalloc
+phystag physalloc
+qmalloc qmalloc
+vmap vmap
+vmap. vmappat vmap

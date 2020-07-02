@@ -1,0 +1,63 @@
+#!/bin/rc
+
+rfork ne
+path=/bin
+
+fn fatal {
+	echo $*
+	exit $"*
+}
+
+flags=()
+while(! ~ $#* 1 && ~ $1 -*){
+	if(~ $1 -c -s){
+		flags=($flags $1)
+		shift
+	}
+	flags=($flags $1)
+	shift
+}
+
+if (! ~ $#* 1)
+	fatal 'usage: contrib/pull [-c file] [-s file] name' >[1=2]
+
+#remove "user" from "user/replica"
+name=`{basename $1}
+repl=/dist/replica/$name
+if (! test -x $repl)
+	fatal no such replica: $name
+
+. $repl
+
+if (~ $#serverchg 0) {
+	serverchg=$s/$name/chg
+	clientchg=$c/client/$name.chg
+}
+
+# check changes
+servermount || fatal mount server failed
+if ( test -e $serverchg) {
+	n=`{ls -l $clientchg >[2]/dev/null |awk '{print $6}'}
+	s=`{ls -l $serverchg >[2]/dev/null |awk '{print $6}'}
+	if (~ $n 0 || ~ $#n 0 || test $s -lt $n) {
+		fcp $serverchg $clientchg
+		cat $clientchg
+	}
+	if not {
+		m=`{echo $n-1024 | hoc}
+		if(~ $m -*)
+			m=0
+		cmp -s $serverchg $clientchg $m $m
+		x=$status
+		switch($x){
+		case *': EOF'
+			tail +^$n^c $serverchg >>$clientchg
+			tail +^$n^c $clientchg
+		case *': differ'
+			fcp $serverchg $clientchg
+			cat $clientchg
+		}
+	}
+}
+
+exec replica/pull -v $flags $repl

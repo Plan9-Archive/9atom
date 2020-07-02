@@ -1,0 +1,153 @@
+dev +dev
+	root
+	cons
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	arch
+	ssl
+	tls
+	cap
+	kprof
+	sd		kwsdalloc
+#	flash
+	twsi
+#	pnp		pci
+	rtc
+
+	ether		netif
+	cec
+	aoe
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum inferno
+	pci
+
+	uart
+	usb
+
+uart +dev
+	uartkw		uartp8250
+
+ip +dev
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+
+link +dev
+	ether1116	ethermii
+	ethermedium
+#	flashkw		ecc
+	loopbackmedium
+	netdevmedium
+	usbehci		usbehcikw
+
+misc
+	rdb
+	coproc
+	softfpu
+	syscall
+	ucalloc
+##	vgavesa
+
+sd +dev
+	sdaoe
+	sdkw		sdscsifis sdatafis
+
+boot cpu
+	tcp
+	il
+
+rootdir
+	boot$CONF.out boot
+	/arm/bin/ip/ipconfig
+	/arm/bin/auth/factotum
+	/arm/bin/usb/usbd
+
+conf
+	int cpuserver = 1;
+	int i8250freq = 3686000;
+
+dbgflg
+	arch		'V'
+	devsegment	'z'
+	main		'x'
+	page		'p'
+	pager		'p'
+	physalloc		'm'
+	sysproc		'E'
+	sysseg		'p'
+	syssem		'S'
+	mmu		'v'
+
+arm +dev
+	arch
+	archmira
+	arm
+	clock
+	coproc
+	fpiarm
+	init9
+	l
+	lexception
+	lproc
+	main
+	mira
+	mmu
+#	sdio
+	softfpu
+	syscall
+	trap
+	uartkw
+	ucalloc
+
+physseg
+	{ .attr=SG_SHARED,	.name="shared",	.size=SEGMAXPG,	.pgszi=1, },
+	{ .attr=SG_BSS,		.name="memory",	.size=SEGMAXPG,	.pgszi=1, },
+
+port
+	alarm
+	qallocb
+	chan
+	dev
+	devtab
+	edf
+	fault
+	image
+	latin1
+	page
+	pager
+	parse
+	pgrp
+	portclock
+	print
+	proc
+	ps
+	qio
+	qlock
+	rebootcmd
+	segment
+	sysauth
+	sysfile
+	sysproc
+	sysseg
+#	syssem
+	systab
+	taslock
+	tod
+	syscallfmt
+
+dir
+	ip
+	port
+
+lib
+	libip
+	libsec
+	libmp
+	libfis
+	libc

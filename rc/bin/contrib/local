@@ -1,0 +1,35 @@
+#!/bin/rc
+
+rfork e
+
+repldir=/dist/replica
+filt=cat
+fn usage {
+	echo 'usage: contrib/local [-c] [-p]' >[1=2]
+	exit  usage	
+}
+
+fn pfilt {
+	if(~ $repldir /dist/replica)
+		awk '{print "contrib/pull " $1}'
+	if not
+		awk '{print "contrib/push " $1}'
+}
+
+while (! ~ $#* 0 && ~ $1 -*) {
+	switch ($1) {
+	case -c
+		repldir=$home/lib/replica/cfg
+	case -p
+		filt=pfilt
+	case -*
+		usage
+	}
+	shift
+}
+if(! ~ $#* 0)
+	usage
+@{
+	cd $repldir
+	ls | grep -v '^(cd|client|didplan9|kfs|network|plan9|plan9\.proto)$'|$filt
+}

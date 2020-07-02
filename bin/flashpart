@@ -1,0 +1,26 @@
+#!/bin/rc
+rfork e
+
+nl='
+'
+# no agreement on flash0 vs flash
+map0=('' 1 2 3 4 5 6 7 8 9)
+map1=(0 1 2 3 4 5 6 7 8 9)
+
+fn flashpart{
+	ifs='/ 	'$nl x=`{echo $flash0part}
+	while(! ~ $#x 0){
+		echo add $x(1-3)>flashctl
+		x=$x(4-)
+	}
+}
+
+for(i in `{seq 0 9}){
+	x=flash$i^part
+	x=$$x
+	j=`{echo $i + 1 | hoc}
+	if(! ~ $#x 0)
+	if(bind -a '#F'$i /dev)
+	if(cd /dev/flash$map0($j) || cd /dev/flash$map1($j))
+		flashpart $x
+}

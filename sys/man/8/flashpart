@@ -1,0 +1,74 @@
+.TH FLASHPART 8
+.SH NAME
+flashpart, flashprep \- partition and prepare flash partitions
+.SH SYNOPSIS
+.B flashpart
+.br
+.B kw/flashprep
+[
+.B -vIWK
+]
+[
+.B -i
+.I plan9.ini
+]
+[
+.B -k
+.I kernel
+]
+[
+.B -e
+erasesz
+]
+.SH DESCRIPTION
+These programs assist in dealing with on-board flash.
+.I Flashpart
+uses the environment variable
+.BI flash n part
+to partition the flash device
+.BI #F n\fR.\fP
+The variable is formatted as a sequence of partitions
+seperated by
+.LR / .
+Each partition is described by the space-seperated 3-tuple
+of name, start offset and end offset.
+.PP
+The
+.I flashprep
+tool builds a stand-alone bootable flash with nvram,
+.IR plan9.ini (8)
+and
+a kernel then emits a u-boot boot command for the image
+and attempts to create the appropriate partitions in
+.BI #F n\fR.\fP
+For ease of management, each element is put in a
+seperate flash erase unit.  The erase size is read from
+.BI #F n
+but may be overridden with
+.BR -e .
+The default configuration file is
+.B /cfg/pxe/ ea
+and may be changed with the
+.B -i
+flag.
+The default kernel is
+.B /arm/9plug
+and may be changed with the
+.B -k
+flag.
+.PP
+Partitions may be s
+With
+.B -I
+only
+.I plan9.ini
+is rewritten.  With
+.B -W
+only the nvram is rewritten.
+.SH "SEE ALSO"
+.IR auth (8),
+.IR booting (8),
+.IR flash (3),
+.IR flashfs (4),
+.IR plan9.ini (8),
+.IR sd (3)

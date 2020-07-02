@@ -1,0 +1,68 @@
+.TH WS 3
+.SH NAME
+ws \- wait statistics
+.SH SYNOPSIS
+.nf
+.B bind -a #W /dev
+.sp 0.3v
+.B /dev/wsctl
+.B /dev/wsdata
+.fi
+.SH DESCRIPTION
+.I Ws
+collects wait statistics for individual
+.IR lock s,
+.IR slock s,
+and
+.IR qlock s.
+A
+.I slock
+entry tracks the time spent acquiring the
+lock inside a
+.B QLock
+or
+.B RWLock
+while
+a
+.I qlock
+tracks the time waiting on the scheduling queue
+for a
+.IR qlock (2)d
+(or
+.IR wlock ,
+etc.) lock to become available.
+The statistics collected are the number of lock events,
+the maximum wait cycles, and the cumulative wait cycles.
+The cycles are counted as
+.I cycles
+(see
+.IR cputime (2)).
+.PP
+The
+.B ctl
+file takes the following commands:
+.TF "\fBstartxx
+.TP
+.B start
+start data collection,
+.TP
+.B stop
+stop data collection, and
+.TP
+.B clear
+forget collected data.
+
+.PP
+The
+.B data
+file is suitable for parsing with
+.IR getfields (2)
+and has 5 fields per wait: type, program counter,
+count, maximum wait, and cumulative wait.  Fields
+are space seperated, and records end with a newline.
+.SH SOURCE
+.B /sys/src/nix/port/devws.c
+.SH "SEE ALSO"
+.IR wsprint (8)
+.SH BUGS
+The naming conventions are confusing.

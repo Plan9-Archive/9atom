@@ -1,0 +1,73 @@
+#!/bin/rc
+# usbid [-v] - dump usb configuration
+rfork e
+fn verbose {
+	if (! test -f /lib/usb)
+		echo pci: no /lib/usb >[1=2]
+	awk '
+
+	BEGIN{
+		field = ' ^ $1 ^ '
+		file="/lib/usb"
+		FS="\t"
+		while(getline <file > 0){
+			if(/^[#;]/) continue
+			if(/^[0-9A-Fa-f]/){
+				vid=$1 #vid=$1
+				vendor[vid] = $2
+			}
+			if(/^	[0-9A-Fa-f]/){
+				did=$2
+				id[vid "/" did] = $3
+			}
+		}
+		FS = " "
+	}
+
+	{
+		print $0
+		if(field>0)
+			vid=$field
+		else for(i = 1;; i++)
+			if(i == NF)
+				next
+			else if($i ~ /^vid.*/){
+				vid=$(i+1)
+				break;
+			}
+
+		s = ""
+		if(vid in id)
+			s = id[vid]
+
+		sub(/\/.*/, "", vid)
+		if(vid in vendor)
+			print "\t" vendor[vid]
+		else
+			print "\t" "unknown"
+		print "\t\t" s
+	}
+' | dd -conv sync -quiet 1
+}
+
+filter=cat
+flagfmt=v,b
+args='[vid/did ...]'
+if(! ifs=() eval `{aux/getflags $*}){
+	aux/usage
+	exit usage
+}
+
+if(! ~ $#* 0){
+	{
+		for(i in `{echo $* | tr 'A-Z' 'a-z'})
+			echo $i
+	} | verbose 1
+	exit ''
+}
+
+if(~ $#flagv 1)
+	filter=(verbose -1)
+
+usb/probe | sed 's:vid (0x)?([0-9a-f]+) did (0x)?:vid/did \2/:g' |
+	$filter

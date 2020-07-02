@@ -1,0 +1,41 @@
+#!/bin/rc
+rfork e
+. common.rc
+
+awk '-F;' '
+' ^ $hex ^ '
+
+BEGIN {
+}
+
+$3 ~ /^L.$/ {
+	cp = hex($1);
+	if(cp > last)
+		last = cp
+	if(length($14)>=4)
+		lc[cp] = $14
+	if(length($6) >= 4 && $6 !~ /<.*/)
+		val[cp] = $6
+}
+
+END {
+	print "static";
+	print "Rune\t__base2[] =";
+	print "{";
+
+	for(i = 0; i < last; i++){
+		cp = i
+		while(length(r = val[cp]) > 0){
+			cp = hex(r)
+			if(cp == 0)
+				print "broke at [" $0 "] r= " r
+		}
+#		if(length(r = lc[cp]) > 0)
+#			cp = hex(r)
+		if(cp != i)
+			printf("\t0x%04x,\t0x%04x,\t/* \\u%04x \\u%04x */\n", i, cp, i, cp);
+	}
+
+	print "};";
+	print "";
+} ' <{Unicode} | Sprint

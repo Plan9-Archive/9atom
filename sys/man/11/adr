@@ -1,0 +1,133 @@
+.TH ADR 9
+.SH NAME
+adr \- physical address map
+.SH SYNOPSIS
+.B cat '#P/adr'
+.br
+.de PB
+.PP
+.ft L
+.nf
+..
+.PB
+#include "adr.h"
+enum {
+	Anone,
+	Amemory,
+	Areserved,
+	Aacpireclaim,
+	Aacpinvs,
+	Aunusable,
+	Adisable,
+
+	Aapic,
+	Apcibar,
+	Ammio,
+	Alast		= Ammio,
+};
+.PB
+enum {
+	Mfree,
+	Mktext,
+	Mkpage,
+	Mupage,
+	Mvmap,
+	Mlast		= Mvmap,
+};
+.PB
+.PD 0
+.ta +\w'\fL      'u +\w'\fL    'u +6n +4n
+uintmem	adralloc(uintmem base, uintmem len, int align,
+		int type, int use, uint flags)
+.PB
+void	adrdump(void)
+.PB
+void	adrinit(void)
+.PB
+void	adrmapck(uintmem base, uintmem len,
+		int type, int use)
+.PB
+int	adrmapenc(uintmem *base, uintmem *len,
+		int type, int use)
+.PB
+void	adrmapinit(uintmem base, uintmem len,
+		int type, int use)
+.PB
+uint	adrmemflags(uintmem pa)
+.PB
+void	adrfree(uintmem base, uintmem len)
+.PB
+uintmem	adrmemtype(uintmem pa, uintmem *len,
+		int *type, int *use)
+.SH DESCRIPTION
+The physical address map is managed by
+.IR adr .
+Map entries consist of a base, length address type
+(e.g. memory, mmio, etc.), current use and
+caching flags.  The map is initlialized from the
+.B *e820
+configuration variable (see
+.IR plan9.ini (8)),
+PCI mappings, ACPI and other memory-mapped
+devices such as I/O APICs and LAPICs.  Address ranges may
+be allocated by address type;
+.I adr
+splits address ranges as necessary.  Allocated maps
+are indicated by a non-
+.B Mfree
+value of
+.BR use .
+When maps are freed, they are merged with adjacent
+maps of the same address type.
+.PP
+The functions for accessing maps are as follows
+.PP
+.TP
+.BI adralloc( base\fP,\fP\ len\fP,\fP\ align\fP,\fP\ type\fP,\fP\ use\fP,\fP\ flags )
+Allocate from existing memory maps with the given alignment.
+A matching map must exist and be free, but will be split to fit
+the allocation.  The memory type for the range is set to
+.IR type .
+.TP
+.B adrdump()
+Dump all maps to the console for debugging.  (See
+.BR #P/adr .)
+.TP
+.B adrinit()
+Set up the address map.  This is called early in
+.BR main .
+.TP
+.BI adrmapinit( base\fP,\fP\ len\fP,\fP\ type\fP,\fP\ use )
+Enter a new physical mapping to be entered into
+the
+.I adr
+map.  The map must not overlap existing maps.
+.TP
+.BI adrmapck( base\fP,\fP\ len\fP,\fP\ type\fP,\fP\ use )
+Ensure that the given map exists and is the correct type.
+Correct the map if necessary.  This is useful to work
+around machines that do not reserve memory for I/O
+APICs and such.
+.TP
+.BI adrfree( base\fP,\fP\ len )
+Delete the given mapping.
+.TP
+.BI adrmapenc( *base\fP,\fP\ *len\fP,\fP\ type\fP,\fP\ use )
+Find the enclosing map, and convert it to the type and use.
+Return 0 if successful, and -1 otherwise.
+.TP
+.BI adrmemtype( pa\fP,\fP\ *len\fP,\fP\ *type\fP,\fP\ *use )
+Find the enclosing map, and return the base address.  Also
+return the size, type, and use, if the corresponding pointers
+are not nil.
+.TP
+.BI adrmemflags( pa )
+Return the memory flags for the enclosing region.  This
+is used by
+.IR vmap (9nix)
+to maintain consistent caching flags.
+.SH SOURCE
+.B /sys/src/nix/k10/adr.c
+.SH "SEE ALSO"
+.IR plan9.ini (8),
+.IR vmap (9nix).

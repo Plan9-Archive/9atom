@@ -1,0 +1,5 @@
+CC=gcc
+CFLAGS+=-DLINUX -Wall -Wno-main -Wno-missing-braces -Wno-parentheses -Wno-switch -O2 -g -c -I.
+O=o
+AR=ar
+ARFLAGS=rvc

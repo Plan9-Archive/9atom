@@ -1,0 +1,40 @@
+.TH IMGTYPE 1 
+.SH NAME
+imgtype  \- command line to convert image to
+.IR image (6)
+format
+.SH SYNOPSIS
+.B imgtype
+[
+.B -Bet
+]
+.I ...
+.SH DESCRIPTION
+.I Imgtype
+cycles through the given files or standard input
+and generates a command line for each to
+convert it to
+.IR image (6)
+format.  With the 
+.BR -e
+flag, the command is executed rather than
+printed.  The
+.BR -t
+flag forces truecolor images.
+If no files are given, stdin is read instead.
+The
+.B -B
+flag causes each read of stdin to start a
+new cycle.
+.SH SOURCE
+.B /sys/src/cmd/imgtype.c
+.SH "SEE ALSO"
+.IR draw (2),
+.IR image (6),
+.IR imgtype (1),
+.IR page (1),
+.IR resample (1).
+.SH BUGS
+The
+.B -B
+flag is wierd.

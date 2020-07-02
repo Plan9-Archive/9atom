@@ -1,0 +1,26 @@
+</sys/doc/fonts
+OBJ=\
+	p0\
+	p1\
+	p2\
+	p3\
+	p4\
+	p5\
+	p6\
+	p7\
+	p8\
+	p9\
+	pa\
+
+fs.ps:D:	$OBJ
+	{echo $FONTS; tbl $OBJ } | eqn | troff -ms | lp -dstdout >$target
+	../cleanps $target
+
+fs.trout:D:	$OBJ
+	{echo $FONTS; tbl $OBJ } | eqn | troff -ms >$target
+
+fs.html:D:
+	{echo $FONTS; tbl $OBJ } | eqn | htmlroff -ms -mhtml >$target
+
+clean:V:
+	rm -f fs.^(html trout ps pdf)

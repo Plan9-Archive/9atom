@@ -1,0 +1,147 @@
+.TH SDODIN 3
+.SH NAME
+sdodin \- Marvell Odin II SAS/SATA drivers
+.SH SYNOPSIS
+.nf
+.B bind -a #S /dev
+.sp 0.3v
+.BI /dev/sdctl
+.sp 0.3v
+.BI /dev/sd a 0/ctl
+.BI /dev/sd a 0/raw
+.BI /dev/sd a 0/data
+.BI /dev/sd a 0/led
+\&...
+.fi
+.SH DESCRIPTION
+The
+.I sdodin
+driver provides access to SAS, SATA and ATAPI devices via the
+.IR sd (3)
+interface.  The Odin programming interface supports up to 16
+hot-swappable devices per controller.
+.PP
+Odin controllers are detected automatically.
+Currently only the Marvell 6485 is supported, although
+devices using the Marvell 6420, 6440 and 6480 chipsets can
+likely be supported with minimal changes.
+.PP
+The top level control file,
+.BR /dev/sdctl ,
+supports the following control messages for
+.IR sdodin :
+.TF "\fLodin idprint"
+.TP
+.B odin debug
+Toggle debug messages.  Default is off.
+.TP
+.B odin idprint
+Toggle printing of drive identification messages.  Default is on.
+Prints short messages when a drive is identified or removed.
+.TP
+.B odin aprint
+Print SCSI commands executed.  Default is off.
+.PD
+.PP
+The device-level
+.B ctl
+file supports:
+.TF \fLnopower
+.TP
+.BI "state " state
+Force a transition to the named
+.IR state .
+The states are:
+.RS
+.TF portreset
+.TP
+.B null
+ignored (may only be reached manually);
+.TP
+.B missing
+not detected;
+.TP
+.B nopower
+detected in power-saving state;
+.B new
+newly discovered;
+.TP
+.B ready
+ready for commands;
+.TP
+.B error
+not ready for commands due to error;
+.TP
+.B reset
+being reset gently;
+.TP
+.B portreset
+being fully reset;
+.TP
+.B offline
+device failed
+.B portreset
+(a port reset will be attempted periodically).
+.RE
+.PD
+.PP
+For devices present at boot, the transition is from state
+.B new
+to state
+.BR ready .
+.PP
+The
+.B led
+file allows the external control of enclosure LED
+states through SES-2 messages over GPIO/SFF-8485.  I²C
+transport is not supported.  The contents of the
+.B led
+file is the current state of the port's LEDs.  Writing
+a state to the file will set the given state.
+The Odin does not set LED states and slots without
+drives may not be controlled.  The standard SES states accepted are
+.TF \fLfailarray
+.TP
+.B none
+no state set;
+.TP
+.B normal
+nominal condition;
+.TP
+.B rebuild
+parent lun is rebuilding;
+.TP
+.B locate
+show drive location;
+.TP
+.B spare
+hot spare drive;
+.TP
+.B pfa
+predicted failure;
+.TP
+.B critarray
+array has lost redundency;
+.TP
+.B failarray
+failed array;
+.TP
+.B fail
+drive has failed and should be replaced.
+backplane buzzer will sound.
+.PD
+.PP
+The LED state has no effect on drive function.
+.SH SOURCE
+.B /sys/src/9/pc/sdodin.c
+.SH SEE ALSO
+.IR atazz (8),
+.IR scuzz (8),
+.IR sd (3),
+SES-2 (ANSI INCITS 305-1998)
+.SH BUGS
+Enclosure management, port multipliers and SAS expanders
+are not supported.  Commands that take too long to
+complete will be timed out;
+.L "security erase unit"
+is almost certain to time out.

@@ -1,0 +1,133 @@
+.TH CEC 8
+.SH NAME
+cec \- Coraid Ethernet Console
+.SH SYNOPSIS
+.B cec
+[
+.B -dp
+] [
+.B -S
+.I srv
+] [
+.B -c
+.I esc
+] [
+.B -e
+.I ea
+] [
+.B -h
+.I host
+[
+.B -s
+.I shelf
+] [
+.B interface
+]
+.SH DESCRIPTION
+The
+.I cec
+command uses raw ethernet frames to connect to a CEC
+server to simulate a serial connection.  The client and
+protocol provide for packet acknowledgement and
+retransmission.
+Coraid appliances and Coraid Plan 9 kernels can currently be
+CEC servers.  Each uses CEC to provide console access.
+.PP
+A
+.I cec
+process starts by probing the specified network interface
+for available CEC servers.  The default is
+.I /net/ether0 .
+Only one
+.I cec
+process may be run per ethernet interface.  The
+.B -S
+flag posts its argument to
+.B /srv
+to allow sharing.
+If the server is specified with the
+.BR -b ,
+.BR -h ,
+or
+.B -s
+flag, the connection will
+proceed immediately upon discovery of the first CEC server
+with the specified address.  Otherwise, a selection prompt
+will be displayed showing the discovered CEC servers 
+available for communication.  Unless the
+.B -p
+flag is specified, 
+.I cec
+exits if no matching servers are found.
+.IP
+.EX
+ 0 5 003048865f1e shelf5
+ [#qp]: 
+.EE
+.LP
+The selection prompt accepts
+.TP
+.I n
+Connect to server
+.I n
+(from the first column),
+.TP
+.B p
+Probe the interface again, and
+.TP
+.B q
+Quit.
+.PP
+Note the selection number is not the shelf address but the
+.IR cec -generated
+sequence number printed in the leftmost column.
+.PP
+Once connected to a cec server, entering the escape sequence
+will drop the user into an escape prompt where the user may
+type 'q' to quit the connection, 'i' to send the escape sequence
+across the connection, or '.' to continue the connection.
+The escape sequence is printed on connection.
+If the connection is unexpectedly lost,
+the initial probe process outlined above is rerun.
+.SS Options
+.TP 1i
+.BI -c " esc"
+Set the escape caracter to
+.BI ctl -
+.IR esc .
+The default setting is
+.BR ctl -\e.
+.TP
+.B -d
+Output debugging information.
+.TP
+.BI -e " ea"
+Connect to the server with ethernet address
+.IR ea .  This option implies
+.IR -p .
+.TP
+.BI -h " host"
+Connect to the server named
+.IR host .
+Note this name may not be the same as the value of
+.LR /dev/sysname .
+.TP
+.B -p
+Persistence.  Continue trying to connect even if
+there are no matching servers.  This is useful when
+connecting to a cpu server before it boots.
+.TP
+.BI -s " shelf"
+Connect to the server at shelf address
+.IR shelf .
+.SH "SEE ALSO"
+.IR cec (3).
+.SH BUGS
+The CEC protocol should be integrated with the console server.
+.PP
+CEC should multiplex network connections as
+.B /net/tcp
+does.
+.PP
+Early boot information and very late crash information from servers
+may be lost due to timing quirks.

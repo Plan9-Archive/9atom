@@ -1,0 +1,147 @@
+.TH TYPES 2
+.SH NAME
+types \- c type system
+.SH SYNOPSIS
+.BR char , 
+.BR short ,
+.BR int , 
+.BR vlong
+.PP
+.BR uchar ,
+.BR ushort ,
+.BR uint ,
+.BR uvlong
+.PP
+.BR u8int ,
+.BR u16int ,
+.BR u32int ,
+.BR u64int
+.PP
+.B Rune
+.PP
+.BR usize ,
+.BR uintptr
+.PP
+.B uintmem
+.PP
+.B schar
+.SH DESCRIPTION
+The Plan 9 C compilers and system use a specialization of the C99 type system,
+which has evolved over time.
+The compilers are unsigned preserving, and
+.B char
+can be assumed to be a signed value.
+Although the system currently makes heavy use of
+.BR ulong 
+to represent exactly-32-bit integers and pointers as unsigned
+integers, this practice is no longer supportable with the advent of
+true 64-bit compilers.  Having a more explicit type set permits us to
+be more specific about intent and is helpful to maintain portability
+to other systems, especially Plan 9 from User Space.
+.PP
+The basic 8, 16, 32 and 64-bit types are
+.BR char ,
+.BR short ,
+.BR int ,
+and
+.BR vlong.
+Conventionally, unsigned types simply prepend a "u" to the basic type name rather
+than using the
+.B unsigned
+prefix.
+.PP
+Most programs will need no more integer types than this.  Exceptions
+come in two forms: the need to be specific about use to aid in
+porting, and type widths fixed by hardware or protcols.
+The system call interface does not fit the second case since the compiler
+itself will pick the same sizes for both kernel and user space.
+.PP
+To specify an integer of a particular width, the form
+.BI u bits int
+is used.  Types for 8, 16, 32, and 64 bit-width specific unsigned
+integers are available.  There are no signed variants of these as they
+are not useful where size-specific types are appropriate.  As a
+special case,
+.B uchar
+is assumed to be equivalent to
+.BR u8int .
+Beware of using size-specific integers in a structure as a marshalling
+technique.  The compiler is free to pad the structure and endian
+conversion can easily be forgotten.  Consider using a structure
+of basic types (typically uchar) marshalled with functions as in
+.IR getbe (2).
+.PP
+The
+.B Rune
+type stands alone.  It holds a single unicode codepoint as
+described in
+.IR rune (2)
+and
+.IR utf (6).
+.PP
+The use-specific types are
+.B usize
+and
+.BR uintptr .
+.B Usize
+represents the type returned by the C
+.B sizeof
+operator.  It is typically the same width as a virtual address.
+In order to ease the transition to 64-bits, the AMD64 compiler
+currently uses a 32-bit
+.BR usize .
+An integer representation of a virtual-address pointer is represented by the type
+.BR uintptr .
+.PP
+The kernel additionally needs to specify a type to represent a
+physical address. Since physical addresses may be the same size,
+larger (PAE) or smaller than virtual addresses,
+.B uintmem
+as a physical address may be the same size, larger (PAE), or smaller than a virtual address.
+.B Uintmem
+also stores the sizes of things that
+.B uintmem
+might address.
+.PP
+Finally,
+.B schar
+is used when porting to other systems where it may matter.  It should not generally be used.
+.SH EXAMPLES
+The C library has a number of functions which are in need
+of conversion.  For example,
+.IP
+.EX
+void*	malloc(usize nbytes);
+int		segfree(void *va, usize len);
+uintptr	getcallerpc(void*);
+.EE
+.PP
+A device driver might access a 32-bit register with
+.IP
+.EX
+u32int regval;
+
+regval = regbase[regoff/4];
+.EE
+.PP
+In the kernel we could convert between physical and virtual addresses
+this way:
+.IP
+.EX
+uintmem	upaddr(uintptr kva);
+uintptr	upaddr(uintmem pa);
+.EE
+.PP
+The actual functions use
+.B void*
+for kernel addresses.
+.SH "SEE ALSO"
+.IR 8c (1),
+.IR getbe (2),
+.IR rune (2),
+.IR utf (6),
+.br
+Plan 9 from User Space,
+.B http://swtch.com/plan9port
+.SH BUGS
+The spirit of the original type system has faded with time.

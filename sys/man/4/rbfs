@@ -1,0 +1,108 @@
+.TH RBFS 4
+.SH NAME
+rbfs  \- ring buffer memory file system
+.SH SYNOPSIS
+.B rbfs
+[
+.B -Dipsu
+]
+[
+.B -m
+.I mountpoint
+]
+[
+.B -S
+.I srvname
+]
+[
+.B -l
+.I linelen
+]
+[
+.B -n
+.I nlines
+]
+.SH DESCRIPTION
+.I Rbfs
+starts a process that mounts itself (see
+.IR bind (2))
+on
+.I mountpoint
+(default
+.BR /n/rb ).
+The
+.I rbfs
+process implements a file tree rooted at
+.IR dir ,
+keeping all files in memory.
+Initially the file tree is empty.
+Each file is modeled as a ring buffer of writes.
+The default number of writes is 1024, and the
+default maximum write size is 256. The
+.B -n
+and
+.B -l
+flags alter these defaults.
+.PP
+The
+.B -D
+option enables a trace of general debugging messages.
+.PP
+The
+.B -i
+flag tells
+.I rbfs
+to use file descriptors 0 and 1 for its communication channel
+rather than create a pipe.
+This makes it possible to use
+.I rbfs
+as a file server on a remote machine: the file descriptors 0
+and 1 will be the network channel from
+.I rbfs
+to the client machine.
+.PP
+The
+.B -p
+flag causes
+.I rbfs
+to make its memory `private'
+(see
+.IR proc (3))
+so that its files are not accessible through the debugging interface.
+.PP
+The
+.B -s
+.RB ( -S )
+flag causes
+.I rbfs
+to post its channel on
+.B /srv/rbfs
+.RB ( /srv/ \fIsrvname\fR)
+rather than mounting it on
+.IR mountpoint ,
+enabling multiple clients to access its files.
+However, it does not authenticate its clients and its
+implementation of groups is simplistic, so
+it should not be used for precious data.
+.PP
+The
+.B -u
+option permits
+.I rbfs
+to consume as much memory as needed;
+without it,
+.I rbfs
+will limit its consumption to some arbitrary amount,
+currently 768MB (enough to hold a CD image).
+.PP
+This program is useful mainly as an example of how
+to write a user-level file server.
+It can also be used to provide high-performance temporary files.
+.SH SOURCE
+.B /sys/src/cmd/rbfs
+.SH "SEE ALSO"
+.IR bind (2) ,
+.IR ramfs (4),
+.SH BUGS
+Should be integrated with ramfs.  Should
+provide per-file limits.

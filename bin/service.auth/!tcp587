@@ -1,0 +1,7 @@
+#!/bin/rc
+#smtp serv net incalldir user
+
+user=`{cat /dev/user}
+if(test -f /srv/ratify)
+	mount /srv/ratify /mail/ratify
+exec upas/smtpd -c /sys/lib/tls/cert.pem -p -aqeEDn $3

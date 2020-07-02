@@ -1,0 +1,14 @@
+config m0
+service plano
+filsys other a0
+filsys main cp(m2)0.10{m1e99.0[e64.<0-3>]}
+filsys dump o
+ip0 205.185.197.110
+ipgw0 205.185.197.254
+ipmask0 255.255.255.0
+ipflag0 cec aoe
+ip1 205.185.197.109
+ipgw1 205.185.197.254
+ipmask1 255.255.255.0
+ipflag1 aoe
+end

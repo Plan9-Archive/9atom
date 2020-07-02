@@ -1,0 +1,15 @@
+#!/bin/rc
+# start abaco and its prerequisites
+rfork n
+
+# outside && bind /net.alt /net
+
+if(~ $#htmlfont 0)
+	htmlfont=/lib/font/bit/htmlfont/vera
+if(! test -e /mnt/web/clone){
+	webfs
+	echo -n useragent netscape 1.0 >/mnt/web/ctl
+}
+if(! test -e /mnt/webcookies/cookies)
+	webcookies
+exec abaco $*

@@ -1,0 +1,42 @@
+</$objtype/mkfile
+<../mkupas
+
+TARG=	fs\
+
+OFILES=\
+	bos.$O\
+	cache.$O\
+	fs.$O\
+	header.$O\
+	idx.$O\
+	imap.$O\
+	mbox.$O\
+	mdir.$O\
+	mtree.$O\
+	plan9.$O\
+	planb.$O\
+	pop3.$O\
+	ref.$O\
+	remove.$O\
+	rename.$O\
+	strtotm.$O\
+
+LIB=../common/libcommon.a$O\
+
+HFILES= ../common/common.h\
+	dat.h
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${TARG:%=%.c}\
+	${OFILES:%.$O=%.c}\
+
+</sys/src/cmd/mkone
+CFLAGS=$CFLAGS  -I../common
+
+acid:V:
+	$CC -a $CFLAGS fs.c>a
+
+chkidx: mtree.$O chkidx.$O
+	$LD $LDFLAGS -o $target $prereq

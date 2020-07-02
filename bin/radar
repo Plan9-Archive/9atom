@@ -1,0 +1,82 @@
+#!/bin/rc
+rfork enf
+
+# N0R: Base Reflectivity
+# N0S: Storm Relative Motion
+# N0V: Base Velocity
+# N1P: One-Hour Precipitation
+# NCR: Composite Reflectivity
+# NTP: Storm Total Precipitation
+p=N0R
+b=http://radar.weather.gov/ridge
+#code=FFC
+
+flagfmt='t,9'
+if(! ifs=() eval `{aux/getflags $*}){
+	aux/usage
+	exit usage
+}
+
+code=()
+if(~ $#* 1 && ~ $*(1) ???)
+	code=`{grep -i '^'^$* /lib/radar/stations | sed 's:	.*::g'}
+if(! ~ $#code 1){
+	y=`{latcmp -l `{gmap -l $*} -m /lib/radar/stationlat}
+	if(~ `{echo $y(4) '>' 321868 | hoc} 1){
+		echo out of us radar range >[1=2]
+		exit range
+	}
+	code=$y(1)
+}
+if(! ~ $#code 1){
+	echo cant find $* >[1=2]	
+	exit noradar
+}
+*=()
+
+f=/lib/radar/$code
+g=()
+
+flag=()
+nl='
+'
+l = (topo.jpg county.gif cities.gif warn.gif hw.gif radar.gif)
+
+fn sigint{
+	rm -f $g
+}
+
+fn fail{
+	sigint
+	echo get $g failed >[1=2]
+}
+
+fn get{
+	g=$f/$2
+	if(~ $#* 3)
+	if(test -f $f/$2)
+	if(test $f/$2 -ot $3)
+		rm $g
+	if(! test -f $f/$2)
+		hget $b/$1 > $g || fail
+	g=()
+}
+
+mkdir -p $f
+# get graphics/black.gif black.gif
+get Overlays/Topo/Short/$code^_Topo_Short.jpg topo.jpg &
+get Overlays/County/Short/$code^_County_Short.gif county.gif &
+get Overlays/Highways/Short/$code^_Highways_Short.gif hw.gif &
+get Overlays/Cities/Short/$code^_City_Short.gif cities.gif &
+get RadarImg/$p/$code^_$p^_0.gif radar.gif 15m &
+get Warnings/Short/$code^_Warnings_0.gif warn.gif 15m &
+wait
+
+flags=($flagt $flag9)
+if(~ $#flags 0){
+	if(test -e /dev/acme)
+		flag=($flag -w)
+	compose $* -t $f/$l|page $flag
+}
+if not
+	compose $* -t $f/$l

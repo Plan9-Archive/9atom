@@ -1,0 +1,3 @@
+0,10,20,30,40,50 * * * * ladd	/rc/bin/restartdns
+# 30 09 * * 6	local	/lib/rfc/grabrfc
+# 01 05 1 * *	local	cd /sys/lib/man/lookman; mkindex

@@ -1,0 +1,56 @@
+.TH RESTARTDNS 8
+.SH NAME
+restartdns \- restart dns and mail problem report
+.SH SYNOPSIS
+.B restartdns
+[
+.B -f
+]
+.SH DESCRIPTION
+.I Restartdns
+automates restarting
+.I dns
+(see
+.IR ndb (8))
+safely and emailing a problem
+report.  You must be the hostowner to run it.
+Typically
+.I restartdns
+is run from a cron job.
+With no arguments,
+.I dns
+is restarted if there are broken
+.I dns
+processes or processes in
+“query lock wait” state.  In this
+case a snapshot of all dns processes
+is taken and saved to
+.BI /n/other/ user /dnssnap/ host.pid.unixtime 
+and notification email is sent.
+The
+.B -f
+flag forces a restart.
+.PP
+The script itself contains configuration
+information such as the list of legal
+host and the recipients of notification
+email.
+.PP
+In Athens, the typical solution is to run
+.I restartdns
+on the dns server, currently
+.BR atlas ,
+as the hostowner,
+currently
+.BR dennis .
+.SH SOURCE
+.B /rc/bin/restartdns
+.SH BUGS
+Due to namespace issues,
+.IR drawterm (8)
+users of the restarted system
+will need to log back in
+to get proper name resolution.
+.SH "SEE ALSO"
+.IR cron (8),
+.IR ndb (8).

@@ -1,0 +1,24 @@
+#!/bin/rc
+
+rfork e
+if(! ~ $#* 1){
+	echo usage: $patch/okay dir >[1=2]
+	exit usage
+}
+
+i=$1
+files=(files removed readme email)
+for(f in $files)
+	if(! test -e $i/$f ){
+		echo  'missing file: '^$i/$f >[1=2]
+		exit 'missing file: '^$i/$f
+	}
+if(grep -v '^/[_a-zA-Z0-9.\-+/:]+	[_a-zA-Z0-9.\-+:]+$' <$i/files){
+	echo $i: bad file list >[1=2]
+	exit 'bad file list' 
+}
+if(grep -v '^(/[_a-zA-Z0-9.\-+/:]+)|$' $i/removed){
+	echo $i: bad removed list >[1=2]
+	exit 'bad removed list' 
+}
+exit ''

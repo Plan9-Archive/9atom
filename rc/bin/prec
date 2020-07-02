@@ -1,0 +1,19 @@
+#! /bin/rc
+label prec
+cat <<!
+left to right	fn() [] -> .
+right to left	! ~ ++ -- - (type) * & sizeof
+left to right	* / %
+left to right	+ -
+left to right	<< >>
+left to right	< <= > >=
+left to right	== !=
+left to right	&
+left to right	^
+left to right	|
+left to right	&&
+left to right	||
+right to left	?:
+right to left	= += -= etc.
+left to right	,
+!

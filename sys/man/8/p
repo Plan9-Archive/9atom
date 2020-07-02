@@ -1,0 +1,70 @@
+.TH P 8
+.SH NAME
+P  \- activate power switch
+.SH SYNOPSIS
+.B P
+.I system ...
+.br
+.B apc/genpwrdb
+.I system ...
+.SH DESCRIPTION
+.I P
+power cycles a system attached to a power switch.  Currently
+.I P
+only knows how to operate
+.B WTI 
+and
+.B APC 
+switches with
+.I telnet
+(see
+.IR con (1))
+access and
+.B Cyberpower
+switches with
+.IR C (1)
+access. The systems attached are defined in a series of
+.IR ndb (6)
+files named
+.BI consoledb. powersw\fR,
+where
+.I powersw
+is the name of the power switch.  Currently there
+are no access controls.  Power switch
+entries are of the form
+Consoles are defined by entries of the form:
+.PP
+.EX
+	type=wti
+		power=shelf428
+		...
+.EE
+.PP
+Each
+.IR power / type / system
+association represents a machine
+.I system
+on switch
+.I power
+with type
+.IR type .
+Currently there is no coordination between
+the instances of
+.IR P .
+.PP
+For APC power strips.
+.I apc/genpwrdb
+maybe used to generate a data base from the current power
+strip configuration.
+.SH FILES
+.TF /lib/ndb/powerdb.sysname
+.TP
+.BI /lib/ndb/powerdb\fR. sysname
+Power databases.
+.SH SOURCE
+.B /rc/bin/P
+.br
+.B /rc/bin/apc/genpwrdb
+.SH BUGS
+A file server for coordination would be helpful.
+

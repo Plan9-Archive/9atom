@@ -1,0 +1,153 @@
+dev
+	root
+	cons
+	arch
+	pnp		pci	bios32
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	rtc
+	ssl
+	tls
+	cap
+	kprof
+	trace		archtrace
+#	fs
+
+	ether		netif
+	cec
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum386 inferno
+	aoe		ip
+
+	draw		screen vga vgax swcursor
+	mouse		mouse
+	vga
+	kbmap
+	kbin
+
+	sd	sdalloc
+#	floppy		dma
+#	lpt
+
+	audio
+#	pccard
+#	i82365		cis
+	uart
+	usb
+
+link
+	realmode
+#	devpccard
+#	devi82365
+	apm		apmjump
+	ether2000	ether8390
+#	ether2114x	pci
+#	ether589	etherelnk3
+	ether79c970	pci
+#	ether8003	ether8390
+	ether8139	pci
+	ether8169	pci ethermii
+#	ether82543gc	pci
+#	ether82557	pci
+	ether82563	pci
+#	ether83815	pci
+#	etherdp83820	pci
+	etherbcm	pci
+#	etherec2t	ether8390
+#	etherelnk3	pci
+#	etherga620	pci
+	etherigbe	pci ethermii
+#	ethervgbe	pci ethermii
+#	ethervt6102	pci ethermii
+#	ethervt6105m	pci ethermii
+#	etheryuk		pci
+#	etherm10g
+#	ether82598	pci
+	ethersink
+#	ethersmc	devi82365 cis
+#	etherwavelan	wavelan devi82365 cis pci
+	ethermedium
+#	pcmciamodem
+	netdevmedium
+	loopbackmedium
+	usbuhci
+	usbohci
+	usbehci 		usbehcipc
+	winbond
+
+	audiohda	pci
+	audioac97	audioac97m	pci
+	audiosb16	dma
+
+misc
+	alloc
+	physalloc
+	noswap
+	xalloc
+
+	archacpi		mp nomp mpacpi apic msi
+	archmp		mp nomp mpacpi apic msi
+
+	sdaoe
+	sdide		pci sdscsi
+	sdiahci		pci sdscsi led
+#	sdmv50xx	pci sdscsi
+	sdloop
+#	sd53c8xx	pci sdscsi
+#	sdmylex		pci sdscsi
+#	sdodin		pci sdscsi led
+
+	uarti8250	uartp8250
+	uartpci		pci uartp8250
+#	uartisa		uartp8250
+
+#	vga3dfx		+cur
+#	vgaark2000pv	+cur
+#	vgabt485	=cur
+#	vgaclgd542x	+cur
+#	vgaclgd546x	+cur
+#	vgact65545	+cur
+#	vgacyber938x	+cur
+#	vgaet4000	+cur
+#	vgahiqvideo	+cur
+#	vgai81x		+cur
+#	vgamach64xx	+cur
+#	vgamga2164w	+cur
+#	vgamga4xx	+cur
+#	vganeomagic	+cur
+	vganvidia	+cur
+#	vgargb524	=cur
+#	vgas3		+cur vgasavage
+#	vgat2r4		+cur
+#	vgatvp3020	=cur
+#	vgatvp3026	=cur
+	vgavesa
+	vgavmware	+cur
+
+ip
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+
+port
+	int cpuserver = 0;
+
+boot
+	tcp
+	il
+
+bootdir
+	bootpc.out boot
+	/386/bin/ip/ipconfig
+	/386/bin/auth/factotum
+	/386/bin/usb/usbd
+lib
+	/$objtype/lib/libaml.a
+flags
+	LD	-e -p

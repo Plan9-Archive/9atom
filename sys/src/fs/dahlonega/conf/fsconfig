@@ -1,0 +1,18 @@
+service wrens
+config pa0"fsconfig"
+filsys main cpe220.0"fscache"{e220.1e300.1}
+filsys dump o
+filsys other e220.2
+ipsntp 128.192.1.9
+ip0 10.220.1.17
+ipgw0 10.220.10.1
+ipmask0 255.255.0.0
+ipflag0 cec aoe
+ip1 10.220.2.2
+ipgw1 10.220.2.1
+ipmask1 255.255.255.0
+ipflag1 cec aoe aoejumbo
+ip2 10.220.3.3
+ipgw2 10.220.3.1
+ipmask2 255.255.255.0
+ipflag2 cec aoe

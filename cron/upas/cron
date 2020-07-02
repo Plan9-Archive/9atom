@@ -1,0 +1,5 @@
+# kick mail retries (replace ladd with your system)
+* * * * *	ladd		/bin/upas/runq -a /mail/queue /mail/lib/remotemail
+
+# clean up after grey list
+47 4 * * *	ladd	rm -rf /mail/grey/tmp/*/*

@@ -1,0 +1,44 @@
+</$objtype/mkfile
+
+TARG=ofactotum\
+	ofgui\
+
+PROTO=\
+	apop.$O\
+	chap.$O\
+	httpdigest.$O\
+	p9any.$O\
+	p9cr.$O\
+	p9sk1.$O\
+	pass.$O\
+	rsa.$O\
+	wep.$O\
+
+FOFILES=\
+	$PROTO\
+	confirm.$O\
+	fs.$O\
+	log.$O\
+	rpc.$O\
+	util.$O\
+	secstore.$O\
+
+HFILES=\
+	dat.h\
+
+LIB=/$objtype/lib/libauth.a /$objtype/lib/libauthsrv.a
+BIN=/$objtype/bin/auth
+
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${FOFILES:%.$O=%.c}\
+	fgui.c\
+
+</sys/src/cmd/mkmany
+
+$O.ofactotum: $FOFILES
+	$LD -o $target $prereq
+
+$O.ofgui: fgui.$O
+	$LD -o $target $prereq

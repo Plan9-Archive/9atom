@@ -1,0 +1,42 @@
+.TH NDBREQUERY 8
+.SH NAME
+requery \- search ndb tuple values by regular expression
+.SH SYNOPSIS
+.B ndb/requery
+[
+.B -i
+] [
+.B -f
+.I ndbfile 
+]
+.I attr
+.I regex
+[
+.I rattr
+]
+.SH DESCRIPTION
+.I Ndb/requery
+searches the database
+.I dbfile
+.RB ( /lib/ndb/local
+by default)
+for an attribute of type
+.I attr
+and value that matches 
+.IR regex .
+The
+.B -i
+flag specifies a case-insensitive search.
+.SH FILES
+.TF /lib/ndb/localxxx
+.TP
+.B /lib/ndb/local
+default datbase
+.SH SOURCE
+.B /sys/src/cmd/ndb/requery.c
+.SH "SEE ALSO"
+.IR ndb (2),
+.IR ndb (6),
+.IR ndb (8),
+.IR ndbtozone (8),
+.SH BUGS

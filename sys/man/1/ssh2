@@ -1,0 +1,784 @@
+.TH SSH2 1
+.SH NAME
+ssh, sshsession, sshtun, scp, rsa2ssh2 \- Plan 9 support for SSHv2
+.SH SYNOPSIS
+.B ssh
+[
+.B -CdriIvaxkKm
+]
+[
+.B -l
+.I user
+]
+[
+.B -n
+.I dir
+]
+[
+.B -s
+.I subsystem
+]
+[
+.B -z
+.I attribute=value
+]
+addr
+[
+.I cmd
+[
+.I args
+]]
+.PP
+.B scp
+[host:]file [host:]file
+.br
+.B scp
+[host:]file ... [host:]dir
+.PP
+.B sshsession
+[
+.B -t
+]
+[
+.B -n
+.I namespace
+]
+[
+.B -R
+.I dir
+]
+[
+.B -r
+.I dir
+]
+[
+.B -s
+.I command
+]
+[
+.B -S
+.I srvpt
+]
+.PP
+.B sshtun
+[
+.B -9dk
+]
+[
+.B -m
+.I mntpt
+]
+[
+.B -s
+.I srvpt
+]
+.PP
+.B rsa2ssh2
+[
+.I file
+]
+.SH DESCRIPTION
+These programs collectively provide support for SSHv2 for Plan 9.
+It supports only SSHv2 and will reject connections with a remote
+system that supports only SSHv1.
+Both client and server operation is provided.
+All of the encryption, authentication, and SSH protocol are handled
+by a tunnel that is presented as a protocol directory in
+.B /net.
+.SH "CLIENT OPERATION"
+.I Ssh
+and
+.I scp
+are the applications that provide normal client access to the
+SSH tunnel.
+.I Ssh
+dials a remote system and runs a shell (or some other command) there.
+In its simplest usage, it works like any other
+.I ssh
+command line application.
+So the command:
+.IP
+.EX
+ssh root@hannibal
+.EE
+.LP
+will result in a command prompt on the machine
+.B hannibal
+logged in as
+.B root.
+To accomplish this,
+.I ssh
+first looks to see if there is an ssh tunnel in
+.B /net,
+and if not, it runs
+.I sshtun
+with no options.
+Using the usual technique of opening the
+.B clone
+file and writing a
+.B connect
+message,
+.I ssh
+dials the remote ssh server and exchanges encryption keys with
+the server using Diffie-Hellman key exchange.
+A similar
+.B clone
+file and
+.B connect
+message protocol creates a session in the established connection.
+In the course of session creation,
+.I ssh
+first attempts to authenticate the user with the server using
+public key authentication.
+If that fails, it then prompts for a password, and attempts to
+authenticate with password authentication.
+It also passes across the value of the environment variable
+.B TERM
+as would be set if
+.I ssh
+is run inside of
+.IR vt (1).
+.LP
+Following the convention in other Plan 9 communications applications,
+typing a control-\\ will result in a
+.B >>>
+prompt.
+There are currently only four commands that can be issued at that
+prompt:
+.B C
+to toggle cooked (local echo) mode,
+.B c
+to continue the
+.I ssh
+session,
+.B h
+to print a list of the available commands,
+.B r
+to toggle the supression of carriage returns, and
+.B q
+to close the session started by this instance of
+.I ssh.
+.LP
+.I Ssh
+can take the following command-line options:
+.TP
+.B -C
+Cooked mode, echo characters typed locally, this is useful on
+high latency links and allows the use of all of rio(1)'s
+editing facilities.
+.PD 0
+.TP
+.B -d
+Increase the amount of debugging output.
+.PD 0
+.TP
+.B -l
+A deprecated method of specifying the user name on the remote
+system.
+.PD 0
+.TP
+.B -r
+Strip carriage return characters coming from the remote system.
+This will normally be desired when running in a raw
+.IR rio (1)
+window or from within
+.IR win
+in
+.IR acme (1).
+It is normally not used when running
+.I ssh
+from within
+.IR vt (1).
+.PD 0
+.TP
+.B -k
+Skip the attempt to authenticate using public key authentication.
+.PD 0
+.TP
+.B -K
+Do not fall back to password authentication.
+If the public key authentication fails,
+.I ssh
+will exit.
+.PD 0
+.TP
+.B -m
+Remove the special meaning of control-\\.
+This is needed by
+.I scp
+to prevent that character in files being copied from triggering the
+special command mode.
+.PD 0
+.TP
+.B -n
+Specify the network directory of an alternate network to use.
+The default is
+.B /net.
+.PD 0
+.TP
+.B -s
+Request an ssh2 subsystem on the remote server,
+this is used by
+.IR sftpfs (4).
+.PD 0
+.TP
+.B -z
+Used to specify which of several possible keys to use.
+.PD 0
+.TP
+.B -i -I
+Sets
+.I ssh
+to interactive
+.RB ( -i )
+or non-interactive
+.RI ( -I )
+mode.
+This determines whether the user is prompted for a password
+if none is found in factotum.
+Without either of these options,
+.I ssh
+uses interactive mode if run in a term window.
+.PD 0
+.TP
+.B -v -a -x
+All no-ops but included for compatibility with
+.IR scp .
+.LP
+The
+.I scp
+program does all its work by running
+.I ssh
+to execute an instance of
+.I scp
+on the server, it functions normally with this implementation of
+.I ssh.
+.SH "SERVER OPERATION"
+The
+.I sshsession
+program provides the server functionality for SSHv2.
+It is suitable for running by
+.IR listen (8)
+Therefore, it is not normally run directly by the user.
+Like
+.I ssh,
+it does all of its communication through the tunnel.
+.I Sshsession
+handles running a shell or a requested command when a remote
+system requests a new connection and session.
+.LP
+One can run a private ssh server by first setting up the tunnel
+and then running the command:
+.IP
+.EX
+aux/listen1 -t ssh!*!2222 sshsession
+.EE
+.LP
+Similarly, a system-wide ssh server can be run by including
+a file called
+.B ssh22
+in
+.B /rc/bin/service.auth.
+.LP
+With no command-line options,
+.I sshsession
+runs in a way suitable for the typical ssh server.
+Several aspects of its behavior can be changed, however,
+via the following options:
+.TP
+.B -s
+Specify an alternative to
+.B /bin/rc
+for shell sessions.
+.PD 0
+.TP
+.B -r
+Specify a starting directory for the ssh session to run in.
+.PD 0
+.TP
+.B -R
+Same as
+.B -r
+but additionally prevent any arguments on the command line to
+be executed from referencing anything outside this directory.
+This is mostly used to limit where
+.I scp
+can deposit or get files.
+.PD 0
+.TP
+.B -n
+Specify a
+.IR namespace (6)
+file to be used before starting the shell or running the requested
+command.
+The default is
+.B /lib/namespace.
+.PD 0
+.TP
+.B -S
+Specify an alternative file in
+.B /srv
+where the tunnel can be found if it is not already mounted in
+.B /net.
+.PD 0
+.TP
+.B -t
+Specify that the sshsession instance is trusted and should run in the
+same name space as the listen that started it.
+.LP
+For shell channels,
+.I sshsession
+will print the contents of
+.B /sys/lib/motd
+to the client, if that file is present.
+.SH TUNNEL
+.I Sshtun
+is the program that implements the ssh tunnel used by
+.I ssh
+and
+.I sshsession.
+It handles all the necessary work to implement SSHv2.
+The following options may be given to
+.I sshtun
+.TP
+.B -d
+Increase the amount of debugging output.
+.PD 0
+.TP
+.B -k
+Use
+.IR keyfs (4)
+for password validation.
+.PD 0
+.TP
+.B -m
+Mount point for the ssh protocol directory; defaults to
+.B /net.
+.PD 0
+.TP
+.B -s
+Name to post in
+.B /srv.
+If
+.B -s
+is not given, no file is posted to
+.B /srv.
+.LP
+Access to the tunnel is provided though a protocol directory
+.B /net/ssh.
+This directory contains a set of numbered directories, each of which
+is an ssh connection that is curently active or has been used in the
+past.
+It also serves the files
+.B clone,
+.B ctl,
+and
+.B keys.
+.B Clone
+behaves like the
+.B clone
+files in other protocol directories.
+In particular, opening it reserves an ssh connection, reading from
+it gets the connection number reserved, and writing to it writes
+to the
+.B ctl
+file in the numbered connection directory.
+Reading the
+.B ctl
+file returns the most active state of any connection.
+There are currently no commands that can be written to
+.B /net/ssh/ctl.
+Finally, the
+.B keys
+file is used by
+.I ssh
+to relay information about keys and passwords between a user
+and the tunnel.
+.LP
+Each of the numbered connection directories also contains
+a set of numbered directories, one for each channel used on
+that connection.
+It also contains the files
+.B clone,
+.B ctl,
+.B data,
+.B listen,
+.B local,
+.B remote,
+and
+.B status.
+Similar to the top-level
+.B clone
+file, opening a connection's
+.B clone
+file reserves a channel and gives access to its
+.B ctl
+file.
+Reading from the
+.B ctl
+file gives the connection number (also the name of that
+directory).
+Several commands are available to write into a connection's
+.B ctl
+file:
+.TP
+.B connect
+This command dials the remote system and carries out the initial
+handshake to exchange versions, lists of supported algorithms,
+and to establish the encryption keys to use.
+.PD 0
+.TP
+.B ssh-userauth
+Attempt to authenticate a user with the remote system, with either
+public key authentication or a password.
+.PD 0
+.TP
+.B ssh-connection
+Currently unsupported.
+.PD 0
+.TP
+.B hangup
+Shut down a connection and all of its channels.
+.PD 0
+.TP
+.B announce
+Announce the tunnel's willingness to accept connection requests from
+remote systems.
+.PD 0
+.TP
+.B accept
+Do the initial connection handshake with the remote system.
+.PD 0
+.TP
+.B reject
+Send back a connection rejection message and shut down the connection.
+.LP
+Because data is always carried over a channel, the connection data file
+is not used for usual data.
+However, reads from the connection data file do return the capability
+needed for
+.I sshsession
+to change identity to the user logging in.
+As with other protocol directories, opens on
+.B listen
+block until a remote system establishes a connection, at which point,
+the application should write either an
+.B accept
+or
+.B reject
+message to the
+.B ctl
+file.
+The
+.B local
+and
+.B remote
+files give the IP addresses and port numbers of the local and remote
+systems.
+The connection
+.B status
+file gives the status of the channel with the status closest to
+.B Established.
+.LP
+Each channel directory contains the files
+.B ctl,
+.B data,
+.B listen,
+.B request,
+and
+.B status.
+As with connections, reads from channel
+.B ctl
+files return the channel number.
+Commands that may be written to a channel
+.B ctl
+file include:
+.TP
+.B connect
+Initiate the establishment of a new channel over this connection.
+SSHv2 defines
+.B session,
+.B x11,
+.B forwarded-tcpip,
+and
+.B direct-tcpip
+channels.
+The
+.B connect
+command defaults to a
+.B session
+channel if no argument is given.
+(This implementation correctly handles only session channel
+requests.)
+.PD 0
+.TP
+.B global
+Reserved for future development.
+In particular, this is necessary to support TCP/IP forwarding.
+.PD 0
+.TP
+.B hangup
+Shut down a channel.
+If this is the last open channel on this connection, then shut down
+the connection too.
+.PD 0
+.TP
+.B announce
+Announce the willingness to accept new channel requests from the
+remote end.
+.LP
+The channel
+.B data
+file is the file over which all application data is carried.
+Opens of the channel
+.B listen
+file block until a channel is opened by the remote end.
+Unlike the connection
+.B listen
+file, the listening application should not write an accept or
+reject message to the
+.B ctl
+file.
+SSHv2 defines a number of out of band channel requests.
+These are sent and received through the
+.B request
+file.
+Among these are
+.B pty-req,
+.B x11-req,
+.B env, shell,
+.B exec,
+.B subsystem,
+.B window-change,
+.B xon-xoff,
+.B signal,
+.B exit-status,
+and
+.B exit-signal.
+.I Sshsession
+only fully handles the
+.B shell
+and
+.B exec
+requests.
+Others are either blithly acknowledged, rejected or ignored,
+depending on whether they are expected to be available by
+the remote system.
+Finally, the channel
+.B status
+file gives the current status of the channel.
+The possible statuses are
+.B Empty,
+.B Allocated,
+.B Initting,
+.B Listening,
+.B Opening,
+.B Negotiating,
+.B Authing,
+.B Established,
+.B Eof,
+.B Closing,
+and
+.B Closed.
+.SH "CRYPTOGRAPHIC FEATURES"
+During the initial connection exchange, both parties send lists of
+supported algorithms.
+The first algorithms listed are for key exchange.
+This implementation supports the
+.B diffie-hellman-group1-sha1
+and
+.B diffie-hellman-group14-sha1
+key exchange algorithms.
+The second list is the set of algorithms for which corresponding host
+keys exist.
+Both the
+.B ssh-rsa
+and
+.B ssh-dss
+algorithms are supported.
+The next lists are encryption algorithms, which may be negotiated
+independently for the server-to-client and client-to-server directions.
+This implementation supports the
+.B aes128-cbc,
+.B aes192-cbc,
+.B aes256-cbc,
+.B 3des-cbc,
+and
+.B arcfour
+algorithms with preference given in that order.
+Finally, the message authentication code algorithms are listed,
+and only the
+.B hmac-sha1
+algorithm is supported here.
+.SH "KEY MANAGEMENT"
+There are a number of different keys that are used by the SSH tunnel.
+Most of them are expected to be stored in the instance of
+.IR factotum (4)
+running in the name space of that tunnel instance.
+However, in some cases, there are alternative locations available.
+.LP
+The first key needed is the host key for server operation.
+In the case of the keys being stored in
+.IR factotum (4),
+these keys will be the first ones listed with
+.B proto=rsa
+and
+.B proto=dss.
+Alternatively, these keys can be specified in the environment
+variables
+.B rsakey
+and
+.B dsskey
+or in the same named files located in the directory where
+.I sshtun
+is started.
+.LP
+The next set of keys are the public host keys used by clients to
+verify the identities of servers.
+As with the original Plan 9 SSH implementation, there is a system-wide
+list of these in
+.B /sys/lib/ssh/keyring
+and each user may have a list in
+.B $home/lib/keyring.
+If a public key for a remote server is listed and matches the one
+offered by the server, the connection proceeds.
+If a public key for a remote server is listed but does not match
+the one offered by the server, the connection is terminated.
+If no public key is listed for a remote server,
+.I ssh
+presents the key to the user and asks whether to reject the
+key, accept the key only for that session, or accept the key
+permanently.
+The last option causes the key to be written to the user's
+keyring.
+In the case of a mismatching key, the accept option can
+either be to add to or replace the old key.
+.LP
+The next key is a user's private key to be used for public key
+authentication.
+Currently, only RSA keys are supported for this, and the key
+must be in the factotum instance running in the name space
+of the tunnel instance.
+Creating a key and putting it in factotum can be done by:
+.IP
+.EX
+auth/rsagen > key
+cp key /mnt/factotum/ctl
+.EE
+.LP
+Of course, the key file will normally be loaded when factotum
+is started either by way of
+.IR secstore (1)
+or directly in the user's
+.B lib/profile.
+The following command will extract the public part of the
+key and add it to the
+.B authorized_keys
+file on a remote UNIX system.
+.IP
+.EX
+grep 'proto=rsa' /mnt/factotum/ctl | rsa2ssh2 |
+	ssh user@unix 'cat >> .ssh/authorized_keys'
+.EE
+.LP
+The command
+.IP
+.EX
+auth/pemdecode 'RSA PRIVATE KEY' id_rsa | auth/asn12rsa > key
+.EE
+.LP
+will translate a private key used with OpenSSH to one suitable
+for loading into factotum.
+.LP
+To disambiguate when a user has more than one private key stored in factotum,
+the following selection criteria are applied:
+.TP
+1.
+The selected key must have both
+.B proto=rsa
+and
+.B !dk=
+attributes present.
+.PD 0
+.TP
+2.
+Among those keys, the attributes
+.B user=,
+.B sys=,
+and
+the attribute/value pair specified in the
+.B -z
+option to
+.I ssh,
+if any, are examined.
+The value of the
+.B user
+attribute is expected to be the user name being authenticated on the remote
+system, and the value of the
+.B sys
+attribute is expected to be the remote system as specified on the
+.I ssh
+command line.
+.PD 0
+.TP
+3.
+The key with the greatest number of matches is selected.
+Among keys with equal number of matches, the first is chosen.
+.LP
+An SSH server must also have a list of public keys that
+can be used for public key authentication.
+Again, these keys must be stored in the factotum instance running
+in the name space of the server's tunnel.
+Each such key must have the attributes
+.B role=verify, proto=rsa,
+and either
+.B user=
+or
+.B sys=.
+.LP
+For password-based user authentication,
+.I sshtun
+can operation in one of two modes.
+If given the
+.B -k
+option, it will validate passwords against those stored in
+.B /mnt/keys
+provided by
+.IR keyfs (4).
+If run without
+.B -k,
+.I sshtun
+will attempt to validate passwords with an authentication
+server using the
+.I auth_userpasswd
+(see
+.IR auth (2))
+call.
+.SH FILES
+.TP
+.B /sys/lib/ssh/keyring
+System-wide known host public keys.
+.PD 0
+.TP
+.B $home/lib/keyring
+Per-user known host public keys.
+.PD 0
+.TP
+.B /sys/lib/motd
+Message of the day file.
+.SH "SEE ALSO"
+RFCs 4250, 4251, 4252, 4253, 4254, and 4419,
+.IR secstore (1),
+.IR vt (1),
+.IR factotum (4),
+.IR keyfs (4),
+.IR authsrv (6),
+.IR listen (8),
+.IR rsa (8),
+.IR sftpfs (4)
+.SH BUGS
+TCP/IP forwarding and some potentially useful channel requests have not
+been implemented.
+.B Zlib
+compression is not supported, also probably not needed.
+Several aspects of key management still need some work.

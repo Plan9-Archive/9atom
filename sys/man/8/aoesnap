@@ -1,0 +1,44 @@
+.TH AOESNAP 8
+.SH NAME
+aoesnap \- snapshot a machine's state via AoE
+.SH SYNOPSIS
+.B aoesnap
+[
+.B -o
+.I outputfile
+]
+.I shelf
+.SH DESCRIPTION
+Aoesnap uses AoE to download a snapshot of a machine's state.
+Snapshots are like Unix core dumps, but allow easy
+debugging on foreign architectures.  The target
+maybe be anywhere on the local Ethernet segment,
+but it must understand how to serve AoE snapshots.
+Currently, only the Coraid VS knows how to serve
+AoE snapshots.
+.PP
+Suppose a snapshot is to be taken of VS shelf
+.IR 199 .
+First the VS needs to be configured to
+serve snapshots and put into snapshot mode
+.IP
+.EX
+VS-1:199> myshelf 199
+VS199:199> ^Z
+hit almost any key to reboot: 
+.EE
+.LP
+The snapshot can then be taken running as root
+.IP
+.EX
+linux# aoesnap | bzip2>snap.bz2
+.EE
+.SH "SEE ALSO"
+.IR cec (8),
+.IR vblade (8),
+.br
+.BR http://www.coraid.com/RESOURCES/AoE-Protocol-Definition
+.SH BUGS
+Must be run as root.
+.PP
+Uncompressed snapshots are large.

@@ -1,0 +1,15 @@
+config p(a0)"fsconfig"
+service newfs
+filsys main cpe220.0"fscache"{e220.1}
+filsys other e220.2
+filsys dump o
+ipsntp 128.192.1.9
+ip0 10.220.1.17
+ipgw0 10.220.10.1
+ipmask0 255.255.0.0
+ipflag0 cec aoe
+ip1 10.220.2.2
+ipgw1 10.220.2.1
+ipmask1 255.255.255.0
+ipflag1 cec aoe aoejumbo
+end

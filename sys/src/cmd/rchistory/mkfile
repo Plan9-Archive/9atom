@@ -1,0 +1,9 @@
+</$objtype/mkfile
+
+TARG=-p
+
+OFILES=rchistory.$O
+
+BIN=/$objtype/bin
+
+</sys/src/cmd/mkone

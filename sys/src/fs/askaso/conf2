@@ -1,0 +1,10 @@
+service aska
+config p(h0)95.1
+filsys other pe2.0"other"
+filsys main cpe2.0"kcache"e2.1
+filsys dump o
+ip0 192.168.0.54
+ipgw0 192.168.0.4
+ipmask0 255.255.255.0
+ipflag0 cec aoe
+ipsntp 128.192.1.9

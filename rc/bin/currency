@@ -1,0 +1,35 @@
+#!/bin/rc
+# list of currencies available at http://www.oanda.com/convert/cheatsheet
+# (content type is chunked so hget loses)
+
+rfork e
+
+months=Jan01Feb02Mar03Apr04May05Jun06Jul07Aug08Sep09Oct10Nov11Dec12
+xin = usd
+xout = gbp
+flagfmt = 'd yyyymmdd'
+args = 'from to'
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 0 1 2){
+	aux/usage
+	exit usage
+}
+switch($#*){
+case 1
+	xout = $1
+case 2
+	xin = $1
+	xout = $2
+}
+	
+xin=`{echo $xin|tr a-z A-Z}
+xout=`{echo $xout|tr a-z A-Z}
+
+if(~ $#flagd 0){
+	ud = `{date}
+	mn=`{echo $months | sed -n  's/.*'^$ud(2)^'(..).*/\1/p' }
+	date = $mn ^/^ $ud(3) ^/^ $ud(6)
+}
+if not
+	date = `{echo $flagd | sed 's:(....)(..)(..):\2/\3/\1:g'}
+hget 'http://www.oanda.com/convert/classic?user=printable&exch='$xout'&expr='$xin'&value=1&date_fmt=us&date='$date |
+	grep '^[ 	]*1 '

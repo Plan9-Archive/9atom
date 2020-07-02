@@ -1,0 +1,21 @@
+This is a crossword playing program.
+To run it, you need to cp *.font /lib/font/bit/times
+
+The crossword format is reminiscent of the
+old picfile format.  It consists of a header 
+of lines of the form "X=foo", a blank line,
+then the crossword puzzle, then the puzzle
+filled in with the answers (rot13'ed).
+Then the clues, one per line.
+The header must contain a line "DIM=nr nc"
+that specifies the number of rows and columns
+in the puzzle.
+
+For example
+	hget http://world.std.com/~wij/puzzles/upnorth.puz >upnorth.puz
+	acrosslite upnorth.puz > upnorth.xword
+	xword upnorth.xword
+
+Russ Cox
+9 August 2000
+rsc@plan9.bell-labs.com

@@ -1,0 +1,20 @@
+#!/bin/rc
+rfork en
+
+f=(email readme notes removed files)
+for(i in $f){
+	if(test -e $i){
+		echo $i
+		sed 's/^/	/g'<$i
+	}
+}
+nl='
+'
+for(i in `$nl {cat files}){
+	eval j '=(' $i ')'
+	if(test -e $j(2)^.orig){
+		echo
+		echo $i
+		diff -c $j(2)^.orig $j(2)
+	}
+}

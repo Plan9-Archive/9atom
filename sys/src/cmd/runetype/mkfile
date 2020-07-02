@@ -1,0 +1,90 @@
+</$objtype/mkfile
+rune20bit='^[0-9A-F][0-9A-F][0-9A-F][0-9A-F][0-9A-F]?[0-9A-F]?;'
+rune16bit='^[0-9A-F][0-9A-F][0-9A-F][0-9A-F];'
+<|mkrunesize
+url=http://www.unicode.org/Public/UNIDATA/
+uconv=/bin/rune/uconv
+CLIB=/sys/src/libc/port
+ULIB=/lib
+BIN=/$objtype/bin/rune
+DOT=.
+
+H=runetype.h\
+	tobaserune.h\
+	runeclass.h\
+	runecompose.h\
+
+L=unicode\
+
+E=\
+	block\
+	case\
+	compose\
+	fold\
+	unfold\
+	type\
+
+TARG=$E\
+	uconv
+
+HELPER=/bin/rune/uconv
+
+EXTRA=${E:%=$O.%}
+HDOT=${H:%=$DOT/%}
+UTFFILES=unicodedata\
+	valuealiases\
+	block\
+
+default all:V: ${TARG:%=$O.%} ${H:%=$DOT/%}
+
+install:V: ${H:%=$CLIB/%} $ULIB/unicode ${TARG:%=$BIN/%}
+
+%.install:V:	$BIN/%
+
+$ULIB/%: %
+	cp $newprereq $ULIB
+
+$CLIB/%: $DOT/%
+	cp $newprereq $CLIB
+
+$BIN/%: $O.% $BIN
+	cp $O.$stem $BIN/$stem
+
+$BIN:
+	mkdir -p $BIN
+
+%.$O:	$HFILES		# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+block.$O:	$DOT/block.h $HELPER
+
+$O.%:	%.$O $OFILES $LIB
+	$LD $LDFLAGS -o $target $prereq
+
+$HELPER: uconv.$O
+	$LD $LDFLAGS -o $HELPER $prereq
+
+$DOT/%.h:D: $HELPER %.rc $UTFFILES
+	$stem.rc unicodedata > $target
+
+nuke:V: clean
+	rm -f $UTFFILES $L
+
+clean:V:
+	rm -f *.[$OS] [$OS].* y.tab.? lex.yy.c y.debug y.output $CLEANFILES
+
+unicode:D: unicode.rc unicodedata
+	unicode.rc unicodedata
+
+unicodedata:D:
+	hget $url/UnicodeData.txt>$target
+
+valuealiases:D:
+	hget $url/PropertyValueAliases.txt>$target
+
+block:D:
+	hget $url/Blocks.txt>$target
+
+CLEANFILES=$HDOT block.h

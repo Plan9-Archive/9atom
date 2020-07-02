@@ -1,0 +1,147 @@
+dev +dev
+	root
+	cons
+	arch
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	fakertc
+	sd		pisdalloc
+	ssl
+	tls
+	cap
+	kprof
+	audio
+
+	ether		netif
+	cec
+	aoe
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum inferno
+
+	uart
+	kbin
+	kbmap
+	usb
+	mouse		mouse
+	draw		drawalloc screen
+
+uart +dev
+	uartmini
+
+ip +dev
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+
+link +dev
+	loopbackmedium
+	ethermedium
+	usbdwc
+	etherusb
+
+sd +dev
+#	sdaoe
+#	sdloop
+#	sdmmc	emmc
+
+boot terminal
+	il
+
+rootdir
+	bootpi.out boot
+	/arm/bin/auth/factotum factotum
+	/arm/bin/ip/ipconfig ipconfig
+	/arm/bin/usb/usbd usbd
+
+# cpuserver = 0 is different from boot where we need cpuflag.
+conf
+	int cpuserver = 0;
+
+dbgflg
+	apic		'A'
+	arch		'V'
+	devacpi		'C'
+	devsegment	'z'
+	hpet		'H'
+	ht		'H'
+	image		'p'
+	ioapic		'I'
+	main		'x'
+	mp		'M'
+	page		'p'
+	pager		'p'
+	physalloc		'm'
+	sysproc		'E'
+	sysseg		'p'
+	syssem		'S'
+	mmu		'v'
+
+rpi +dev
+	arch
+	archbcm
+	arm
+	softfpu
+	kbd
+	main
+	mmu
+	qmalloc
+	random
+	syscall
+	trap
+#	physalloc
+
+physseg
+	{ .attr=SG_SHARED,	.name="shared",	.size=SEGMAXPG,	.pgszi=1, },
+	{ .attr=SG_BSS,		.name="memory",	.size=SEGMAXPG,	.pgszi=1, },
+
+port
+	alarm
+	qallocb
+	chan
+	dev
+	devtab
+	edf
+	fault
+	image
+	latin1
+	page
+	pager
+	parse
+	pgrp
+	portclock
+	print
+	proc
+	ps
+	qio
+	qlock
+	rebootcmd
+	segment
+	sysauth
+	sysfile
+	sysproc
+	sysseg
+#	syssem
+	systab
+	taslock
+	tod
+	syscallfmt
+
+dir
+	ip
+	port
+
+lib
+	libmemlayer
+	libmemdraw
+	libdraw
+	libip
+	libsec
+	libmp
+	libfis
+	libc

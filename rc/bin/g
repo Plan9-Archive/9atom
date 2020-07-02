@@ -1,0 +1,45 @@
+#!/bin/rc
+
+rfork e
+flags=-n
+re=()
+files=/dev/null
+f=1
+p=()
+if(~ $#filepat 0)
+	filepat = '(body|\.[Cbchlmsy])$'
+
+fn collect{
+	find $* | grep $filepat
+}
+
+fn collect1{
+	ls | grep $filepat
+}
+
+for(i){
+	if(~ $f 1 && ~ $i -*)
+		flags = ($flags $i)
+	if not if (~ $#re 0){
+		f = 0
+		re = $i
+	}
+	if not{
+		p = ($p $i)
+		if(test -d $i)
+			files = ($files `{collect $i})
+		if not
+			files = ($files $i)
+	}
+}
+if(~ $#re 0){
+	echo usage: g '[flags]' pattern ... >[1=2]
+	exit usage
+}
+modre>[2=]
+switch($#p){
+case 0
+	grep $flags $re `{collect1} $files
+case *
+	grep $flags $re $files
+}

@@ -1,0 +1,35 @@
+# format: sf	font
+# where s is a 1 character size designator
+#	s	small
+#	n	normal
+#	l	large
+#	v	very large
+# and face is a 1 character face designator
+#	r	roman
+#	i	italic
+#	b	bold
+#	t	typewriter
+
+tr	/lib/font/bit/pala/pala.10.font
+sr	/lib/font/bit/pala/pala.12.font
+nr	/lib/font/bit/pala/pala.14.font
+lr	/lib/font/bit/pala/pala.16.font
+vr	/lib/font/bit/pala/pala.20.font
+
+ti	/lib/font/bit/palai/palai.10.font
+si	/lib/font/bit/palai/palai.12.font
+ni	/lib/font/bit/palai/palai.14.font
+li	/lib/font/bit/palai/palai.16.font
+vi	/lib/font/bit/palai/palai.20.font
+
+tb	/lib/font/bit/palab/palab.10.font
+sb	/lib/font/bit/palab/palab.12.font
+nb	/lib/font/bit/palab/palab.14.font
+lb	/lib/font/bit/palab/palab.16.font
+vb	/lib/font/bit/palab/palab.20.font
+
+tt	/lib/font/bit/fixed/unicode.6x12.font
+st	/lib/font/bit/fixed/unicode.8x13.font
+nt	/lib/font/bit/fixed/unicode.9x15.font
+lt	/lib/font/bit/fixed/unicode.9x18.font
+vt	/lib/font/bit/fixed/unicode.10x20.font

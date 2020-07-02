@@ -1,0 +1,29 @@
+.TH FIND 1
+.SH NAME
+find \- recursively list files.
+.SH SYNOPSIS
+.B find 
+[
+.B -1dfq
+] 
+.I dir ...
+.SH DESCRIPTION
+List each argument.  If the argument is a directory recursively list it's contents.
+The default is to list the current directory.
+Specifying
+.B -d
+prints only directories, 
+.B -f
+supresses warnings, while
+.B -q
+supresses quoting the output for
+.IR rc (1).
+With
+.BR -1 ,
+mount points will not be traversed.
+.SH SOURCE
+.B /sys/src/cmd/find.c
+.SH SEE ALSO
+.IR du (1)
+.SH BUGS
+Feeping creaturism.

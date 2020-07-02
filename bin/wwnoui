@@ -1,0 +1,8 @@
+#!/bin/rc
+rfork e
+for(i){
+	i=`{echo $i|
+		tr 'A-Z' 'a-z' |
+		sed 's/^.(......).*/\1/g'}
+	look $i /lib/oui
+}

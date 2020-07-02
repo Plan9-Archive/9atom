@@ -1,0 +1,95 @@
+#!/bin/rc
+# generate latin1.h from /lib/keyboard
+# todo: genereate /lib/keyboard from unicode data.
+flagfmt='u'
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 0){
+	aux/usage
+	exit usage
+}
+
+sort +1 /lib/keyboard |
+	sed ' s/^(....)  (............)(.).*/\1	\2	\3/g' | 
+	awk -F'	' '
+
+function swizz(x)
+{
+	for(i = 1; length(x) != 5; i += 2)
+		x = substr(x, 1, 1) "\177" substr(x, 2)
+	return x
+}
+
+function conv(str, val, rune)
+{
+	printf "%s	%s	%s\n", str, swizz(val), rune;
+}
+
+{
+	if($2 ~ /^ .*/)
+		conv($1, substr($2, 1, 2), $3)
+	else{
+		split($2, a, " ")
+		for(i in a)
+			conv($1, a[i], $3)
+		delete a
+	}
+}
+'  | sort +1 | tr -d '\177' | awk -F'	' '
+BEGIN{
+	unix = ENVIRON["flagu"]
+}
+function zero()
+{
+	base=""
+	follow=""
+	runes=""
+	delete vals
+	i = 0;
+}
+
+function output()
+{
+	if(i>0){
+		printf "	\"%s\", \"%s\",	", base, follow
+		if(!unix)
+			printf "L\"%s\",\n", runes
+		else{
+			printf "{ "
+			for(j = 0; j < i; j++)
+				printf "0x%s, ", vals[j]
+			printf "},\n"
+		}
+	}
+	zero()
+}
+
+function quoted(s,	p, c, i)
+{
+	p = ""
+	for(i = 1; i <= length(s); i++){
+		c = substr(s, i, 1)
+		if(c == "\"" || c == utf(39))
+			p = p "\\"
+		p = p c
+	}
+	return p		
+}
+
+NF==3{
+	b = quoted(substr($2, 1, length($2)-1))
+	r = quoted(substr($2, length($2)))
+
+	if(b != base){
+		output()
+		base = b
+	}
+	follow = follow r
+	runes = runes $3
+	vals[i] = tolower($1)
+	i++
+	next
+}
+
+END{
+	output()
+}
+'

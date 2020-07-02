@@ -1,0 +1,34 @@
+#!/bin/rc
+if(~ $#* 0)
+	zone = /adm/timezone/local
+if not
+	zone = $1
+
+echo 'Timezone timezone = {'
+
+awk '
+NR==1{
+	print ".stname	= " utf(34) $1 utf(34) ","
+	print ".stdiff	= " $2 ","
+	print ".dlname	= " utf(34) $3 utf(34) ","
+	print ".dldiff	= " $4 ","
+	print ".dlpairs	= {"
+}
+NR!=1{
+	for(i = 1; i <= NF; i++)
+		tab[n++] = $i
+}
+END{
+	for(i = 0; n-i > 4; i += 4)
+		printf("\t\t%d, %d, %d, %d,\n", tab[i], tab[i+1], tab[i+2], tab[i+3]);
+	if(i != n){
+		printf("\t\t");
+		for(;i < n; i++)
+			printf("%d, ", tab[i])
+		printf("\n");
+	}
+}
+' < $zone
+
+echo '	}' ; echo '};'
+

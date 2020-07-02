@@ -1,0 +1,57 @@
+.TH RADAR 1
+.SH NAME
+radar, radarloop \- display a real-time weather image
+.SH SYNOPSIS
+.B radar
+[
+.B -t9
+] [
+.I station
+]
+.br
+.B radarloop
+[
+.B -i
+.I updatems
+] [
+.B -c
+.I cmd ...
+]
+.SH DESCRIPTION
+.I Radar
+uses US Government weather radar data and
+map overlays to generate (with the
+.B -t
+or
+.B -9
+flags) or display a local radar image.
+If
+.I station
+is given, and it matches an existing station, then
+that station is displayed.  Otherwise
+.I station
+is consdered a place name and converted to a position with
+.IR gmap (1).
+If there are in-range radar stations, the nearest one
+is selected.
+.P
+.I Radarloop
+continuously displays the current radar image.
+.SH FILES
+.TF \fL/lib/radar/stationlat
+.TP
+.BI /lib/radar/ XYZ
+station-specific data
+.TP
+.BR /lib/radar/stations
+a list of available stations
+.TP
+.BR /lib/radar/stationlat
+station latitude and longitude
+/lib/radar/stations
+.SH SOURCE
+.B /rc/bin/radar
+.br
+.B /rc/bin/radarloop
+.SH BUGS
+The data only covers US territory.

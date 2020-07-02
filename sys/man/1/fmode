@@ -1,0 +1,31 @@
+.TH FMODE 1 
+.SH NAME
+fmode \- fix file modes
+.SH SYNOPSIS
+.B fmode
+[
+.I -f
+]
+.I src
+[
+.I dst
+.B ...
+]
+.SH DESCRIPTION
+.I Fmode
+may be used to fix file modes.
+.PP
+With
+.B -f
+it does not report deletions.
+.SH EXAMPLE
+.EX
+; 6.fmode /mnt/term/usr/quanstro/nix-os/^$p $p
+# cc.a8: deleted
+# cc.a5: deleted
+# cc.a6: deleted
+chmod 664 acid.c
+chmod 664 bits.c
+.EE
+.SH SOURCE
+.B /sys/src/cmd/fmode.c

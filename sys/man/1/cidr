@@ -1,0 +1,87 @@
+.TH CIDR 1
+.SH NAME
+cidr \- search files for ip address patterns
+.SH SYNOPSIS
+.B ip/cidr
+[
+.B -cLlnrsv
+]
+.I pattern
+|
+[
+.B -f
+.I patternfile
+]
+.I file
+...
+.SH DESCRIPTION
+.I Cidr
+is analogous to
+.IR grep (1)
+for IP addresses.
+The input is searched
+for tokens that match the
+.IR pattern ,
+a set of whitespace-seperated CIDRs or CIDRs
+negated with '~'.
+The options are
+.TP
+.B -c
+Print only a count of matching lines.
+.PD 0
+.TP
+.B -l
+(ell) Print the names of files with selected lines; don't print the lines.
+.TP
+.B -L
+Print the names of files with no selected lines;
+the converse of
+.BR -l .
+.TP
+.B -n
+Mark each printed line with its line number counted in its file.
+.TP
+.B -r
+Reverse the meaning of the pattern and tokens.
+.TP
+.B -s
+Produce no output, but return status.
+.TP
+.B -v
+Reverse: print lines that do not match the pattern.
+.TP
+.B -f
+The pattern argument is the name of a file containing regular
+expressions one per line.
+.PD
+.PP
+The format of the pattern is standard
+CIDR notation.  A
+.L ~
+may prefix the CIDR to negate the match.
+These are all legal patterns
+.IP
+.EX
+10.220.0.1
+10.220.0.1/18
+~fc00::/7
+.EE
+.PP
+See
+.B /lib/badcidr
+for a list of RFC3330 unroutable or illegal CIDRs.
+.SH SOURCE
+.B /sys/src/cmd/ip/cidr.c
+.SH "SEE ALSO"
+.B /lib/rfc/rfc3330
+.SH BUGS
+Combinations of
+.BR -v ,
+.B -r
+and patterns with
+.L ~
+can be misleading.
+.PP
+Missing a
+.L \&
+verb.

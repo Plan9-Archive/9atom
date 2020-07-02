@@ -1,0 +1,37 @@
+#!/bin/rc
+rfork e
+
+fn az{
+	atazz $* >[2]/dev/null
+}
+
+fn aze{
+	echo $*(2-) | atazz $1 >[2]/dev/null
+}
+
+fn devs{
+	d0=`{echo probe | az | sed 's/[ 	].*//g'}
+	d=()
+	for(i in $d0)
+		if(aze $i dev | grep -s '^flags.*[ 	]sct')
+			d = ($d $i)
+}
+
+flagfmt=''
+args='dev'
+if(! ifs=() eval `{aux/getflags $*}){
+	aux/usage
+	exit usage
+}
+
+if(~ $#* 0)
+	devs
+if not
+	d = $*
+
+for(i in $d){
+	t=`{aze $i read log ext sctstat | grep '^temp'}
+	if(! ~ $status '' || ! ~ $#t 2)
+		t = (temp unknown)
+	echo $i^'	'^$t(2)
+}

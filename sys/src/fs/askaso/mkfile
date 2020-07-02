@@ -1,0 +1,157 @@
+CONF=aska
+ZONE=/adm/timezone/US_Eastern
+p=9
+
+objtype=386
+</$objtype/mkfile
+
+TARG=$p$CONF'fs'
+
+DEV=\
+#	apc.$O\
+	aoe.$O\
+	cw.$O\
+	devio.$O\
+	devtab.$O\
+#	fworm.$O\
+	fjuke.$O\
+#	juke.$O\
+	mworm2.$O\
+	part.$O\
+#	wren.$O\
+#	swab.$O\
+
+IP=\
+	arp.$O\
+	icmp.$O\
+	il.$O\
+	ip.$O\
+	ipaux.$O\
+	iproute.$O\
+	sntp.$O\
+	udp.$O\
+
+PORT=\
+	9p2.$O\
+	auth.$O\
+	chk.$O\
+	clock.$O\
+	con.$O\
+	config.$O\
+	console.$O\
+	data.$O\
+	dentry.$O\
+	devcec.$O\
+	devcons.$O\
+	devcopy.$O\
+	fcmd.$O\
+	iobuf.$O\
+	lrand.$O\
+	main.$O\
+	print.$O\
+	proc.$O\
+	rawcopy.$O\
+	sub.$O\
+	time.$O\
+	uidgid.$O\
+
+PC=\
+	l.$O\
+	8250.$O\
+	8253.$O\
+	ata.$O\
+	cga.$O\
+#	mv50xx.$O\
+#	iasata.$O\
+	dosfs.$O\
+#	floppy.$O\
+	kbd.$O\
+	lock.$O\
+	malloc.$O\
+	mmu.$O\
+	nvr.$O\
+	pc.$O\
+	pci.$O\
+	toy.$O\
+	trap.$O\
+
+ETHER=\
+	etherctlr.$O\
+	ether83815.$O\
+#	etherigbe.$O\
+#	ethermii.$O\
+#	ether82563.$O\
+#	etherm10g.$O\
+	etherif.$O\
+
+SCSI=\
+#	scsi.$O\
+#	scsibuslogic.$O\
+#	scsincr53c8xx.$O\
+
+OBJ=\
+	$PC\
+	$PORT\
+	$DEV\
+	$IP\
+	$ETHER\
+	$SCSI\
+
+HFILES=\
+	../port/all.h\
+	../port/lib.h\
+	../port/portdat.h\
+	../port/portfns.h\
+	dat.h\
+	../pc/fns.h\
+	../pc/io.h\
+	../pc/mem.h\
+	/$objtype/include/u.h\
+	/$objtype/include/ureg.h\
+
+LIB=\
+	-lauthsrv\
+	-lc\
+	-lsec\
+
+CFLAGS=-FTVw -I. -I../port -I../pc
+
+all:V:	$TARG
+
+<../pc/mkfile
+<../port/mkfile
+<../dev/mkfile
+<../ip/mkfile
+
+$TARG:	$CONF.c $OBJ
+	$CC $CFLAGS -DDATE'='`{date -n} $CONF.c
+	$LD -o $target -l -T0x30100020 $OBJ $CONF.$O $LIB
+	size $target
+
+/$objtype/$TARG: $TARG
+	cp $TARG /$objtype
+
+install:V: /$objtype/$TARG
+
+bootflp: $TARG plan9.ini
+	pc/bootfloppy bootflp plan9.ini $TARG
+
+iso cd: bootflp
+	{ echo bootflp ; echo $TARG ; echo plan9.ini } > $TARG'proto'
+	rm -f $TARG.iso && disk/mk9660 -b bootflp -p $TARG'proto' $TARG.iso
+
+sizes: sizes.$O
+	$LD -o $target sizes.$O -lc
+
+$TARG.$O:	../pc/dosfs.h
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.s
+	$AS $stem.s
+
+%.$O:	$HFILES
+
+clean:V:
+	rm -f *.[$OS] [$OS].out bootflp *.iso timezone.h sizes $TARG^proto $TARG

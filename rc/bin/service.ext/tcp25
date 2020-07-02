@@ -1,0 +1,8 @@
+#!/bin/rc
+#smtp serv net incalldir user
+
+user=`{cat /dev/user}
+if(test -f /srv/ratify)
+	mount /srv/ratify /mail/ratify
+k=(-k 97.76.115.246 -k 89.215.119.79-k 74.125.82.178 -k 82.170.96.241 -k 67.207.142.3 -k 189.104.220.239)
+exec upas/smtpd $k -fqDn $3

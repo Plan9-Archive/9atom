@@ -1,0 +1,23 @@
+tr	/lib/font/bit/lucidasans/unicode.6.font
+sr	/lib/font/bit/lucidasans/unicode.7.font
+nr	/lib/font/bit/lucidasans/unicode.8.font
+lr	/lib/font/bit/lucidasans/unicode.10.font
+vr	/lib/font/bit/lucidasans/unicode.13.font
+
+ti	/lib/font/bit/lucidasans/italicunicode.6.font
+si	/lib/font/bit/lucidasans/italicunicode.7.font
+ni	/lib/font/bit/lucidasans/italicunicode.8.font
+li	/lib/font/bit/lucidasans/italicunicode.10.font
+vi	/lib/font/bit/lucidasans/italicunicode.13.font
+
+tb	/lib/font/bit/lucidasans/boldunicode.6.font
+sb	/lib/font/bit/lucidasans/boldunicode.7.font
+nb	/lib/font/bit/lucidasans/boldunicode.8.font
+lb	/lib/font/bit/lucidasans/boldunicode.10.font
+vb	/lib/font/bit/lucidasans/boldunicode.13.font
+
+tt	/lib/font/bit/fixed/unicode.6x12.font
+st	/lib/font/bit/fixed/unicode.8x13.font
+nt	/lib/font/bit/fixed/unicode.9x15.font
+lt	/lib/font/bit/fixed/unicode.9x18.font
+vt	/lib/font/bit/fixed/unicode.10x20.font

@@ -1,0 +1,30 @@
+.TH VACATION 8
+.SH NAME
+vacation \- vacation notification
+.SH SYNOPSIS
+.nf
+.B . /mail/lib/vacation
+.B /mail/box/\f2user\f5/vacmsg
+.fi
+.SH DESCRIPTION
+Vacation is sourced from a user's
+.B /mail/box/\f2user\f5/pipeto
+file.
+When new mail is recieved
+and
+.B /mail/box/\f2user\f5/vacmsg
+exists,
+.I vacation
+sends the contents of
+.B /mail/box/\f2user\f5/vacmsg
+to the sender and saves a copy
+in
+.BR /mail/box/\f2user\f5/mbox .
+The word ``VACATION'' is prepended to
+the subject line.
+.SH "SEE ALSO"
+.IR upasfs (4)
+.IR marshal (1)
+.SH BUGS
+Should this be integrated with
+.BR pipeto.lib ?

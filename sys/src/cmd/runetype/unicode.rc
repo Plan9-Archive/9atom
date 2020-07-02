@@ -1,0 +1,39 @@
+#!/bin/rc
+rfork e
+. common.rc
+
+Unicode | awk -F^';' '
+function s(x){
+	if(x == "001C")
+		return "file seperator"
+	if(x == "001D")
+		return "group separator"
+	if(x == "001E")
+		return "record separator"
+	if(x == "001F")
+		return "unit separator"
+	return ""
+}
+
+BEGIN{
+	rdigits=ENVIRON["rdigits"];
+}
+
+{
+	a = s(x)
+	if(length(a) > 0){
+	}
+	else
+	if(!s($1) && length($2) > 0 && match($2, "<") == 0)
+		a = $2
+	else
+	if(length($11) > 0)
+		a = $11
+	b=""
+	if(length($13) > 0)
+		b = ";" $13
+	if(length(a)>0){
+		o = substr("00000000", 1, rdigits - length($1)) $1
+		print o "	" a b
+	}
+}' |tr 'A-Z' 'a-z'  >unicode 

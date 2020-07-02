@@ -1,0 +1,15 @@
+#!/bin/rc
+rfork e
+
+# find wctl file
+fn getwctl{
+	if(test -f /dev/wctl) echo /dev/wctl
+	if not if(test -f /mnt/term/dev/wctl) echo /mnt/term/dev/wctl
+	if not if(~ $service cpu) echo /mnt/term/srv/riowctl.*.*
+	if not {
+		echo wctl: can''''t find wctl >[1=2]
+		exit usage
+	}
+}
+
+echo $* >> `{getwctl}

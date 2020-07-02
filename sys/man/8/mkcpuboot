@@ -1,0 +1,69 @@
+.TH MKCPUBOOT 8
+.SH NAME
+mkcpuboot \- build cpu server boot media
+.SH SYNOPSIS
+.B disk/mkcpuboot
+[
+.B -m
+.I mbr
+][
+.B -p
+.I pbs
+][
+.B -l
+.I loader
+]
+][
+-B -k
+.I kernel
+]
+.BI /dev/sd nn
+.SH DESCRIPTION
+This program assists the setup of boot media for a cpu
+server booting from an independent file server.  Prepared
+boot disks should be ready to use.
+.PP
+.I Mkfsboot
+builds a bootable 386 or amd64 image from configuration in
+the current directory on the image
+.BI /dev/sd nn\fR.\fP
+The directory
+.I 9fat
+contains at least the files
+.IR loader ,
+.IR kernel ,
+.BR plan9.ini .
+The default MBR, PBS, boot loader, and kernel are 
+.BR /386/mbr ,
+.BR /386/pbs ,
+.BR /386/9load ,
+.BR /amd64/9cpu ,
+respectively.
+.SH EXAMPLE
+To prepare a bootable kernel using the defaults on
+.BR /dev/sdE0 ,
+.IP
+.EX
+disk/mkcpuboot /dev/sdE0
+.EE
+.PP
+To use
+.I iplfat
+(see
+.IR pcipl (8)),
+.IP
+.EX
+disk/mkcpuboot -m /386/iplmbr -p /386/iplpbs
+	-l /386/iplfat
+.EE
+.SH SOURCE
+.B /sys/src/cmd/disk/mkcpuboot
+.SH "SEE ALSO"
+.IR authsrv (2),
+.IR auth (8),
+.IR booting (8),
+.IR iplpc (8)
+.SH BUGS
+Using fat is dubious.
+.I Iplpc
+should be the default.

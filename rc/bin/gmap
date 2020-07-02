@@ -1,0 +1,55 @@
+#!/bin/rc
+
+rfork e
+
+fn getkey {
+	if(~ $#gmapkey 0)
+		gmapkey = `{cat /lib/gmapkey}
+	if(~ $#gmapkey 0){
+		echo goto http://code.google.com/apis/maps/signup.html and get a google maps key (free)
+		exit 'no key'
+	}
+}
+
+gmapkey = ()
+here = `{cat /lib/sky/here}
+lat = $here(1)
+lng = `{echo -$here(2) | sed 's/^--//g'}
+
+
+flagfmt = 'z zoom,h,l,r,s,t'
+args = query
+if(! ifs = () eval `{aux/getflags $*}){
+	aux/usage
+	exit usage
+}
+if(~ $#flagz 0)
+	flagz = 16
+t = roadmap
+~ $#flagh 1 && t = hybrid
+~ $#flagt 1 && t = terrain
+~ $#flags 1 && t = satellite
+
+if(! ~ $#* 0){
+	getkey
+	query = ""
+	for (p)
+		query = $query+$p
+	there = `{ hget 'http://maps.google.com/maps/geo?q='$"query^'&output=csv&oe=utf8&sensor=false&key='$gmapkey | sed 's/,/ /g; 1q' }
+	if(! ~ $there(1) 200){
+		echo $* - not found
+		exit 'not found'
+	}
+	lng = $there(4)
+	lat = $there(3)
+}
+if(~ $#flagl 1){
+	echo $lat $lng
+	exit ''
+}
+
+if(~ $t terrain && ~ $flagz 1[6-9])
+	flagz = 15
+
+getkey
+hget 'http://maps.google.com/staticmap?center='$lat^,^$lng^'&size=600x600&zoom='$flagz'&sensor=false&format=png&key='$gmapkey'&maptype='$t | png

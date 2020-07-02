@@ -1,0 +1,120 @@
+.TH IOPS 8
+.EQ
+delim $$
+.EN
+.SH NAME
+iops \- measure IOPS and throughput
+.SH SYNOPSYS
+.B disk/iops
+[
+.B -v
+[
+.B rws
+] [
+.B -p
+.I prog
+] ... [
+.I file
+...
+.SH DESCRIPTION
+.I Iops
+uses a command-line specified programs to generate an I/O pattern
+to measure I/O throughput and IOPS on the given files.  Each program
+is run on each file.  Programs,
+specified with
+.BR -p ,
+consist of single-character op codes, some with a postfix argument.
+The opcodes either do I/O or manipulate the internal registers, which
+are:
+.TF offset
+.TP
+.B offset
+The base offset int the file.  I/O is at byte location
+$o + roman lba * ss$.  The initial value is 0.
+.TP
+.B ss
+The sector size.  The initial value is 512.
+.TP
+.B lba
+The current sector.  The initial value is 0.
+.PD
+.PP
+The
+.B size
+of the file is determined by
+.I dirstat
+(see
+.IR stat (2)).
+Neither loops nor timing nest.
+Whitespace is ignored.
+The op codes are
+.TF z\fIsize\fP
+.TP
+.B :\fIn\fP
+Begin loop of
+.I n
+iterations.
+.TP
+.B ;
+End loop.
+.TP
+.B {
+Begin timing.
+.TP
+.B }
+End timing.  Print the elapsed time time, read, write, and combined
+throughput and iops.
+.TP
+.B o\fIn\fP
+Set the
+.B offset
+register to
+.IR n .
+.TP
+.B z\fIss\fP
+Set the
+.B ss
+register to
+.IR ss .
+.TP
+.B r
+Read one sector.
+.TP
+.B w
+Write one sector.
+.TP
+.B s=\fIn\fR
+Set the lba register to
+.IR n .
+.TP
+.B sr
+Set a random lba in the file.  The maximum lba
+is $( roman "size" - o)/ss$.
+.TP
+.B s\fIn\fR
+Increment the lba by
+.I n
+sectors.
+.PD
+.PP
+The
+.B -v
+flag prints debugging information based on its arguments;
+.B s
+prints the
+.B lba
+after a seek,
+.B r
+prints the
+.B lba
+of a read, and
+.B w
+prints the
+.B lba
+of a write.
+.SH SOURCE
+.B /sys/src/cmd/disk/iops.c
+.SH BUGS
+No nesting.  Output is pre-divided.
+
+

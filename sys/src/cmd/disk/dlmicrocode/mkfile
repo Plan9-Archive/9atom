@@ -1,0 +1,15 @@
+</$objtype/mkfile
+
+TARG =	disk/dlmicrocode
+
+HFILES = dat.h
+OFILES = ata.$O scsi.$O main.$O
+
+BIN=/$objtype/bin
+UPDATE=\
+	mkfile\
+	$HFILES\
+	${OFILES:%.$O=%.c}\
+	${TARG:%=/386/bin/%}\
+
+</sys/src/cmd/mkone

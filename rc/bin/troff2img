@@ -1,0 +1,12 @@
+#!/bin/rc
+
+flagfmt=''
+args=''
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 0){
+	aux/usage
+	exit usage
+}
+
+lp -dstdout |
+	gs -dNOPAUSE -dQUIET '-sOUTPUTFILE=/fd/1' '-sDEVICE=plan9bm' - quit.ps |
+	crop -c 255 255 255

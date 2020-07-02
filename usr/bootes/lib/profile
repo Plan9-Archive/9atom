@@ -1,0 +1,46 @@
+bind -a $home/bin/rc /bin
+bind -a $home/bin/$cputype /bin
+bind -c $home/tmp /tmp
+
+# vfont (variable) and ffond (fixed) are an experiment with acme.
+# font = /lib/font/bit/pelm/unicode.8.font
+font = /lib/font/bit/cyberbit/mod14.font
+vfont = /lib/font/bit/cyberbit/mod14.font
+ffont = /lib/font/bit/pelm/unicode.8.font
+tabstop = 8
+
+fn cd {
+	builtin cd $* && awd
+}
+
+history = $home/lib/history
+
+switch($service){
+case terminal
+	cat $home/lib/kbmap/fkeys > /dev/kbmap
+	plumber
+	auth/factotum
+	echo -n accelerated > '#m/mousectl'
+	echo -n 'res 3' > '#m/mousectl'
+	prompt=('; '	'	')
+	rio
+case cpu
+	if(test -e /mnt/term/env/wsys)
+	if(test -e /mnt/term/mnt/wsys){
+		# rio already running
+		wsys = /mnt/term^`{cat /mnt/term/env/wsys}
+		bind -a /mnt/term/mnt/wsys /dev
+		if(test -f /mnt/term/dev/label)
+			echo -n böotes:$sysname > /mnt/term/dev/label
+	}
+	bind /mnt/term/dev/cons /dev/cons
+	bind /mnt/term/dev/consctl /dev/consctl
+	bind -a /mnt/term/dev /dev
+	news
+	if (! test -e /mnt/term/mnt/wsys) {
+		plumber
+		auth/factotum
+		exec rio
+	}
+case con
+}

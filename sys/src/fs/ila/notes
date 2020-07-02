@@ -1,0 +1,22 @@
+fixed
+1.  copydev doesn't differentiate b/w e99.0 and e99.1
+2.  marvell performance problems.
+3.  aoe performance.
+4.  aoe jumbograms.
+9.  handle local interface failure.
+a.  handle remote interface failure.
+b.  handle local interface addition.
+8.  issue all frames at beginning.
+c.  e820.
+5.  partitioning.
+d.  rework config code to allow dropping of interfaces.
+
+todo
+6.  il jumbograms.
+7.  aoe discovery limits?
+e.  chaninit can be called from il with no limit.  at some
+point allocation will fail, but dofilter will run out of filters
+at <500 channels.  
+f.  remove support for 32-bit worms.
+
+Morituri te salutant.

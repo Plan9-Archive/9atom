@@ -1,0 +1,23 @@
+#!/bin/rc
+# bug: should be set up by init
+
+obj=(
+	68000	2
+	arm	5
+	amd64	6 
+	alpha	7
+	386	8
+	ppc64	9
+	sparc	k
+	mips	v
+)
+while(! ~ $objtype $obj(1)){
+	if(~ $#obj 0){
+		echo unknown objtype: $objtype >[1=2]
+		exit objtype
+	}
+	obj = $obj(2-)
+}
+O=$obj(2)
+obj=()
+echo $O

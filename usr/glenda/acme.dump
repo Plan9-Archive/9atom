@@ -1,0 +1,20 @@
+/usr/glenda
+/lib/font/bit/lucidasans/unicode.7.font
+/lib/font/bit/lucidasans/typelatin1.7.font
+          0          20          75
+w Newcol Kill Putall Dump Exit 
+c          0 New Cut Paste Snarf Sort Zerox Delcol 
+c          1 New Cut Paste Snarf Sort Zerox Delcol 
+c          2 New Cut Paste Snarf Sort Zerox Delcol 
+f          0           1           0           0           4 
+          1          34          38           1           0 /usr/glenda/ Del Snarf Get | Look 
+f          1           2         567         567           4 
+          2          29        4753           0           0 readme.acme Del Snarf | Look 
+e          2           0           0           0           4 
+          3          44           2           0           1 /usr/glenda/- Del Snarf | Look Send Noscroll
+/usr/glenda
+win
+F          2           1          61          97          11          97 
+          4          36          97           0           0 /acme/mail/+Errors Del Snarf | Look 
+Mail: can't open /mail/fs/ctl: '/mail/fs/ctl' does not exist
+rc 200: Mail 202: can't open %s: %r

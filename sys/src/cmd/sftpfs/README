@@ -1,0 +1,9 @@
+AUTHOR		Fazlul Shahriar <fshahriar@gmail.com>
+
+BUGS
+	openssh server bugs:
+		READDIR gives 0 entries if the directory has no executable permission,
+		but is readable.
+
+Small changes for ssh2 by Steve Simon, Apr 2012.
+

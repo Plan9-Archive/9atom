@@ -1,0 +1,21 @@
+.TH IMGLOOP 1
+.SH NAME
+imgloop \- loop regenerating an image
+.SH SYNOPSIS
+.B imgloop
+[
+.B -i
+.I intervalms
+] [
+.B -c
+.I cmd
+...
+]
+.SH DESCRIPTION
+Display an image in a loop.  By default the image is regenerated
+every 20s.  The default command is
+.IR radar (1).
+.SH SOURCE
+.B /sys/src/cmd/imgloop
+.SH BUGS
+Should allow panning.

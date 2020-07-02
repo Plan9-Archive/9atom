@@ -1,0 +1,103 @@
+#!/bin/rc -x
+
+fileserver=aska
+cpu=ladd
+facedom=quanstro.net
+ndbfile=/lib/ndb/local
+# site=quanstro.net
+# LPDEST=printer
+
+mntgen -s slashn && chmod 666 /srv/slashn
+ndb/cs -f $ndbfile
+sysname=`{cat /dev/sysname}
+
+if(! test -e /net/ipifc/0/ctl || ~ 127.0.0.1 `{cat /net/ipifc/0/local})
+	ip/ipconfig >/dev/null >[2=1]
+if(test -e /net/ipifc/0/ctl)
+	ndb/dns -rf $ndbfile
+for(i in /net/ether?)
+	if(test -f $i/mtu)
+		echo mtu `{sed 's/.* //g'<$i/mtu}>$i/clone
+
+# parallelism for mk
+NPROC = `{wc -l </dev/sysstat}
+
+if(~ $#cdboot 0){
+	aux/timesync -f && sed 's/ +([0-9]+).*/\1/' </dev/time >'#r/rtc'
+}
+if not
+	aux/timesync -ra1000000
+
+for(i in A w f t m u v L '$' Ι Σ κ æ ©)
+	/bin/bind -a '#'^$i /dev >/dev/null >[2=1]
+for(disk in /dev/sd??) {
+	if(test -f $disk/data && test -f $disk/ctl)
+		disk/fdisk -p $disk/data >$disk/ctl >[2]/dev/null
+	for(part in $disk/plan9*)
+		if(test -f $part)
+			disk/prep -p $part >$disk/ctl >[2]/dev/null
+}
+
+# hacks
+switch($sysname){
+case brasstown
+	# use the external jack
+	echo pin 21>/dev/audioctl
+}
+
+if(! ~ `{cat /dev/user} none && test -x /bin/aux/vmware)
+	aux/vmware
+usbstart
+if(! ~ $terminal 'ARM '*){
+	if(! ~ $user none)
+	if(~ $mouseport ask || ~ $#mouseport 0){
+		echo -n 'mouseport is (ps2, ps2intellimouse, usb, 0, 1, 2)[ps2]: '
+		mouseport=`{read}
+		if(~ $#mouseport 0)
+			mouseport=ps2
+	}
+	if(! ~ $user none)
+	if(~ $vgasize ask || ~ $#vgasize 0){
+		echo -n 'vgasize [640x480x8]: '
+		vgasize=`{read}
+		if(~ $#vgasize 0)
+			vgasize=640x480x8
+	}
+	if(! ~ $user none)
+	if(~ $monitor || ~ $#monitor 0){
+		echo -n 'monitor is [xga]: '
+		monitor=`{read}
+		if(~ $#monitor 0)
+			monitor=xga
+	}
+	if(test -f /dev/mousectl && ~ $mouseport ps2 ps2intellimouse 0 1 2 usb){
+		if(~ $mouseport usb)
+			usbstart
+		if not
+			aux/mouse $mouseport
+		# parse vgasize into fields
+		vgasize=`{echo $vgasize}
+		if(! ~ $"monitor '' && ! ~ `{cat /dev/user} none)@{
+			rfork n
+			if(~ $monitor vesa)
+				aux/realemu
+			aux/vga -l $vgasize
+		}
+		if(~ $accupoint 1)
+			pipefile -dr /bin/aux/accupoint /dev/mouse
+	}
+}
+disk=''
+if(test -f '#S/'*/swap)
+	disk=`{ls -Q '#S/'*/swap >[2]/dev/null | sed 1q | sed 's!swap$!!'}
+if(! ~ $disk '') {
+	swap $disk^swap >/dev/null >[2=1]
+	dossrv
+	c:
+}
+if(test -f '#©/cecctl') @{
+	echo name $sysname
+#	echo cecon /net/ether0
+}>'#©/cecctl'>[2]/dev/null
+
+dmaon

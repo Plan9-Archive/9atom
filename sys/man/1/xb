@@ -1,0 +1,52 @@
+.TH XB 1
+.SH NAME
+xb \- XML beautifier
+.SH SYNOPSIS
+.B xb
+[
+.B dM
+][
+.I file
+]
+.SH DESCRIPTION
+.I Xb
+performs a DOM model, non-validating parse of the given XML
+file (or standard input if none specified). This is then written
+to standard output reformatted into an indented, one-line-per-element
+style.
+.PP
+.I Xb
+takes some liberties with the document which may effect later
+interpretation, though it is idempotent:
+.IP -
+Re-formatting the will change the meaning of PCdata in the
+XML file if leading and trailing whitespace is significant.
+.IP -
+All comments are stripped, though the 
+.B DOCTYPE
+structured comment is preserved. A new XML version
+comment is always generated on the output.
+.IP -
+Attributes are always quoted with single quotes
+whether the source uses single or double quotes.
+.IP -
+Empty long form elements are replaced with their short form;
+for example:
+.EX
+	<fred a='1'>
+	</fred>
+.EE
+ is replaced with
+.EX
+	<fred a='1' />
+.EE
+.IP -
+.I Xml
+has its own view of the valid characterset for XML files, which might
+result in slightly different characters being escaped as entity references
+to those on the input. This is only a matter of interpretation, the meaning
+of the file will be unaffected.
+.SH SOURCE
+.B /sys/src/cmd/xb.c
+.SH "SEE ALSO"
+.IR xml (2)

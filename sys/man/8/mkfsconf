@@ -1,0 +1,98 @@
+.TH MKFSCONF 8
+.SH NAME
+mkfsconf, mknvrsafe, mkfsboot \- build file server boot media
+.SH SYNOPSIS
+.B disk/mkfsconfig <
+.I cfg
+>
+.I cfgpart
+.br
+.B disk/mknvrsafe
+[
+.B -c
+.I config
+]
+.br
+.B disk/mkfsboot
+[
+.B -m
+.I mbr
+][
+.B -p
+.I pbs
+][
+.B -l
+.I loader
+]
+.BI /dev/sd nn
+.SH DESCRIPTION
+These programs assist in setting up boot media for
+the file server.  Media prepared with these programs
+will be ready to use once authentication information
+is entered at boot time.
+.PP
+.I Mknvrsafe
+prepares an nvram file which points to the
+file server's config device.  See
+.IR fs (8)
+for device specifications.
+.PP
+The file server configuration block itself may be written
+with
+.IR mkfsconf .
+Care must be taken when placing this block on disk,
+since the file server's block size is typically not a divisor
+of the media block size.
+.PP
+.I Mkfsboot
+builds a bootable 386 image from configuration in
+the current directory on the image
+.BI /dev/sd nn\fR.\fP
+The file
+.I fsconfig
+is the file server configuration and the directory
+.I 9fat
+contains at least the files
+.IR loader ,
+.BI 9 conf fs\fR,\fP
+.BR plan9.ini ,
+.BR fs.nvr .
+The default MBR, PBS and boot loader are 
+.BR /386/mbr ,
+.BR /386/pbs ,
+.BR /386/9load ,
+respectively.
+.SH EXAMPLE
+To prepare an nvram file given the file server configuration
+file
+.BR fsconfig,
+.IP
+.EX
+# format properly without password
+disk/mknvrsafe -c `{sed -n 's:^config (.*):\\1:p' < fsconfig} |
+	dd -conv sync -of 9fat/fs.nvr
+.EE
+.PP
+And to write the configuration block to the partition
+fsconfig,
+.IP
+.EX
+# need to add Tconfig tag
+grep -v '^config' fsconfig | disk/mkfsconfig |
+	dd -of $d/fsconfig -oseek $offset
+.EE
+.SH SOURCE
+.B /sys/src/cmd/disk/mkfsconf.c
+.br
+.B /sys/src/cmd/disk/mknvrsafe.c
+.br
+.B /sys/src/cmd/disk/mkfsboot
+.SH "SEE ALSO"
+.IR authsrv (2),
+.IR fs (8),
+.IR fsconfig (8)
+.SH BUGS
+.I Mkfsconf
+should not assume a 8192 byte block
+or require outside help to align partitions
+properly.  Only works for 386 machines.

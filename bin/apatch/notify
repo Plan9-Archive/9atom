@@ -1,0 +1,29 @@
+#!/bin/rc
+# $patch/notify
+rfork e
+. /rc/bin/apatch/defs
+mountfs
+
+cd $PD || fail no $PD
+for(i in [a-zA-Z]*){
+	if(! test -e $i/diffs && test -e $i/done ){
+		echo new patch $i >[1=2]
+		$patch/diff $i >/dev/null >[2=1]
+		@{
+			echo From: $MS
+			echo Subject:  'new patch: '^$"i
+			echo
+
+		#	echo http://$P ^ '/magic/webls?dir=/patches/'^$i
+		#	echo
+
+			cat $i/readme
+			echo files:
+			cat $i/files | sed 's/^/	/'
+			echo removed:
+			cat $i/removed | sed 's/^/	/'
+			echo
+			cat $i/diffs
+		} | mail `{cat $i/email} $M
+	}
+}

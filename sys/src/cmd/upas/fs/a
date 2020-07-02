@@ -1,0 +1,1834 @@
+Elemlen = 28;
+Errlen = 128;
+Pathlen = 256;
+sizeof_1_ = 8;
+aggr _1_
+{
+	'U' 0 lo;
+	'U' 4 hi;
+};
+
+defn
+_1_(addr) {
+	complex _1_ addr;
+	print("	lo	", addr.lo, "\n");
+	print("	hi	", addr.hi, "\n");
+};
+
+sizeofFPdbleword = 8;
+aggr FPdbleword
+{
+	'F' 0 x;
+	{
+	'U' 0 lo;
+	'U' 4 hi;
+	};
+};
+
+defn
+FPdbleword(addr) {
+	complex FPdbleword addr;
+	print("	x	", addr.x, "\n");
+	print("_1_ {\n");
+		_1_(addr+0);
+	print("}\n");
+};
+
+UTFmax = 4;
+Runesync = 128;
+Runeself = 128;
+Runeerror = 65533;
+Runemax = 1114111;
+sizeofFmt = 48;
+aggr Fmt
+{
+	'b' 0 runes;
+	'X' 4 start;
+	'X' 8 to;
+	'X' 12 stop;
+	'X' 16 flush;
+	'X' 20 farg;
+	'D' 24 nfmt;
+	'X' 28 args;
+	'D' 32 r;
+	'D' 36 width;
+	'D' 40 prec;
+	'U' 44 flags;
+};
+
+defn
+Fmt(addr) {
+	complex Fmt addr;
+	print("	runes	", addr.runes, "\n");
+	print("	start	", addr.start\X, "\n");
+	print("	to	", addr.to\X, "\n");
+	print("	stop	", addr.stop\X, "\n");
+	print("	flush	", addr.flush\X, "\n");
+	print("	farg	", addr.farg\X, "\n");
+	print("	nfmt	", addr.nfmt, "\n");
+	print("	args	", addr.args\X, "\n");
+	print("	r	", addr.r, "\n");
+	print("	width	", addr.width, "\n");
+	print("	prec	", addr.prec, "\n");
+	print("	flags	", addr.flags, "\n");
+};
+
+FmtWidth = 1;
+FmtLeft = 2;
+FmtPrec = 4;
+FmtSharp = 8;
+FmtSpace = 16;
+FmtSign = 32;
+FmtZero = 64;
+FmtUnsigned = 128;
+FmtShort = 256;
+FmtLong = 512;
+FmtVLong = 1024;
+FmtComma = 2048;
+FmtByte = 4096;
+FmtFlag = 8192;
+sizeofTm = 40;
+aggr Tm
+{
+	'D' 0 sec;
+	'D' 4 min;
+	'D' 8 hour;
+	'D' 12 mday;
+	'D' 16 mon;
+	'D' 20 year;
+	'D' 24 wday;
+	'D' 28 yday;
+	'a' 32 zone;
+	'D' 36 tzoff;
+};
+
+defn
+Tm(addr) {
+	complex Tm addr;
+	print("	sec	", addr.sec, "\n");
+	print("	min	", addr.min, "\n");
+	print("	hour	", addr.hour, "\n");
+	print("	mday	", addr.mday, "\n");
+	print("	mon	", addr.mon, "\n");
+	print("	year	", addr.year, "\n");
+	print("	wday	", addr.wday, "\n");
+	print("	yday	", addr.yday, "\n");
+	print("	zone	", addr.zone, "\n");
+	print("	tzoff	", addr.tzoff, "\n");
+};
+
+PNPROC = 1;
+PNGROUP = 2;
+Profoff = 0;
+Profuser = 1;
+Profkernel = 2;
+Proftime = 3;
+Profsample = 4;
+sizeofLock = 4;
+aggr Lock
+{
+	'D' 0 val;
+};
+
+defn
+Lock(addr) {
+	complex Lock addr;
+	print("	val	", addr.val, "\n");
+};
+
+sizeofQLp = 12;
+aggr QLp
+{
+	'D' 0 inuse;
+	'A' QLp 4 next;
+	'C' 8 state;
+};
+
+defn
+QLp(addr) {
+	complex QLp addr;
+	print("	inuse	", addr.inuse, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	state	", addr.state, "\n");
+};
+
+sizeofQLock = 16;
+aggr QLock
+{
+	Lock 0 lock;
+	'D' 4 locked;
+	'A' QLp 8 $head;
+	'A' QLp 12 $tail;
+};
+
+defn
+QLock(addr) {
+	complex QLock addr;
+	print("Lock lock {\n");
+	Lock(addr.lock);
+	print("}\n");
+	print("	locked	", addr.locked, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofRWLock = 20;
+aggr RWLock
+{
+	Lock 0 lock;
+	'D' 4 readers;
+	'D' 8 writer;
+	'A' QLp 12 $head;
+	'A' QLp 16 $tail;
+};
+
+defn
+RWLock(addr) {
+	complex RWLock addr;
+	print("Lock lock {\n");
+	Lock(addr.lock);
+	print("}\n");
+	print("	readers	", addr.readers, "\n");
+	print("	writer	", addr.writer, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofRendez = 12;
+aggr Rendez
+{
+	'A' QLock 0 l;
+	'A' QLp 4 $head;
+	'A' QLp 8 $tail;
+};
+
+defn
+Rendez(addr) {
+	complex Rendez addr;
+	print("	l	", addr.l\X, "\n");
+	print("	$head	", addr.$head\X, "\n");
+	print("	$tail	", addr.$tail\X, "\n");
+};
+
+sizeofNetConnInfo = 36;
+aggr NetConnInfo
+{
+	'X' 0 dir;
+	'X' 4 root;
+	'X' 8 spec;
+	'X' 12 lsys;
+	'X' 16 lserv;
+	'X' 20 rsys;
+	'X' 24 rserv;
+	'X' 28 laddr;
+	'X' 32 raddr;
+};
+
+defn
+NetConnInfo(addr) {
+	complex NetConnInfo addr;
+	print("	dir	", addr.dir\X, "\n");
+	print("	root	", addr.root\X, "\n");
+	print("	spec	", addr.spec\X, "\n");
+	print("	lsys	", addr.lsys\X, "\n");
+	print("	lserv	", addr.lserv\X, "\n");
+	print("	rsys	", addr.rsys\X, "\n");
+	print("	rserv	", addr.rserv\X, "\n");
+	print("	laddr	", addr.laddr\X, "\n");
+	print("	raddr	", addr.raddr\X, "\n");
+};
+
+RFNAMEG = 1;
+RFENVG = 2;
+RFFDG = 4;
+RFNOTEG = 8;
+RFPROC = 16;
+RFMEM = 32;
+RFNOWAIT = 64;
+RFCNAMEG = 1024;
+RFCENVG = 2048;
+RFCFDG = 4096;
+RFREND = 8192;
+RFNOMNT = 16384;
+sizeofQid = 16;
+aggr Qid
+{
+	'W' 0 path;
+	'U' 8 vers;
+	'b' 12 type;
+};
+
+defn
+Qid(addr) {
+	complex Qid addr;
+	print("	path	", addr.path, "\n");
+	print("	vers	", addr.vers, "\n");
+	print("	type	", addr.type, "\n");
+};
+
+sizeofDir = 60;
+aggr Dir
+{
+	'u' 0 type;
+	'U' 4 dev;
+	Qid 8 qid;
+	'U' 24 mode;
+	'U' 28 atime;
+	'U' 32 mtime;
+	'V' 36 length;
+	'X' 44 name;
+	'X' 48 uid;
+	'X' 52 gid;
+	'X' 56 muid;
+};
+
+defn
+Dir(addr) {
+	complex Dir addr;
+	print("	type	", addr.type, "\n");
+	print("	dev	", addr.dev, "\n");
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	mode	", addr.mode, "\n");
+	print("	atime	", addr.atime, "\n");
+	print("	mtime	", addr.mtime, "\n");
+	print("	length	", addr.length, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	uid	", addr.uid\X, "\n");
+	print("	gid	", addr.gid\X, "\n");
+	print("	muid	", addr.muid\X, "\n");
+};
+
+sizeofWaitmsg = 20;
+aggr Waitmsg
+{
+	'D' 0 pid;
+	'a' 4 time;
+	'X' 16 msg;
+};
+
+defn
+Waitmsg(addr) {
+	complex Waitmsg addr;
+	print("	pid	", addr.pid, "\n");
+	print("	time	", addr.time, "\n");
+	print("	msg	", addr.msg\X, "\n");
+};
+
+sizeofIOchunk = 8;
+aggr IOchunk
+{
+	'X' 0 addr;
+	'U' 4 len;
+};
+
+defn
+IOchunk(addr) {
+	complex IOchunk addr;
+	print("	addr	", addr.addr\X, "\n");
+	print("	len	", addr.len, "\n");
+};
+
+Bsize = 8192;
+Bungetsize = 4;
+Bmagic = 3227993;
+Beof = -1;
+Bbad = -2;
+Binactive = 0;
+Bractive = 1;
+Bwactive = 2;
+Bracteof = 3;
+sizeofBiobufhdr = 52;
+aggr Biobufhdr
+{
+	'D' 0 icount;
+	'D' 4 ocount;
+	'D' 8 rdline;
+	'D' 12 runesize;
+	'D' 16 state;
+	'D' 20 fid;
+	'D' 24 flag;
+	'V' 28 offset;
+	'D' 36 bsize;
+	'X' 40 bbuf;
+	'X' 44 ebuf;
+	'X' 48 gbuf;
+};
+
+defn
+Biobufhdr(addr) {
+	complex Biobufhdr addr;
+	print("	icount	", addr.icount, "\n");
+	print("	ocount	", addr.ocount, "\n");
+	print("	rdline	", addr.rdline, "\n");
+	print("	runesize	", addr.runesize, "\n");
+	print("	state	", addr.state, "\n");
+	print("	fid	", addr.fid, "\n");
+	print("	flag	", addr.flag, "\n");
+	print("	offset	", addr.offset, "\n");
+	print("	bsize	", addr.bsize, "\n");
+	print("	bbuf	", addr.bbuf\X, "\n");
+	print("	ebuf	", addr.ebuf\X, "\n");
+	print("	gbuf	", addr.gbuf\X, "\n");
+};
+
+sizeofBiobuf = 8248;
+aggr Biobuf
+{
+	{
+	'D' 0 icount;
+	'D' 4 ocount;
+	'D' 8 rdline;
+	'D' 12 runesize;
+	'D' 16 state;
+	'D' 20 fid;
+	'D' 24 flag;
+	'V' 28 offset;
+	'D' 36 bsize;
+	'X' 40 bbuf;
+	'X' 44 ebuf;
+	'X' 48 gbuf;
+	};
+	'a' 52 b;
+};
+
+defn
+Biobuf(addr) {
+	complex Biobuf addr;
+	print("Biobufhdr {\n");
+		Biobufhdr(addr+0);
+	print("}\n");
+	print("	b	", addr.b, "\n");
+};
+
+sizeofMlock = 264;
+aggr Mlock
+{
+	'D' 0 fd;
+	'D' 4 pid;
+	'a' 8 name;
+};
+
+defn
+Mlock(addr) {
+	complex Mlock addr;
+	print("	fd	", addr.fd, "\n");
+	print("	pid	", addr.pid, "\n");
+	print("	name	", addr.name, "\n");
+};
+
+Mboxmode = 402;
+sizeofString = 20;
+aggr String
+{
+	{
+	'D' 0 val;
+	};
+	'X' 4 base;
+	'X' 8 end;
+	'X' 12 ptr;
+	'd' 16 ref;
+	'b' 18 fixed;
+};
+
+defn
+String(addr) {
+	complex String addr;
+	print("Lock {\n");
+		Lock(addr+0);
+	print("}\n");
+	print("	base	", addr.base\X, "\n");
+	print("	end	", addr.end\X, "\n");
+	print("	ptr	", addr.ptr\X, "\n");
+	print("	ref	", addr.ref, "\n");
+	print("	fixed	", addr.fixed, "\n");
+};
+
+Fields = 18;
+Fanswered = 1;
+Fdeleted = 2;
+Fdraft = 4;
+Fflagged = 8;
+Frecent = 16;
+Fseen = 32;
+Fstored = 64;
+sizeof_2_ = 8256;
+aggr _2_
+{
+	Biobuf 0 bb;
+	'A' Biobuf 8248 fp;
+	'D' 8252 fd;
+};
+
+defn
+_2_(addr) {
+	complex _2_ addr;
+	print("Biobuf bb {\n");
+	Biobuf(addr.bb);
+	print("}\n");
+	print("	fp	", addr.fp\X, "\n");
+	print("	fd	", addr.fd, "\n");
+};
+
+sizeof_3_ = 24;
+aggr _3_
+{
+	'a' 0 std;
+	'D' 12 pid;
+	'D' 16 status;
+	'A' Waitmsg 20 waitmsg;
+};
+
+defn
+_3_(addr) {
+	complex _3_ addr;
+	print("	std	", addr.std, "\n");
+	print("	pid	", addr.pid, "\n");
+	print("	status	", addr.status, "\n");
+	print("	waitmsg	", addr.waitmsg\X, "\n");
+};
+
+sizeof_4_ = 8;
+aggr _4_
+{
+	'U' 0 msize;
+	'X' 4 version;
+};
+
+defn
+_4_(addr) {
+	complex _4_ addr;
+	print("	msize	", addr.msize, "\n");
+	print("	version	", addr.version\X, "\n");
+};
+
+sizeof_5_ = 4;
+aggr _5_
+{
+	'u' 0 oldtag;
+};
+
+defn
+_5_(addr) {
+	complex _5_ addr;
+	print("	oldtag	", addr.oldtag, "\n");
+};
+
+sizeof_6_ = 4;
+aggr _6_
+{
+	'X' 0 ename;
+};
+
+defn
+_6_(addr) {
+	complex _6_ addr;
+	print("	ename	", addr.ename\X, "\n");
+};
+
+sizeof_7_ = 20;
+aggr _7_
+{
+	Qid 0 qid;
+	'U' 16 iounit;
+};
+
+defn
+_7_(addr) {
+	complex _7_ addr;
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	iounit	", addr.iounit, "\n");
+};
+
+sizeof_8_ = 16;
+aggr _8_
+{
+	Qid 0 aqid;
+};
+
+defn
+_8_(addr) {
+	complex _8_ addr;
+	print("Qid aqid {\n");
+	Qid(addr.aqid);
+	print("}\n");
+};
+
+sizeof_9_ = 12;
+aggr _9_
+{
+	'U' 0 afid;
+	'X' 4 uname;
+	'X' 8 aname;
+};
+
+defn
+_9_(addr) {
+	complex _9_ addr;
+	print("	afid	", addr.afid, "\n");
+	print("	uname	", addr.uname\X, "\n");
+	print("	aname	", addr.aname\X, "\n");
+};
+
+sizeof_10_ = 12;
+aggr _10_
+{
+	'U' 0 perm;
+	'X' 4 name;
+	'b' 8 mode;
+};
+
+defn
+_10_(addr) {
+	complex _10_ addr;
+	print("	perm	", addr.perm, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	mode	", addr.mode, "\n");
+};
+
+sizeof_11_ = 72;
+aggr _11_
+{
+	'U' 0 newfid;
+	'u' 4 nwname;
+	'a' 8 wname;
+};
+
+defn
+_11_(addr) {
+	complex _11_ addr;
+	print("	newfid	", addr.newfid, "\n");
+	print("	nwname	", addr.nwname, "\n");
+	print("	wname	", addr.wname, "\n");
+};
+
+sizeof_12_ = 260;
+aggr _12_
+{
+	'u' 0 nwqid;
+	'a' 4 wqid;
+};
+
+defn
+_12_(addr) {
+	complex _12_ addr;
+	print("	nwqid	", addr.nwqid, "\n");
+	print("	wqid	", addr.wqid, "\n");
+};
+
+sizeof_13_ = 16;
+aggr _13_
+{
+	'V' 0 offset;
+	'U' 8 count;
+	'X' 12 data;
+};
+
+defn
+_13_(addr) {
+	complex _13_ addr;
+	print("	offset	", addr.offset, "\n");
+	print("	count	", addr.count, "\n");
+	print("	data	", addr.data\X, "\n");
+};
+
+sizeof_14_ = 8;
+aggr _14_
+{
+	'u' 0 nstat;
+	'X' 4 stat;
+};
+
+defn
+_14_(addr) {
+	complex _14_ addr;
+	print("	nstat	", addr.nstat, "\n");
+	print("	stat	", addr.stat\X, "\n");
+};
+
+sizeof_15_ = 260;
+aggr _15_
+{
+	{
+	'U' 0 msize;
+	'X' 4 version;
+	};
+	{
+	'u' 0 oldtag;
+	};
+	{
+	'X' 0 ename;
+	};
+	{
+	Qid 0 qid;
+	'U' 16 iounit;
+	};
+	{
+	Qid 0 aqid;
+	};
+	{
+	'U' 0 afid;
+	'X' 4 uname;
+	'X' 8 aname;
+	};
+	{
+	'U' 0 perm;
+	'X' 4 name;
+	'b' 8 mode;
+	};
+	{
+	'U' 0 newfid;
+	'u' 4 nwname;
+	'a' 8 wname;
+	};
+	{
+	'u' 0 nwqid;
+	'a' 4 wqid;
+	};
+	{
+	'V' 0 offset;
+	'U' 8 count;
+	'X' 12 data;
+	};
+	{
+	'u' 0 nstat;
+	'X' 4 stat;
+	};
+};
+
+defn
+_15_(addr) {
+	complex _15_ addr;
+	print("_4_ {\n");
+		_4_(addr+0);
+	print("}\n");
+	print("_5_ {\n");
+		_5_(addr+0);
+	print("}\n");
+	print("_6_ {\n");
+		_6_(addr+0);
+	print("}\n");
+	print("_7_ {\n");
+		_7_(addr+0);
+	print("}\n");
+	print("_8_ {\n");
+		_8_(addr+0);
+	print("}\n");
+	print("_9_ {\n");
+		_9_(addr+0);
+	print("}\n");
+	print("_10_ {\n");
+		_10_(addr+0);
+	print("}\n");
+	print("_11_ {\n");
+		_11_(addr+0);
+	print("}\n");
+	print("_12_ {\n");
+		_12_(addr+0);
+	print("}\n");
+	print("_13_ {\n");
+		_13_(addr+0);
+	print("}\n");
+	print("_14_ {\n");
+		_14_(addr+0);
+	print("}\n");
+};
+
+sizeofFcall = 272;
+aggr Fcall
+{
+	'b' 0 type;
+	'U' 4 fid;
+	'u' 8 tag;
+	{
+	{
+	'U' 12 msize;
+	'X' 16 version;
+	};
+	{
+	'u' 12 oldtag;
+	};
+	{
+	'X' 12 ename;
+	};
+	{
+	Qid 12 qid;
+	'U' 28 iounit;
+	};
+	{
+	Qid 12 aqid;
+	};
+	{
+	'U' 12 afid;
+	'X' 16 uname;
+	'X' 20 aname;
+	};
+	{
+	'U' 12 perm;
+	'X' 16 name;
+	'b' 20 mode;
+	};
+	{
+	'U' 12 newfid;
+	'u' 16 nwname;
+	'a' 20 wname;
+	};
+	{
+	'u' 12 nwqid;
+	'a' 16 wqid;
+	};
+	{
+	'V' 12 offset;
+	'U' 20 count;
+	'X' 24 data;
+	};
+	{
+	'u' 12 nstat;
+	'X' 16 stat;
+	};
+	};
+};
+
+defn
+Fcall(addr) {
+	complex Fcall addr;
+	print("	type	", addr.type, "\n");
+	print("	fid	", addr.fid, "\n");
+	print("	tag	", addr.tag, "\n");
+	print("_15_ {\n");
+		_15_(addr+12);
+	print("}\n");
+};
+
+Tversion = 100;
+Rversion = 101;
+Tauth = 102;
+Rauth = 103;
+Tattach = 104;
+Rattach = 105;
+Terror = 106;
+Rerror = 107;
+Tflush = 108;
+Rflush = 109;
+Twalk = 110;
+Rwalk = 111;
+Topen = 112;
+Ropen = 113;
+Tcreate = 114;
+Rcreate = 115;
+Tread = 116;
+Rread = 117;
+Twrite = 118;
+Rwrite = 119;
+Tclunk = 120;
+Rclunk = 121;
+Tremove = 122;
+Rremove = 123;
+Tstat = 124;
+Rstat = 125;
+Twstat = 126;
+Rwstat = 127;
+Tmax = 128;
+AESbsize = 16;
+AESmaxkey = 32;
+AESmaxrounds = 14;
+sizeofAESstate = 592;
+aggr AESstate
+{
+	'U' 0 setup;
+	'D' 4 rounds;
+	'D' 8 keybytes;
+	'U' 12 ctrsz;
+	'a' 16 key;
+	'a' 48 ekey;
+	'a' 288 dkey;
+	'a' 528 ivec;
+	'a' 544 mackey;
+};
+
+defn
+AESstate(addr) {
+	complex AESstate addr;
+	print("	setup	", addr.setup, "\n");
+	print("	rounds	", addr.rounds, "\n");
+	print("	keybytes	", addr.keybytes, "\n");
+	print("	ctrsz	", addr.ctrsz, "\n");
+	print("	key	", addr.key, "\n");
+	print("	ekey	", addr.ekey, "\n");
+	print("	dkey	", addr.dkey, "\n");
+	print("	ivec	", addr.ivec, "\n");
+	print("	mackey	", addr.mackey, "\n");
+};
+
+BFbsize = 8;
+BFrounds = 16;
+sizeofBFstate = 4236;
+aggr BFstate
+{
+	'U' 0 setup;
+	'a' 4 key;
+	'a' 60 ivec;
+	'a' 68 pbox;
+	'a' 140 sbox;
+};
+
+defn
+BFstate(addr) {
+	complex BFstate addr;
+	print("	setup	", addr.setup, "\n");
+	print("	key	", addr.key, "\n");
+	print("	ivec	", addr.ivec, "\n");
+	print("	pbox	", addr.pbox, "\n");
+	print("	sbox	", addr.sbox, "\n");
+};
+
+DESbsize = 8;
+sizeofDESstate = 148;
+aggr DESstate
+{
+	'U' 0 setup;
+	'a' 4 key;
+	'a' 12 expanded;
+	'a' 140 ivec;
+};
+
+defn
+DESstate(addr) {
+	complex DESstate addr;
+	print("	setup	", addr.setup, "\n");
+	print("	key	", addr.key, "\n");
+	print("	expanded	", addr.expanded, "\n");
+	print("	ivec	", addr.ivec, "\n");
+};
+
+DES3E = 0;
+DES3D = 1;
+DES3EEE = 0;
+DES3EDE = 2;
+DES3DED = 5;
+DES3DDD = 7;
+sizeofDES3state = 420;
+aggr DES3state
+{
+	'U' 0 setup;
+	'a' 4 key;
+	'a' 28 expanded;
+	'a' 412 ivec;
+};
+
+defn
+DES3state(addr) {
+	complex DES3state addr;
+	print("	setup	", addr.setup, "\n");
+	print("	key	", addr.key, "\n");
+	print("	expanded	", addr.expanded, "\n");
+	print("	ivec	", addr.ivec, "\n");
+};
+
+SHA1dlen = 20;
+SHA2_224dlen = 28;
+SHA2_256dlen = 32;
+SHA2_384dlen = 48;
+SHA2_512dlen = 64;
+MD4dlen = 16;
+MD5dlen = 16;
+AESdlen = 16;
+Hmacblksz = 64;
+sizeof_16_ = 64;
+aggr _16_
+{
+	'a' 0 state;
+	'a' 0 bstate;
+};
+
+defn
+_16_(addr) {
+	complex _16_ addr;
+	print("	state	", addr.state, "\n");
+	print("	bstate	", addr.bstate, "\n");
+};
+
+sizeofDigestState = 336;
+aggr DigestState
+{
+	'W' 0 len;
+	{
+	'a' 8 state;
+	'a' 8 bstate;
+	};
+	'a' 72 buf;
+	'D' 328 blen;
+	'C' 332 malloced;
+	'C' 333 seeded;
+};
+
+defn
+DigestState(addr) {
+	complex DigestState addr;
+	print("	len	", addr.len, "\n");
+	print("_16_ {\n");
+		_16_(addr+8);
+	print("}\n");
+	print("	buf	", addr.buf, "\n");
+	print("	blen	", addr.blen, "\n");
+	print("	malloced	", addr.malloced, "\n");
+	print("	seeded	", addr.seeded, "\n");
+};
+
+sizeofRC4state = 260;
+aggr RC4state
+{
+	'a' 0 state;
+	'b' 256 x;
+	'b' 257 y;
+};
+
+defn
+RC4state(addr) {
+	complex RC4state addr;
+	print("	state	", addr.state, "\n");
+	print("	x	", addr.x, "\n");
+	print("	y	", addr.y, "\n");
+};
+
+sizeofRSApub = 8;
+aggr RSApub
+{
+	'X' 0 n;
+	'X' 4 ek;
+};
+
+defn
+RSApub(addr) {
+	complex RSApub addr;
+	print("	n	", addr.n\X, "\n");
+	print("	ek	", addr.ek\X, "\n");
+};
+
+sizeofRSApriv = 32;
+aggr RSApriv
+{
+	RSApub 0 pub;
+	'X' 8 dk;
+	'X' 12 p;
+	'X' 16 q;
+	'X' 20 kp;
+	'X' 24 kq;
+	'X' 28 c2;
+};
+
+defn
+RSApriv(addr) {
+	complex RSApriv addr;
+	print("RSApub pub {\n");
+	RSApub(addr.pub);
+	print("}\n");
+	print("	dk	", addr.dk\X, "\n");
+	print("	p	", addr.p\X, "\n");
+	print("	q	", addr.q\X, "\n");
+	print("	kp	", addr.kp\X, "\n");
+	print("	kq	", addr.kq\X, "\n");
+	print("	c2	", addr.c2\X, "\n");
+};
+
+sizeofPEMChain = 12;
+aggr PEMChain
+{
+	'A' PEMChain 0 next;
+	'X' 4 pem;
+	'D' 8 pemlen;
+};
+
+defn
+PEMChain(addr) {
+	complex PEMChain addr;
+	print("	next	", addr.next\X, "\n");
+	print("	pem	", addr.pem\X, "\n");
+	print("	pemlen	", addr.pemlen, "\n");
+};
+
+sizeofEGpub = 12;
+aggr EGpub
+{
+	'X' 0 p;
+	'X' 4 alpha;
+	'X' 8 key;
+};
+
+defn
+EGpub(addr) {
+	complex EGpub addr;
+	print("	p	", addr.p\X, "\n");
+	print("	alpha	", addr.alpha\X, "\n");
+	print("	key	", addr.key\X, "\n");
+};
+
+sizeofEGpriv = 16;
+aggr EGpriv
+{
+	EGpub 0 pub;
+	'X' 12 secret;
+};
+
+defn
+EGpriv(addr) {
+	complex EGpriv addr;
+	print("EGpub pub {\n");
+	EGpub(addr.pub);
+	print("}\n");
+	print("	secret	", addr.secret\X, "\n");
+};
+
+sizeofEGsig = 8;
+aggr EGsig
+{
+	'X' 0 r;
+	'X' 4 s;
+};
+
+defn
+EGsig(addr) {
+	complex EGsig addr;
+	print("	r	", addr.r\X, "\n");
+	print("	s	", addr.s\X, "\n");
+};
+
+sizeofDSApub = 16;
+aggr DSApub
+{
+	'X' 0 p;
+	'X' 4 q;
+	'X' 8 alpha;
+	'X' 12 key;
+};
+
+defn
+DSApub(addr) {
+	complex DSApub addr;
+	print("	p	", addr.p\X, "\n");
+	print("	q	", addr.q\X, "\n");
+	print("	alpha	", addr.alpha\X, "\n");
+	print("	key	", addr.key\X, "\n");
+};
+
+sizeofDSApriv = 20;
+aggr DSApriv
+{
+	DSApub 0 pub;
+	'X' 16 secret;
+};
+
+defn
+DSApriv(addr) {
+	complex DSApriv addr;
+	print("DSApub pub {\n");
+	DSApub(addr.pub);
+	print("}\n");
+	print("	secret	", addr.secret\X, "\n");
+};
+
+sizeofDSAsig = 8;
+aggr DSAsig
+{
+	'X' 0 r;
+	'X' 4 s;
+};
+
+defn
+DSAsig(addr) {
+	complex DSAsig addr;
+	print("	r	", addr.r\X, "\n");
+	print("	s	", addr.s\X, "\n");
+};
+
+sizeofThumbprint = 24;
+aggr Thumbprint
+{
+	'A' Thumbprint 0 next;
+	'a' 4 sha1;
+};
+
+defn
+Thumbprint(addr) {
+	complex Thumbprint addr;
+	print("	next	", addr.next\X, "\n");
+	print("	sha1	", addr.sha1, "\n");
+};
+
+sizeofTLSconn = 80;
+aggr TLSconn
+{
+	'a' 0 dir;
+	'X' 40 cert;
+	'X' 44 sessionID;
+	'D' 48 certlen;
+	'D' 52 sessionIDlen;
+	'X' 56 trace;
+	'A' PEMChain 60 chain;
+	'X' 64 sessionType;
+	'X' 68 sessionKey;
+	'D' 72 sessionKeylen;
+	'X' 76 sessionConst;
+};
+
+defn
+TLSconn(addr) {
+	complex TLSconn addr;
+	print("	dir	", addr.dir, "\n");
+	print("	cert	", addr.cert\X, "\n");
+	print("	sessionID	", addr.sessionID\X, "\n");
+	print("	certlen	", addr.certlen, "\n");
+	print("	sessionIDlen	", addr.sessionIDlen, "\n");
+	print("	trace	", addr.trace\X, "\n");
+	print("	chain	", addr.chain\X, "\n");
+	print("	sessionType	", addr.sessionType\X, "\n");
+	print("	sessionKey	", addr.sessionKey\X, "\n");
+	print("	sessionKeylen	", addr.sessionKeylen, "\n");
+	print("	sessionConst	", addr.sessionConst\X, "\n");
+};
+
+sizeofPool = 88;
+aggr Pool
+{
+	'X' 0 name;
+	'U' 4 maxsize;
+	'U' 8 cursize;
+	'U' 12 curfree;
+	'U' 16 curalloc;
+	'U' 20 minarena;
+	'U' 24 quantum;
+	'U' 28 minblock;
+	'X' 32 freeroot;
+	'X' 36 arenalist;
+	'X' 40 alloc;
+	'X' 44 merge;
+	'X' 48 move;
+	'D' 52 flags;
+	'D' 56 nfree;
+	'D' 60 lastcompact;
+	'X' 64 lock;
+	'X' 68 unlock;
+	'X' 72 print;
+	'X' 76 panic;
+	'X' 80 logstack;
+	'X' 84 private;
+};
+
+defn
+Pool(addr) {
+	complex Pool addr;
+	print("	name	", addr.name\X, "\n");
+	print("	maxsize	", addr.maxsize, "\n");
+	print("	cursize	", addr.cursize, "\n");
+	print("	curfree	", addr.curfree, "\n");
+	print("	curalloc	", addr.curalloc, "\n");
+	print("	minarena	", addr.minarena, "\n");
+	print("	quantum	", addr.quantum, "\n");
+	print("	minblock	", addr.minblock, "\n");
+	print("	freeroot	", addr.freeroot\X, "\n");
+	print("	arenalist	", addr.arenalist\X, "\n");
+	print("	alloc	", addr.alloc\X, "\n");
+	print("	merge	", addr.merge\X, "\n");
+	print("	move	", addr.move\X, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	nfree	", addr.nfree, "\n");
+	print("	lastcompact	", addr.lastcompact, "\n");
+	print("	lock	", addr.lock\X, "\n");
+	print("	unlock	", addr.unlock\X, "\n");
+	print("	print	", addr.print\X, "\n");
+	print("	panic	", addr.panic\X, "\n");
+	print("	logstack	", addr.logstack\X, "\n");
+	print("	private	", addr.private\X, "\n");
+};
+
+complex Pool mainmem;
+complex Pool imagmem;
+POOL_ANTAGONISM = 1;
+POOL_PARANOIA = 2;
+POOL_VERBOSITY = 4;
+POOL_DEBUGGING = 8;
+POOL_LOGGING = 16;
+POOL_TOLERANCE = 32;
+POOL_NOREUSE = 64;
+sizeofAvl = 16;
+aggr Avl
+{
+	'A' Avl 0 p;
+	'a' 4 n;
+	'D' 12 bal;
+};
+
+defn
+Avl(addr) {
+	complex Avl addr;
+	print("	p	", addr.p\X, "\n");
+	print("	n	", addr.n, "\n");
+	print("	bal	", addr.bal, "\n");
+};
+
+Cidx = 1;
+Cidxstale = 2;
+Cheader = 4;
+Cbody = 8;
+Enone = 0;
+Ebase64 = 1;
+Equoted = 2;
+Dnone = 0;
+Dinline = 1;
+Dfile = 2;
+Dignore = 3;
+DMcreate = 33554432;
+Rrecur = 1;
+Rtrunc = 2;
+Deleted = 1;
+Dup = 2;
+Dead = 4;
+Disappear = 8;
+Dmark = 16;
+Mtrunc = 1;
+Maxmsg = 78643200;
+Maxcache = 524288;
+Nctab = 15;
+Nref = 10;
+sizeofIdx = 92;
+aggr Idx
+{
+	'X' 0 str;
+	'X' 4 digest;
+	'b' 8 flags;
+	'W' 12 fileid;
+	'U' 20 lines;
+	'U' 24 size;
+	'U' 28 rawbsize;
+	'U' 32 ibadchars;
+	'X' 36 ffrom;
+	'X' 40 from;
+	'X' 44 to;
+	'X' 48 cc;
+	'X' 52 bcc;
+	'X' 56 replyto;
+	'X' 60 messageid;
+	'X' 64 subject;
+	'X' 68 sender;
+	'X' 72 inreplyto;
+	'X' 76 idxaux;
+	'D' 80 type;
+	'D' 84 disposition;
+	'D' 88 nparts;
+};
+
+defn
+Idx(addr) {
+	complex Idx addr;
+	print("	str	", addr.str\X, "\n");
+	print("	digest	", addr.digest\X, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	fileid	", addr.fileid, "\n");
+	print("	lines	", addr.lines, "\n");
+	print("	size	", addr.size, "\n");
+	print("	rawbsize	", addr.rawbsize, "\n");
+	print("	ibadchars	", addr.ibadchars, "\n");
+	print("	ffrom	", addr.ffrom\X, "\n");
+	print("	from	", addr.from\X, "\n");
+	print("	to	", addr.to\X, "\n");
+	print("	cc	", addr.cc\X, "\n");
+	print("	bcc	", addr.bcc\X, "\n");
+	print("	replyto	", addr.replyto\X, "\n");
+	print("	messageid	", addr.messageid\X, "\n");
+	print("	subject	", addr.subject\X, "\n");
+	print("	sender	", addr.sender\X, "\n");
+	print("	inreplyto	", addr.inreplyto\X, "\n");
+	print("	idxaux	", addr.idxaux\X, "\n");
+	print("	type	", addr.type, "\n");
+	print("	disposition	", addr.disposition, "\n");
+	print("	nparts	", addr.nparts, "\n");
+};
+
+sizeof_17_ = 8;
+aggr _17_
+{
+	'X' 0 lim;
+	'V' 0 imapuid;
+	'X' 0 aux;
+};
+
+defn
+_17_(addr) {
+	complex _17_ addr;
+	print("	lim	", addr.lim\X, "\n");
+	print("	imapuid	", addr.imapuid, "\n");
+	print("	aux	", addr.aux\X, "\n");
+};
+
+sizeofMessage = 272;
+aggr Message
+{
+	'D' 0 id;
+	'D' 4 refs;
+	'D' 8 subname;
+	'a' 12 name;
+	{
+	'X' 24 str;
+	'X' 28 digest;
+	'b' 32 flags;
+	'W' 36 fileid;
+	'U' 44 lines;
+	'U' 48 size;
+	'U' 52 rawbsize;
+	'U' 56 ibadchars;
+	'X' 60 ffrom;
+	'X' 64 from;
+	'X' 68 to;
+	'X' 72 cc;
+	'X' 76 bcc;
+	'X' 80 replyto;
+	'X' 84 messageid;
+	'X' 88 subject;
+	'X' 92 sender;
+	'X' 96 inreplyto;
+	'X' 100 idxaux;
+	'D' 104 type;
+	'D' 108 disposition;
+	'D' 112 nparts;
+	};
+	'b' 116 cstate;
+	'U' 120 infolen;
+	'U' 124 csize;
+	'X' 128 start;
+	'X' 132 end;
+	'X' 136 header;
+	'X' 140 hend;
+	'D' 144 hlen;
+	'X' 148 mheader;
+	'X' 152 mhend;
+	'X' 156 body;
+	'X' 160 bend;
+	'X' 164 rbody;
+	'X' 168 rbend;
+	'C' 172 mallocd;
+	'C' 173 ballocd;
+	'C' 174 hallocd;
+	'D' 176 badchars;
+	'C' 180 deleted;
+	'C' 181 inmbox;
+	'X' 184 unixheader;
+	'X' 188 unixfrom;
+	'X' 192 date822;
+	'a' 196 references;
+	'X' 236 boundary;
+	'D' 240 charset;
+	'X' 244 filename;
+	'C' 248 encoding;
+	'C' 249 converted;
+	'C' 250 decoded;
+	'C' 251 mimeflag;
+	'A' Message 252 next;
+	'A' Message 256 part;
+	'A' Message 260 whole;
+	{
+	'X' 264 lim;
+	'V' 264 imapuid;
+	'X' 264 aux;
+	};
+};
+
+defn
+Message(addr) {
+	complex Message addr;
+	print("	id	", addr.id, "\n");
+	print("	refs	", addr.refs, "\n");
+	print("	subname	", addr.subname, "\n");
+	print("	name	", addr.name, "\n");
+	print("Idx {\n");
+		Idx(addr+24);
+	print("}\n");
+	print("	cstate	", addr.cstate, "\n");
+	print("	infolen	", addr.infolen, "\n");
+	print("	csize	", addr.csize, "\n");
+	print("	start	", addr.start\X, "\n");
+	print("	end	", addr.end\X, "\n");
+	print("	header	", addr.header\X, "\n");
+	print("	hend	", addr.hend\X, "\n");
+	print("	hlen	", addr.hlen, "\n");
+	print("	mheader	", addr.mheader\X, "\n");
+	print("	mhend	", addr.mhend\X, "\n");
+	print("	body	", addr.body\X, "\n");
+	print("	bend	", addr.bend\X, "\n");
+	print("	rbody	", addr.rbody\X, "\n");
+	print("	rbend	", addr.rbend\X, "\n");
+	print("	mallocd	", addr.mallocd, "\n");
+	print("	ballocd	", addr.ballocd, "\n");
+	print("	hallocd	", addr.hallocd, "\n");
+	print("	badchars	", addr.badchars, "\n");
+	print("	deleted	", addr.deleted, "\n");
+	print("	inmbox	", addr.inmbox, "\n");
+	print("	unixheader	", addr.unixheader\X, "\n");
+	print("	unixfrom	", addr.unixfrom\X, "\n");
+	print("	date822	", addr.date822\X, "\n");
+	print("	references	", addr.references, "\n");
+	print("	boundary	", addr.boundary\X, "\n");
+	print("	charset	", addr.charset, "\n");
+	print("	filename	", addr.filename\X, "\n");
+	print("	encoding	", addr.encoding, "\n");
+	print("	converted	", addr.converted, "\n");
+	print("	decoded	", addr.decoded, "\n");
+	print("	mimeflag	", addr.mimeflag, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	part	", addr.part\X, "\n");
+	print("	whole	", addr.whole\X, "\n");
+	print("_17_ {\n");
+		_17_(addr+264);
+	print("}\n");
+};
+
+sizeof_18_ = 20;
+aggr _18_
+{
+	{
+	'A' Avl 0 p;
+	'a' 4 n;
+	'D' 12 bal;
+	};
+	'A' Message 16 m;
+};
+
+defn
+_18_(addr) {
+	complex _18_ addr;
+	print("Avl {\n");
+		Avl(addr+0);
+	print("}\n");
+	print("	m	", addr.m\X, "\n");
+};
+
+sizeofMcache = 72;
+aggr Mcache
+{
+	'W' 0 cached;
+	'D' 8 ntab;
+	'a' 12 ctab;
+};
+
+defn
+Mcache(addr) {
+	complex Mcache addr;
+	print("	cached	", addr.cached, "\n");
+	print("	ntab	", addr.ntab, "\n");
+	print("	ctab	", addr.ctab, "\n");
+};
+
+sizeofMailbox = 484;
+aggr Mailbox
+{
+	{
+	Lock 0 lock;
+	'D' 4 locked;
+	'A' QLp 8 $head;
+	'A' QLp 12 $tail;
+	};
+	'D' 16 idxsem;
+	'D' 20 syncsem;
+	'D' 24 refs;
+	'A' Mailbox 28 next;
+	'D' 32 id;
+	'D' 36 flags;
+	'C' 40 rmflags;
+	'C' 41 dolock;
+	'C' 42 addfrom;
+	'a' 43 name;
+	'a' 71 path;
+	'A' Dir 328 d;
+	'A' Message 332 root;
+	'X' 336 mtree;
+	'U' 340 vers;
+	{
+	'W' 344 cached;
+	'D' 352 ntab;
+	'a' 356 ctab;
+	};
+	Qid 416 qid;
+	'U' 432 waketime;
+	'X' 436 close;
+	'X' 440 decache;
+	'X' 444 fetch;
+	'X' 448 $delete;
+	'X' 452 ctl;
+	'X' 456 remove;
+	'X' 460 rename;
+	'X' 464 sync;
+	'X' 468 idxwrite;
+	'X' 472 idxread;
+	'X' 476 idxinvalid;
+	'X' 480 aux;
+};
+
+defn
+Mailbox(addr) {
+	complex Mailbox addr;
+	print("QLock {\n");
+		QLock(addr+0);
+	print("}\n");
+	print("	idxsem	", addr.idxsem, "\n");
+	print("	syncsem	", addr.syncsem, "\n");
+	print("	refs	", addr.refs, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	id	", addr.id, "\n");
+	print("	flags	", addr.flags, "\n");
+	print("	rmflags	", addr.rmflags, "\n");
+	print("	dolock	", addr.dolock, "\n");
+	print("	addfrom	", addr.addfrom, "\n");
+	print("	name	", addr.name, "\n");
+	print("	path	", addr.path, "\n");
+	print("	d	", addr.d\X, "\n");
+	print("	root	", addr.root\X, "\n");
+	print("	mtree	", addr.mtree\X, "\n");
+	print("	vers	", addr.vers, "\n");
+	print("Mcache {\n");
+		Mcache(addr+344);
+	print("}\n");
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	waketime	", addr.waketime, "\n");
+	print("	close	", addr.close\X, "\n");
+	print("	decache	", addr.decache\X, "\n");
+	print("	fetch	", addr.fetch\X, "\n");
+	print("	$delete	", addr.$delete\X, "\n");
+	print("	ctl	", addr.ctl\X, "\n");
+	print("	remove	", addr.remove\X, "\n");
+	print("	rename	", addr.rename\X, "\n");
+	print("	sync	", addr.sync\X, "\n");
+	print("	idxwrite	", addr.idxwrite\X, "\n");
+	print("	idxread	", addr.idxread\X, "\n");
+	print("	idxinvalid	", addr.idxinvalid\X, "\n");
+	print("	aux	", addr.aux\X, "\n");
+};
+
+sizeofMpair = 8;
+aggr Mpair
+{
+	'A' Mailbox 0 mb;
+	'A' Message 4 m;
+};
+
+defn
+Mpair(addr) {
+	complex Mpair addr;
+	print("	mb	", addr.mb\X, "\n");
+	print("	m	", addr.m\X, "\n");
+};
+
+Qbcc = 0;
+Qbody = 1;
+Qcc = 2;
+Qdate = 3;
+Qdigest = 4;
+Qdisposition = 5;
+Qffrom = 6;
+Qfileid = 7;
+Qfilename = 8;
+Qflags = 9;
+Qfrom = 10;
+Qheader = 11;
+Qinfo = 12;
+Qinreplyto = 13;
+Qlines = 14;
+Qmessageid = 15;
+Qmimeheader = 16;
+Qraw = 17;
+Qrawbody = 18;
+Qrawheader = 19;
+Qrawunix = 20;
+Qreferences = 21;
+Qreplyto = 22;
+Qsender = 23;
+Qsize = 24;
+Qsubject = 25;
+Qto = 26;
+Qtype = 27;
+Qunixdate = 28;
+Qunixheader = 29;
+Qmax = 30;
+Qtop = 31;
+Qmbox = 32;
+Qdir = 33;
+Qctl = 34;
+Qmboxctl = 35;
+sizeofHash = 36;
+aggr Hash
+{
+	'A' Hash 0 next;
+	'X' 4 name;
+	'U' 8 ppath;
+	Qid 12 qid;
+	'A' Mailbox 28 mb;
+	'A' Message 32 m;
+};
+
+defn
+Hash(addr) {
+	complex Hash addr;
+	print("	next	", addr.next\X, "\n");
+	print("	name	", addr.name\X, "\n");
+	print("	ppath	", addr.ppath, "\n");
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	mb	", addr.mb\X, "\n");
+	print("	m	", addr.m\X, "\n");
+};
+
+sizeof_19_ = 12;
+aggr _19_
+{
+	'X' 0 s;
+	'D' 4 l;
+	'U' 8 ref;
+};
+
+defn
+_19_(addr) {
+	complex _19_ addr;
+	print("	s	", addr.s\X, "\n");
+	print("	l	", addr.l, "\n");
+	print("	ref	", addr.ref, "\n");
+};
+
+complex Mailbox mbl;
+complex Message root;
+complex QLock mbllock;
+complex _19_ rtab;
+sizeofFid = 52;
+aggr Fid
+{
+	Qid 0 qid;
+	'd' 16 busy;
+	'd' 18 open;
+	'D' 20 fid;
+	'A' Fid 24 next;
+	'A' Mailbox 28 mb;
+	'A' Message 32 m;
+	'A' Message 36 mtop;
+	'D' 40 foff;
+	'A' Message 44 fptr;
+	'D' 48 fvers;
+};
+
+defn
+Fid(addr) {
+	complex Fid addr;
+	print("Qid qid {\n");
+	Qid(addr.qid);
+	print("}\n");
+	print("	busy	", addr.busy, "\n");
+	print("	open	", addr.open, "\n");
+	print("	fid	", addr.fid, "\n");
+	print("	next	", addr.next\X, "\n");
+	print("	mb	", addr.mb\X, "\n");
+	print("	m	", addr.m\X, "\n");
+	print("	mtop	", addr.mtop\X, "\n");
+	print("	foff	", addr.foff, "\n");
+	print("	fptr	", addr.fptr\X, "\n");
+	print("	fvers	", addr.fvers, "\n");
+};
+
+Hsize = 1999;
+complex Mailbox mbl;
+complex QLock mbllock;
+complex Fcall rhdr;
+complex Fcall thdr;
+complex Fid fids;
+complex Message sanemsg:m;
+complex Mailbox sanembmsg:mb;
+complex Message sanembmsg:m;
+complex Fid sanefid:f;
+complex Fid sanefids:f;
+complex Fmt Afmt:f;
+complex Fmt Δfmt:f;
+complex Fmt Dfmt:f;
+complex Mailbox mpair:mb;
+complex Message mpair:m;
+complex Mpair mpair:mp;
+complex Fmt Pfmt:f;
+complex Mailbox Pfmt:mb;
+complex Message Pfmt:m;
+complex Mpair Pfmt:mp;
+complex Mailbox fileinfo:mb;
+complex Message fileinfo:m;
+complex Mailbox readinfo:mb;
+complex Message readinfo:m;
+complex Dir mkstat:d;
+complex Mailbox mkstat:mb;
+complex Message mkstat:m;
+complex Fid rversion:f;
+complex Fid rattach:f;
+complex Fid doclone:f;
+complex Fid doclone:nf;
+complex Fid dowalk:f;
+complex Mailbox dowalk:omb;
+complex Mailbox dowalk:mb;
+complex Hash dowalk:h;
+complex Fid rwalk:f;
+complex Fid rwalk:nf;
+complex Fid ropen:f;
+complex Dir readtopdir:d;
+complex Mailbox readtopdir:mb;
+complex Fid readmboxdir:f;
+complex Dir readmboxdir:d;
+complex Message readmboxdir:msg;
+complex Fid readmsgdir:f;
+complex Dir readmsgdir:d;
+complex Message readmsgdir:msg;
+complex Mailbox mboxctlread:mb;
+complex Fid rread:f;
+complex Message modflags:m;
+complex Fid rwrite:f;
+complex Message rwrite:m;
+complex Fid rclunk:f;
+complex Mailbox rclunk:mb;
+complex Fid rremove:f;
+complex Fid rstat:f;
+complex Dir rstat:d;
+complex Fid newfid:f;
+complex Fid newfid:ff;
+complex Mailbox fidmboxrefs:mb;
+complex Fid fidmboxrefs:f;
+complex Dir reader:d;
+complex Mailbox reader:mb;
+complex Lock idlock$166;
+sizeofIgnorance = 12;
+aggr Ignorance
+{
+	'A' Ignorance 0 next;
+	'X' 4 str;
+	'D' 8 len;
+};
+
+defn
+Ignorance(addr) {
+	complex Ignorance addr;
+	print("	next	", addr.next\X, "\n");
+	print("	str	", addr.str\X, "\n");
+	print("	len	", addr.len, "\n");
+};
+
+complex Ignorance ignorance;
+complex Ignorance readignore:i;
+complex Biobuf readignore:b;
+complex Ignorance ignore:i;
+complex Message readheader:m;
+complex QLock hashlock;
+complex Hash hlook:hp;
+complex Qid henter:qid;
+complex Message henter:m;
+complex Mailbox henter:mb;
+complex Hash henter:hp;
+complex Hash henter:l;
+complex Hash hfree:hp;
+complex Hash hfree:l;
+complex Mailbox hashmboxrefs:mb;
+complex Hash hashmboxrefs:hp;
+complex Mailbox checkmboxrefs:mb;

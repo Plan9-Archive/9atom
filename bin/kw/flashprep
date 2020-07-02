@@ -1,0 +1,111 @@
+#!/bin/rc
+rfork n
+
+fn fatal{
+	echo >[1=2] $*
+	exit fatal
+}
+
+fn verbose{
+	if(~ $#flagv 1)
+		echo >[1=2] $*
+}
+
+bind -b '#F' /dev	|| fatal cant bind flash device
+cd /dev/flash	|| fatal cant cd to /dev/flash
+
+erasesz=`{awk 'NR==2 {sub(/0x0+/, "", $3); print $3}' < flashctl}
+totsz=4m	# 4mb; adjust to taste
+plan9ini=`{pxeof $sysname}
+kernel=`{ndb/query sys $sysname bootf}
+
+flagfmt='v,I,W,K,i plan9ini,k kernel,e erasesz,t totsz'
+args=''
+if(! ifs=() eval `{aux/getflags $*}){
+	aux/usage
+	exit usage
+}
+
+erasesz	=`{aux/number -f %x $erasesz}	|| exits num
+totsz	=`{aux/number -f %x $totsz}	|| exits num
+blsz=$erasesz
+
+eraseblocks=`{echo '
+	16i 10o
+	' $erasesz ' sa
+	' $totsz ' sb
+
+	lb la 1 - + la / 2+
+	sn 0si
+
+	[100000 la li *+p li 1 + si li ln >y]sy
+	lyx
+	' | dc}
+kblk=`{echo $#eraseblocks 2 - p | dc}
+
+if(! test -f $plan9ini>[2=]){
+	echo >[1=2] plan9.ini $plan9ini not found
+	exit check
+}
+if(! test -f $kernel>[2=]){
+	echo >[1=2] kernel $kernel not found
+	exit check
+}
+if(~ $#eraseblocks 0 || ~ $"eraseblocks *unimplemented* || test $#eraseblocks -gt 64){
+	echo >[1=2] wierd number of pages to clear $#pages
+	exit check
+}
+
+if(~ $#flagW^$#flagI^$#flagK 000 111){
+	flagW=1; flagI=1; flagK=1
+}
+if not{
+	e=()
+	if(~ $#flagW 1)
+		e = ($e $eraseblocks(1)
+	if(~ $#flagI 1)
+		e = ($e $eraseblocks(2)
+	if(~ $#flagK 1)
+		e = ($e $eraseblocks(3-)
+}
+
+echo erasing $#eraseblocks `{echo 16i $erasesz 400 / p | dc}^k blocks
+verbose eraseblocks $eraseblocks
+
+for(i in $eraseblocks){
+	verbose erase 0x$i
+	if(! echo erase 0x$i > flashctl){
+		echo kwflashprep: erase block 0x$i
+		exit erase
+	}
+}
+
+fn kfill {
+	cat $kernel /dev/zero | dd -quiet 1 -conv sync -bs 8192
+}
+fn α {
+	echo 16 i 10 o $1 $erasesz $2 '*' + p | dc
+}
+x=`{echo $kblk sk 16i $erasesz 2000 / lk '*' p|dc}
+
+~ $#flagW 1	&& {auth/wrkey || exit wrkey}
+~ $#flagI 1	&& {dd -of flash -oseek  9 -count 1	-if $plan9ini	-bs 0x$erasesz -conv sync	|| exit ddini}
+~ $#flagK 1	&& {dd -of flash -oseek 10 -count $x	-if <{kfill}	-obs 0x$erasesz -ibs 8192	|| exit ddkern}
+
+
+# double check for ecc errors
+dd -if flash -iseek 8 -count $#eraseblocks -bs 0x$erasesz >/dev/null || exit ecc errors
+
+echo setenv bootcmd \
+	''''nand read 0x1000 0x`{α 100000 1} '0x200;' \
+	nand read 0x800000 0x`{α 100000 2} '0x300000;' go 0x800000''''
+
+{
+echo add nvram		0x`{α 100000 0} 0x`{α 100000 1}
+echo add plan9.ini	0x`{α 100000 1} 0x`{α 100000 2}
+echo add kernel		0x`{α 100000 2} 0x`{echo 16i 10o $totsz $erasesz 2 '*' - 100000 + p|dc}
+}>flashctl
+
+# nvram 	0x00100000 0x00120000 0x00020000 0x00000800
+# plan9.ini 	0x00120000 0x00140000 0x00020000 0x00000800
+# kernel 	0x00140000 0x004c0000 0x00020000 0x00000800

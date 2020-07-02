@@ -1,0 +1,26 @@
+.TH DLMICROCODE 8
+.SH NAME
+dlmicrocode \- update drive microcode
+.SH SYNOPSIS
+.B disk/dlmicrocode -f
+.I fw disk ...
+.SH DESCRIPTION
+.I Dlmicrocode
+uses standard SCSI or ATA commands to update
+a drive's microcode with a new firmware blob specified
+with the
+.B -f
+flag.  Firmware is drive and model specific, and there
+is no guarantee that a drive will implement sufficient
+checking.  Be careful!
+.SH EXAMPLE
+.IP
+.EX
+	disk/dlmicrocode -f fw /dev/sdE0 /dev/sdE1
+.EE
+.SH "SEE ALSO"
+.IR sd (3),
+.IR atazz (8).
+.SH BUGS
+Bricks are possible.  Data loss is possible.  Firmware update is often not
+implemented robustly, and even if they work, your data may be gone.

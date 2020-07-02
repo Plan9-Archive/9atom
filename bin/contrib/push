@@ -1,0 +1,94 @@
+#!/bin/rc
+
+rfork ne
+path=/bin
+
+fn fatal {
+	echo $* >[2=1]
+	exit $"*
+}
+
+fn chg {
+	{
+		date
+		cat | sed 's/^/    /'
+		echo
+	} >> $serverchg
+}
+
+fn must {
+	$* || fatal $"*^': '^$status
+}
+
+flags=()
+while (! ~ $#* 0 && ~ $1 -*) {
+	if (~ $1 -c -s) {
+		flags=($flags $1)
+		shift
+	}
+	flags=($flags $1)
+	shift
+}
+
+if (! ~ $#* 1)
+	fatal 'usage: contrib/push name' >[1=2]
+
+name=$1
+cfg=$home/lib/replica/cfg/$name
+
+if (! test -x $cfg)
+	fatal no such replica: $name
+
+. $cfg
+
+if (! ~ $#clientexclude 0)
+	clientexclude=-x^$clientexclude
+
+replica/updatedb -r $clientroot -p $clientproto $clientexclude $clientdb >> $clientlog
+ndb=`{echo $clientdb | sed 's;(.*)/(.*);\1/n\2;'}
+odb=`{echo $clientdb | sed 's;(.*)/(.*);\1/_\2;'}
+replica/compactdb $clientdb > $ndb && mv $clientdb $odb && mv $ndb $clientdb
+
+must servermount
+if(~ 0 1){
+# iso proto
+isoproto=/tmp/$name$pid.proto
+must fcp $clientproto $isoproto
+must aux/stub /$name.db
+must bind $clientdb /$name.db
+must aux/stub /$name.log
+must bind $clientlog /$name.log
+echo '
+'^$name^'.db 664 sys sys
+'^$name^'.log 664 sys sys
+'>> $isoproto
+
+# create the .iso
+isofile=/tmp/$name$pid.iso
+must disk/mk9660 -s $clientroot -p $isoproto $isofile
+must bzip2 -9 < $isofile > $isofile.bz2
+rm -f $isofile $isoproto
+must fcp $isofile.bz2 $s/$name/iso.bz2
+rm -f $isofile.bz2
+}
+
+# regular push
+replica/applychanges -v $flags -p $clientproto $clientexclude $serverdb $clientroot $serverroot || {
+	echo '# recovery ...'
+	echo replica/applylog -v $flags $clientexclude $serverdb $clientroot $serverroot < $serverlog
+	# not fatal
+}
+fcp -x $clientlog $serverlog
+fcp -x $clientdb $serverdb
+
+if (~ $#serverchg 0)
+	serverchg=$s/$name/chg
+
+if (test -w /dev/consctl) {
+	>/dev/consctl {
+		echo holdon
+		chg
+	}
+}
+if not
+	chg

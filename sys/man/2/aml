@@ -1,0 +1,133 @@
+.TH AML 2
+.SH NAME
+amltag, amlval, amlint, amllen, amlinit, amlexit, amlload, amlwalk, amleval, amlenum, amlalloc, amlfree \- ACPI interprter
+.SH SYNOPSIS
+.de PB
+.PP
+.ft L
+.nf
+..
+.PB
+#include <u.h>
+#include <aml.h>
+.PB
+.PD 0
+.ta +\w'\fL        'u +\w'\fL    'u +6n +4n
+int	amltag(void *p)
+.PB
+void*	amlval(void *p)
+.PB
+uvlong	amlint(void *p)
+.PB
+int	amllen(void *p)
+.PB
+void	amlinit(void)
+.PB
+void	amlexit(void)
+.PB
+int	amlload(uchar *data, int len);
+.PB
+void*	amlwalk(void *dot, char *name);
+.PB
+int	amleval(void *dot, char *fmt, ...);
+.PB
+void	amlenum(void *dot, char *seg,
+		int (*proc)(void *, void *), void *arg);
+.PB
+void*	amlalloc(usize);
+.PB
+void	amlfree(void*);
+.SH DESCRIPTION
+.I Aml
+implements an interpreter for the ACPI machine language, AML.
+ACPI is supposed to supplant older configuration methods such as
+the MP tables and older power-management methods such as APM.
+AML is used by 386 and AMD64 platform BIOS to things
+that are not part of the ACPI fixed description tables, such as interrupts.
+When used, the
+.I aml
+interperter must run in the kernel to parse interrupts, etc. at boot time.
+.PP
+.I Aml
+provides access to the following AML object types.
+.IP
+.TS
+L	L	L
+-	-	-
+LFB	L	L.
+tag	type	name
+b	uchar*	buffer
+s	char*	string
+i	uvlong*	integer
+p	void**	package
+r	void*	region
+f	void*	field
+u	void*	bufferfield
+N	void*	name
+R	void*	reference
+.TE
+.PP
+.TP
+.BI amlload(data ,\  len\f5)
+Start the interperter with the given AML code.  For userspace, kernel
+provides
+.BR #P/acpitbls .
+.TP
+.B amlexit()
+Terminate the interperter and free its resources
+.TP
+.BI amlalloc( nbytes )
+Provided by the caller.  Allocate and clear
+.IR nbytes .
+.TP
+.BI amlfree( p )
+Provided by the caller.  Free memory allocated with
+.IR amlalloc .
+.TP
+.BI amltag( p )
+Return the “tag” of the given AML object.
+.TP
+.BI amlval( p )
+Evaluate one level of indirection on AML object
+.IR p.
+.TP
+.BI amlint( p )
+Return the value of the integer pointed to by
+.IR p .
+.I P
+may have tag
+.L i
+or
+.LR s .
+Objects of tag
+.L s
+are converted with
+.I strtoull
+(see
+.IR atof (2)).
+.TP
+.BI amllen( p )
+Return the number of elements in
+.IR p .
+.TP
+.BI amlwalk( dot ,\  name )
+Walk the aml heirarchy to
+.I name
+from the current position,
+.IR dot.
+.TP
+.BI amleval( dot ,\  name )
+Evaluate the method
+.I name
+from the corrent position,
+IR dot.
+.TP
+\f5amlenum(\f2dot\fP, \f2seg\fP, \f2procfn\fP, \f2arg\f5)\fP
+Call function
+.IR procfn ( arg )
+for each matching object under
+.IR dot .
+.SH "SEE ALSO"
+.CW http://www.acpi.info/DOWNLOADS/ACPIspec50.pdf
+.SH BUGS
+A 32-bit little-endian machine is assumed.

@@ -1,0 +1,175 @@
+#!/bin/rc
+rfork e
+
+. /rc/bin/apatch/defs
+
+fn xchmod { 
+	chmod $* >[2]/dev/null
+}
+
+fn validate{
+	if(! echo $2 | grep -s $3){
+		echo bad $1: $3 only >[1=2];
+		exit usage
+	}
+}
+
+flagfmt='f,v,y,Y ndays'
+args='name email file ... [<description]'
+if(! ifs=() eval `{aux/getflags $*} || ~ $#* 0 1 2){
+	aux/usage
+	exit usage
+}
+~ $flagf 1 && force=y || force=n
+~ $flagY '' || flagy=$flagY
+
+patch=$1
+email=$2
+* = $*(3-)
+
+validate 'patch name' $patch '^[a-zA-Z][a-z_0-9.\-]+$'
+validate email $email '^(-|[A-Za-z0-9.\-+]+@[A-Za-z0-9.\-+]+)$'
+
+mountfs
+
+# define our source
+source = $SD
+if(! ~ $flagy ''){
+	9fs dump || fail 9fs
+	source=`{yesterday -n $flagy /}
+	test -d $source || fail no yesterday
+}
+
+rooted=()
+p=`{pwd}
+for(i)
+	~ $i /* && rooted=($rooted $i) || rooted=($rooted $p/$i)
+
+removed=()
+changed=()
+
+for(i in `{cleanname $rooted})
+	test -e $i && changed=($changed $i) || removed=($removed $i)
+if(! ~ $#changed 0)
+	changed=`{find $changed || fail file collection errors}
+if(echo $changed | grep -s '(^[01258769kqv]\.)|(\.a?[01258769kqv]$)'){
+	echo there are object or library files. clean it first >[1=2]
+	exit fail
+}
+c=$changed
+changed=()
+for(i in $c){
+	if(test -d $i)
+		changed = ($changed $i)
+	if not{
+		if(cmp -s $i $source/$i)
+			echo unchanged: $i >[1=2]
+		if not
+			changed = ($changed $i)
+	}
+}
+c=()
+
+r=$removed
+removed=()
+for(i in $r){
+	if(test -e $source/$i)
+		removed=($removed $i)
+	if not
+		echo not removed: $i >[1=2]
+}
+
+if(~ $#changed 0 && ~ $#removed 0)
+	fail patch not created: nothing changed, nothing added, nothing deleted
+
+if(~ $flagv 1){
+	echo removed
+	echo -n '	'
+	echo $removed | sed 's: :\n	:g'
+	echo changed
+	echo -n '	'
+	echo $changed | sed 's: :\n	:g'
+}
+
+~ $flagv 1 && echo patchd $PD/$patch >[1=2]
+
+if(test -e $PD/$patch){
+	if(~ $force n){
+		echo patch $patch already exists.
+		echo Use flag -f to force and redefine it
+		exit fail
+	} >[1=2]
+	for(i in `{seq 1 100}){
+		if(! test -e $PD/$patch.$i){
+			patch = $patch.$i
+			break
+		}
+	}
+	echo new name: $patch>[1=2]
+}
+d=$PD/$patch
+fn sigexit sigint{
+	echo removing $PD/$patch >[1=2]
+	rm -rf $PD/$patch
+}
+if(! mkdir $d){
+	echo mkdir $d failed >[1=2]
+	exit mkdir
+}
+
+xchmod o-w $d
+echo $removed | tr ' ' \xa > $d/removed
+echo $email >$d/email
+touch $d/^(readme files)
+
+fn genu {
+	echo $changed | tr ' ' \xa |
+	awk '{
+		base = $0
+		sub("/$", "", base)		# already have cleanname
+		sub(".*/", "", base)
+		i = length(a[base]);
+		if(i > 0)
+			print $0 "\t" base "." i
+		else
+			print $0 "\t" base
+		a[base]++;
+	}'
+}
+
+~ $flagv 1 && genu
+
+uniqlist = `{genu}
+genu >> $d/files
+while(! ~ $#uniqlist 0){
+	file=$uniqlist(1)
+	base=$uniqlist(2)
+	uniqlist = $uniqlist(3-)
+	test -e $SD/$file && cpfile $SD/$file $d/$base.orig
+	cpfile $file $d/$base	|| fail cpfile # we need to back out
+
+}
+
+@{builtin cd $d && xchmod ug+rw * && xchmod a+r *}
+
+if(~ `{cat /proc/$pid/fd | awk 'NR==2{print $NF}'} */dev/cons && test -w /dev/consctl){
+	>/dev/consctl {
+		echo holdon
+		cat >$d/readme
+	}
+}
+if not
+	cat >$d/readme
+
+if(! test -s $d/readme)
+	fail no description given
+
+# add the patch name to the applied list, so that it is not pull
+# when it's $patch/Applied in the future.
+must mkdir -p /dist/apatch
+echo $patch >> /dist/apatch/applied
+echo $d locally applied.
+
+fn sigexit sigint
+
+exit ''

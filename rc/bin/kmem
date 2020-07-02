@@ -1,0 +1,38 @@
+#!/bin/rc
+# kmem [kernel] - print summary of allocate blocks in running kernel
+rfork e
+
+flagfmt=()
+ptflagfmt='q,w,l library,m machine,r'
+args='kernel'
+if(! ifs=() eval `{aux/getflags $*} || ! ~ $#* 0 1){
+	aux/usage
+	exit usage
+}
+
+if(~ $#* 1)
+	binary=$1
+proc=()
+if(~ $#rflag 0)
+	proc=$pid
+
+echo 'kinit(); blocksummary()' | acid -k $ptflag -lkernel -lpool -lleak $proc $binary | awk '
+	$1 == "block" {
+		addr=$6
+		size=$3
+		alloc=$4
+		total[alloc] += size
+		count[alloc]++
+	}
+	$1 == "summary" { 
+		alloc=$2
+		cnt=$3
+		size=$4
+		total[alloc] += size
+		count[alloc] += cnt
+	}
+	END{
+		for(i in count)
+			printf("%6d %11d %s\n", count[i], total[i], i);
+	}
+' | sort -nr

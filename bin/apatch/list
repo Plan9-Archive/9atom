@@ -1,0 +1,59 @@
+#!/bin/rc
+
+rfork e
+. /rc/bin/apatch/defs
+mountfs
+
+cd $PD || fail no $PD
+all=no
+verb=no
+
+while(! ~ $#* 0 && ~ $1 -*){
+	if(~ $1 *a*)
+		all=yes
+	if(~ $1 *v*)
+		verb=yes
+	shift
+}
+
+dirs=$*
+if(~ $#dirs 0){
+	dirs=(`{
+		for(p in `{ls -tr | grep -v '\.[0-9]+$'}){
+			if(test -d $p){
+				if(~ $all yes || ! grep -s '^'^$p^'$' $SD^/dist/$patch/applied)
+					echo $p
+			}
+		}
+	})
+}
+echo dirs >[1=2]
+
+
+for(i in $dirs){
+	if($patch/okay $i){
+		dt=`{ls -ld $i | awk '{print $7, $8, $9}'}
+		if(~ $verb yes){
+			if(grep -s  '^'^$i^'$' $SD^/dist/$patch/applied)
+				echo applied: $i
+			if not
+				echo name: $i
+			echo date: $dt
+			cat $i/readme| sed 's/^/	/'
+			echo from: `{cat $i/email}
+			echo files:
+			cat $i/files | sed 's/^/	/'
+			echo removed:
+			cat $i/removed | sed 's/^/	/'
+			echo
+		}
+		if not{
+			if(grep -s  '^'^$i^'$' $SD^/dist/$patch/applied)
+				echo $dt applied $i: `{grep . <$i/readme | sed 1q}
+			if not
+				echo $dt $i: `{grep . <$i/readme | sed 1q}
+		}
+	}
+	if not
+		echo '	'bad patch: $status >[2=1]
+}

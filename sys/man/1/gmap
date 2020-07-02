@@ -1,0 +1,64 @@
+.TH GMAP 1
+.SH NAME
+gmap \- display google maps
+.SH SYNOPSIS
+.B gmap
+.B -l
+[
+.I query
+]
+.br
+.B gmap
+[
+.B -z
+.I zoom
+] [
+.I -hrst
+] [
+.I query
+]
+.SH DESCRIPTION
+.I Gmap
+uses google maps engine to look up place names.
+The default location is given by
+.BR /lib/sky/here .
+If a 
+.I query
+is given, it can be any number of words.
+With the
+.I -l
+flag, a successful lookup results in the latitude
+and longitude being printed.  Otherwise a map
+of the current location at the given zoom factor
+is displayed.  The default map type is a road map.
+.P
+The arguments for map display are
+.TF "-z zoom"
+.TP
+.BI -z " zoom"
+change the zoom factor.  Useful values for
+.I zoom
+are between 5-15.
+.TP
+.B -h
+display a hybrid map
+.TP
+.B -t
+display a terrain map
+.TP
+.B -s
+display a satellite map
+.P
+.SH FILES
+.TF \fL/lib/gmapkey
+.TP
+.BI /lib/gmapkey
+Google application key.
+.SH SOURCE
+.B /rc/bin/gmap
+.SH "SEE ALSO"
+.IR radar (1).
+.SH BUGS
+You must obtain a personal key from Google
+to use
+.IR gmap .

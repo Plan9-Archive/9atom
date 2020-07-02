@@ -1,0 +1,7 @@
+PORTFILES=`{builtin cd ../port;echo *.c | sed 's/ /|/g; s/\.c//g'}
+^($PORTFILES)\.$O:R:	'../port/\1.c'
+	$CC $CFLAGS -I. ../port/$stem1.c
+
+time.$O: timezone.h mkfile
+timezone.h:D: mkfile
+	../fs64/tzgen $ZONE > timezone.h

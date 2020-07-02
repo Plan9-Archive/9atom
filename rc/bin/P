@@ -1,0 +1,68 @@
+#!/bin/rc
+rfork en
+
+flagfmt=''
+args='sys ...'
+if(! ifs=() eval `{aux/getflags $*} || ~ $#* 0){
+	aux/usage
+	exit usage
+}
+
+fn wti {
+	{
+		echo /boot $2
+		sleep 2
+	} | telnet $1 >/dev/null >[2=1]
+}
+
+fn iopower {
+	port=`{ndb/query -f $ndbfile power $2 port}
+	if(~ $#port 0){
+		echo P: iopower: unknown port >[1=2]
+		exit bad
+	}
+	{
+		echo
+		echo of $port
+		sleep 1
+		echo on $port
+	} | C $1 >/dev/null
+}
+
+fn apc {
+	{
+		echo apc		# user
+		echo apc		# password
+		echo olReboot $2
+		sleep 1
+	} | telnet $1 >/dev/null >[2=1]
+}
+
+types=(wti iopower apc)
+
+fn P{
+	server=()
+	ndbfile=()
+	for(i in /lib/ndb/powerdb.*){
+		type=`{ndb/query -f $i power $1 type}
+		if(! ~ $#type 0){
+			server=` '.' {echo -n $i}
+			server=$server(2)
+			ndbfile=$i
+			break
+		}
+	}
+	if(~ $#server 0){
+		echo P: unknown power switch for $1
+		exit unknown
+	}
+	if(! ~ $type $types){
+		echo P: unknown power switch type $type
+		exit unknown
+	}
+
+	$type $server $1
+}
+
+for(i)
+	P $i

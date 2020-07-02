@@ -1,0 +1,14 @@
+1. aoe tries to sleep with il lock held.
+static void
+strategy(Aoedev *d, Srb *s)
+{
+	send(d->work, s);
+	sleep(s, srbready, s);	/* recv? */
+}
+called from ilhangup()
+likely problem is that fileinit() causes i/o.
+f->open & FREMOV ?
+this is a pretty subtile problem.  any i/o problem
+can hangup all of il.  
+
+2. time gets reset.

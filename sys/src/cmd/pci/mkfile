@@ -1,0 +1,8 @@
+</$objtype/mkfile
+
+TARG=pci pcirw
+OFILES=\
+	pciifc.$O\
+
+BIN=/$objtype/bin/
+</sys/src/cmd/mkmany

@@ -1,0 +1,119 @@
+dev
+	root
+	cons
+	arch
+	pnp		pci	bios32
+	env
+	pipe
+	proc
+	mnt
+	srv
+	dup
+	rtc
+	ssl
+	tls
+	bridge		log
+#	sdp		thwack unthwack
+	cap
+	trace		archtrace
+	kprof
+	fs
+
+	ether		netif
+	cec
+	ip		arp chandial ip ipv6 ipaux iproute netlog nullmedium pktmedium ptclbsum386 inferno
+	aoe		ip
+
+	sd		sdalloc
+#	floppy		dma
+#	lpt
+
+	uart
+#	usb
+
+link
+	realmode
+#	acpi
+#	ether2000	ether8390
+#	ether2114x	pci
+#	ether589	etherelnk3
+#	ether79c970	pci
+#	ether8003	ether8390
+	ether8139	pci
+	ether8169	pci ethermii
+#	ether82543gc	pci
+	ether82557	pci
+	ether82563	pci
+	ether83815	pci
+	etherbcm	pci
+#	etherdp83820	pci
+#	etherec2t	ether8390
+#	etherelnk3	pci
+#	etherga620	pci
+	etherigbe	pci ethermii
+#	ethervgbe	pci ethermii
+#	ethervt6102	pci ethermii
+#	ethervt6102m	pci ethermii
+#	etheryuk		pci
+	etherm10g	pci
+	ether82598	pci
+	ethersink
+	ethermedium
+#	netdevmedium
+	loopbackmedium
+#	usbuhci
+#	usbohci
+#	usbehci 		usbehcipc
+	winbond
+
+misc
+	physalloc
+	alloc
+	noswap
+	xalloc
+
+	archacpi
+	archmp	mp nomp mpacpi apic msi
+
+#	uartaxp		pci
+	uarti8250	uartp8250
+	uartox958	pci uartp8250
+	uartpci		pci uartp8250
+
+	sdaoe
+	sdide		pci sdscsi
+	sdiahci		pci sdscsi led
+	sdmv50xx	pci sdscsi
+	sdmpt2		pci sdscsi
+	sdloop
+#	sd53c8xx	pci sdscsi
+#	sdmylex		pci sdscsi
+	sdodin		pci sdscsi led
+
+ip
+	il
+	tcp
+	udp
+	ipifc
+	icmp
+	icmp6
+#	gre
+	ipmux
+	esp
+#	rudp
+
+port
+	int cpuserver = 1;
+
+boot cpu
+	tcp
+	il
+
+bootdir
+	bootpccpu.out boot
+	/386/bin/ip/ipconfig ipconfig
+	/386/bin/auth/factotum
+lib
+	/$objtype/lib/libaml.a
+flags
+	LD		-e -p

@@ -1,0 +1,31 @@
+#!/bin/rc
+
+rfork e
+. /rc/bin/apatch/defs
+mountfs -a
+mountdist -w	# writable
+
+echo applying to [something] ...
+
+test -e /n/dist/lib/patch.skip && bind /dev/null /n/dist/lib/patch.skip
+test -e /n/dist/lib/patch.skipfile && bind /dev/null /n/dist/lib/patch.skipfile
+
+errs=/tmp/apply.$pid
+if($patch/apply $* |[2] tee $errs){
+	patch=$1
+	if(test -d $PD/$patch.*){
+		echo '#you could:'
+		echo rm -rf $PD/$patch.*
+	}
+	$patch/applied $1
+	echo patch has been applied. hit enter to notify $M or del to skip
+	read
+	@{cd $PD/applied/$1 && $patch/diffemail ; echo ------; cat $errs} |
+		mail -s 'applied patch: '^$PD/applied/$1 $M
+	rm -f $errs
+}
+
+if(test -x /sys/lib/dist/update){
+	echo '#run this to update the replica db.' 
+	echo '#  /sys/lib/dist/update'
+}

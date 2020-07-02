@@ -1,0 +1,52 @@
+.TH FSRECOVER 8
+.SH NAME
+fsrecover \- recover from file server disaster
+.SH SYNOPSIS
+.B recover
+.I main
+.SH DESCRIPTION
+Coraid's file server is
+.IR ila .
+The backup file server is
+.IR plano .
+.I Plano
+is left running should a file server be
+needed for reconfiguration before
+the backup file server can be brought
+online as the main file server.
+.PP
+The outline of the process is to first
+reboot
+.I plano
+and type
+.B "recover main"
+at the configuration prompt. (see
+.IR fsconfig (8).)
+Then dumps need to be enabled and
+the normal file server prompt by typing
+.BR "dumpctl on" .
+.PP
+The authentication server needs to
+be rebooted next.  At the boot menu
+select
+.I plano
+from the available options.  Edit
+.B /lib/ndb/local
+so that
+.BR fs=plano .
+Edit
+.B /n/9fat/plan9.ini
+to make
+.I plano
+the default menu option.
+.PP
+Finally, reboot all other servers.
+.SH "SEE ALSO
+.IR fs (4),
+.IR fs (8),
+.IR fsconfig (8),
+.IR plan9.ini (8).
+.SH BUGS
+If you're need this manual page, it may be unavailable online.
+.PP
+All data in the cache of the fileserver will be lost.

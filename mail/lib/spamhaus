@@ -1,0 +1,36 @@
+#!/bin/rc
+rfork en
+
+sflag=0
+if(~ $1 -s){
+	sflag=1
+	shift
+}
+
+rev=`{echo $1 | sed 's/([0-9]*)\.([0-9]*)\.([0-9]*)\.([0-9]*)/\4.\3.\2.\1/'}
+#ans=`{ndb/dnsquery $rev^.zen.spamhaus.org>[2]/dev/null|sed -n 's:.*	(127\.0\.0\.[0-9]+):\1:p' }
+ans=`{echo $rev^.zen.spamhaus.org | ndb/dnsquery >[2]/dev/null|sed -n 's:.*	(127\.0\.0\.[0-9]+):\1:p' }
+msg=''
+for(i in $ans){
+	switch($i){
+	case 127.0.0.2
+		m = 'known spam source'
+	case 127.0.0.4 
+		m = 'composite block list'
+	case 127.0.0.5
+		m = njabl
+	case 127.0.0.10
+		m = 'your isps policy'
+	case 127.0.0.11
+		m = 'sh policy'
+	case *
+		m = 'unknown reason'
+	}
+	if(~ $msg '')
+		msg = $m
+	if not
+		msg = $msg^', '^$m
+}
+if(~ $sflag 0 && ! ~ $msg '')
+	echo $msg
+exit $msg

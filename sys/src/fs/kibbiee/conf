@@ -1,0 +1,17 @@
+config {m0m1}
+service kibbiee
+filsys main c[m0m1]f{[m2m3][m4m5]}
+filsys dump o
+filsys other m6
+ipauth 205.185.197.2
+ipsntp 128.192.1.9
+ip0 205.185.197.116
+ipgw0 205.185.197.254
+ipmask0 255.255.255.0
+ip1 205.185.197.112
+ipgw1 205.185.197.254
+ipmask1 255.255.255.0
+ip2 205.185.197.111
+ipgw2 205.185.197.254
+ipmask2 255.255.255.0
+end

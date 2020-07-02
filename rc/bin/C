@@ -1,0 +1,58 @@
+#!/bin/rc
+
+rfork e
+dflag=()
+opt=-r
+while(~ $1 -*)
+	switch($1){
+	case -r
+		shift
+		opt=''
+	case -d
+		dflag=1
+		shift
+	case *
+		opt=-r
+		shift
+	}
+
+if(~ $dflag 1)
+	rfork e
+if not
+	rfork en
+
+server=()
+for(i in /lib/ndb/consoledb.*){
+	dev=`{ndb/query -f $i console $1 dev}
+	if(! ~ $#dev 0){
+		server=` '.' {echo -n $i}
+		server=$server(2)
+		break
+	}
+}
+
+if(~ $#server 0){
+	echo C: unknown console server for $1
+	exit 1
+}
+
+if(! test -e /mnt/consoles/$1){
+	switch($sysname){
+	case $server
+		mount /srv/consoles /mnt/consoles
+	case *
+		import $server /mnt/consoles
+	}
+}
+
+if(! test -e /mnt/consoles/$1 && test -e /srv/consoles)
+	mount /srv/consoles /mnt/consoles
+
+if(! test -e /mnt/consoles/$1){
+	echo console not found
+	exit 'console not found'
+}
+
+if(~ $#dflag 0)
+	exec con -l $opt /mnt/consoles/$1
+echo /mnt/consoles/$1

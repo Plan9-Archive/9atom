@@ -1,0 +1,18 @@
+
+#
+#  files comprising the database, use as many as you like, see ndb(6)
+#
+database=
+	file=/lib/ndb/local
+	file=/lib/ndb/common
+	file=/lib/ndb/root-servers
+
+auth=myauthserver.myuniversity.edu authdom=myauthdom
+auth=sources.cs.bell-labs.com authdom=outside.plan9.bell-labs.com
+auth=ladd.quanstro.net authdom=plan9.quanstro.net
+auth=tyty.coraid.com authdom=coraid.com
+
+#
+#  because the public demands the name localhost
+#
+ip=127.0.0.1 sys=localhost dom=localhost
